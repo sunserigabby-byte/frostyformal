@@ -1,3 +1,23 @@
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: radial-gradient(circle at 30% 50%, rgba(255,255,180,0.25), transparent 60%),
+              radial-gradient(circle at 70% 40%, rgba(255,240,200,0.2), transparent 60%);
+  mix-blend-mode: screen;
+  animation: garlandGlow 3s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 4;
+}
+
+@keyframes garlandGlow {
+  from { opacity: 0.2; }
+  to { opacity: 0.6; }
+}
+
 :root {
   --blue:#163f88;
   --blue2:#1f4fa5;
