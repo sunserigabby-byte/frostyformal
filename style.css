@@ -13,11 +13,11 @@ body {
   font-family:'Poppins',sans-serif;
   color:var(--ink);
   line-height:1.7;
-  background:linear-gradient(180deg,#102852,#1a3a7a 55%,#23488f 100%);
+  background:linear-gradient(180deg,#143a7a,#1c4a93 55%,#2557a8 100%);
   overflow-x:hidden;
 }
 
-/* Container */
+/* Layout */
 .container {
   max-width:900px;
   margin:0 auto;
@@ -26,21 +26,52 @@ body {
   z-index:3;
 }
 
-/* Hero */
+/* HERO */
+
 .hero {
   position:relative;
-  background:
-    radial-gradient(circle at top,rgba(255,255,255,0.16),transparent 65%),
-    radial-gradient(circle at top,rgba(217,234,255,0.9),rgba(24,55,115,0.92));
-  border-bottom:1px solid rgba(208,224,245,0.85);
-  padding:160px 20px 40px;
+  padding:190px 20px 40px; /* extra space for garland */
   border-radius:0 0 50% 50% / 10%;
-  box-shadow:inset 0 0 80px rgba(255,255,255,0.62);
+  box-shadow:inset 0 0 80px rgba(255,255,255,0.55);
+  background:
+    radial-gradient(circle at top,rgba(255,255,255,0.18),transparent 65%),
+    radial-gradient(circle at top,rgba(217,234,255,0.95),rgba(24,55,115,0.90));
+  border-bottom:1px solid rgba(208,224,245,0.85);
   text-align:center;
   overflow:hidden;
 }
 
+/* Garland at top using garlandb.jpg */
+.hero::before {
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:150px;
+  background:url('garlandb.jpg') repeat-x center top;
+  background-size:auto 150px;
+  z-index:4;
+  pointer-events:none;
+}
+
+/* Soft shimmer */
+.hero::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 15% 18%, rgba(255,255,255,0.12), transparent 55%),
+    radial-gradient(circle at 80% 15%, rgba(255,255,255,0.10), transparent 50%);
+  mix-blend-mode:screen;
+  opacity:0.05;
+  pointer-events:none;
+  z-index:1;
+}
+
 .title-fancy {
+  position:relative;
+  z-index:5;
   font-family:'Great Vibes',cursive;
   font-size:clamp(72px,10vw,132px);
   color:#e6f0ff;
@@ -49,12 +80,15 @@ body {
 }
 
 .subtitle {
+  position:relative;
+  z-index:5;
   font-size:20px;
   margin:12px 0 8px;
   color:#dde7ff;
 }
 
 /* Cards */
+
 .card {
   background:rgba(255,255,255,0.97);
   border:1px solid rgba(180,200,255,0.4);
@@ -66,6 +100,7 @@ body {
   position:relative;
   text-align:left;
   color:var(--ink);
+  z-index:3;
 }
 
 .card h2 {
@@ -79,6 +114,7 @@ body {
 }
 
 /* Buttons */
+
 .btn-primary {
   position:absolute;
   top:18px;
@@ -95,7 +131,7 @@ body {
   text-decoration:none;
   box-shadow:0 4px 12px rgba(0,0,0,0.35);
   transition:all .25s;
-  z-index:3;
+  z-index:6;
 }
 
 .btn-primary:hover {
@@ -148,9 +184,10 @@ body {
   transform:translateY(-2px);
 }
 
-/* Venmo button (left-aligned, inside RSVP card) */
+/* Venmo button inside RSVP */
+
 .venmo-button-wrap {
-  margin-top:10px;
+  margin:8px 0 4px 0;
   text-align:left;
 }
 
@@ -159,13 +196,13 @@ body {
   color:var(--ink);
   border:2px solid var(--gold);
   font-weight:700;
-  border-radius:50px;
-  padding:10px 24px;
-  font-size:14px;
+  border-radius:30px;
+  padding:8px 20px;
+  font-size:13px;
   text-transform:uppercase;
-  letter-spacing:.8px;
+  letter-spacing:.7px;
   text-decoration:none;
-  box-shadow:0 4px 10px rgba(0,0,0,0.35);
+  box-shadow:0 3px 8px rgba(0,0,0,0.35);
   transition:all .25s;
   display:inline-block;
   margin:0;
@@ -177,6 +214,7 @@ body {
 }
 
 /* Itinerary */
+
 .itinerary {
   list-style:none;
   padding:0;
@@ -191,21 +229,22 @@ body {
   border-bottom:1px dashed rgba(160,190,255,0.65);
 }
 
-.itinerary li:last-child {
-  border-bottom:none;
-}
+.itinerary li:last-child { border-bottom:none; }
 
 .icon { width:26px; text-align:center; font-size:22px; }
 .time { width:185px; font-weight:600; color:var(--blue2); font-size:14px; }
 .event { flex:1; font-size:14px; }
 
 /* Snowflakes */
+
 .big-snowflake {
   position:fixed;
   top:-10vh;
   left:var(--x,50%);
   font-size:var(--size,90px);
-  opacity:0.9;
+  color:rgba(255,255,255,0.95);
+  text-shadow:0 0 14px rgba(0,0,0,0.35);
+  opacity:0.95;
   animation:drift var(--duration,18s) linear infinite;
   animation-delay:var(--delay,0s);
   pointer-events:none;
@@ -213,7 +252,7 @@ body {
 }
 
 @keyframes drift {
-  0% { transform:translateY(-10vh); opacity:0.95; }
+  0% { transform:translateY(-10vh); opacity:0.98; }
   100% { transform:translateY(115vh); opacity:0.6; }
 }
 
@@ -221,11 +260,13 @@ body {
   position:fixed;
   font-size:var(--size,80px);
   color:rgba(255,255,255,0.12);
+  text-shadow:0 0 10px rgba(0,0,0,0.25);
   z-index:0;
   pointer-events:none;
 }
 
-/* String lights */
+/* String lights separator */
+
 .lights { margin:14px 0; }
 .lights svg { width:100%; height:60px; display:block; }
 .wire { stroke:#404a40; stroke-width:2.5; fill:none; }
@@ -241,7 +282,8 @@ body {
   to { opacity:1; }
 }
 
-/* RSVP card + fields */
+/* RSVP Card */
+
 .rsvp-card { text-align:left; }
 
 .field { margin-bottom:14px; }
@@ -270,7 +312,7 @@ body {
   flex-wrap:wrap;
 }
 
-.inline-fields > .field { flex:1; }
+.inline-fields .field { flex:1; }
 
 .hint {
   display:block;
@@ -313,11 +355,10 @@ body {
   color:var(--blue2);
 }
 
-.rsvp-message.error {
-  color:#c0392b;
-}
+.rsvp-message.error { color:#c0392b; }
 
 /* Links */
+
 a.inline {
   color:var(--blue2);
   font-weight:600;
@@ -326,6 +367,7 @@ a.inline {
 a.inline:hover { text-decoration:underline; }
 
 /* Footer */
+
 .footer {
   text-align:center;
   font-size:13px;
@@ -335,6 +377,7 @@ a.inline:hover { text-decoration:underline; }
 }
 
 /* Responsive */
+
 @media (max-width:600px) {
   .card { padding:20px; }
   .btn-primary {
