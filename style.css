@@ -230,6 +230,28 @@ body {
 .rsvp-submit:hover {
   background:var(--blue2);
   transform:translateY(-2px);
+ 
+.venmo-button {
+  background: var(--gold);
+  color: var(--ink);
+  border: 2px solid var(--gold);
+  font-weight: 700;
+  border-radius: 50px;
+  padding: 12px 28px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s;
+}
+
+.venmo-button:hover {
+  background: #ffe6a5;
+  transform: translateY(-2px);
+}
+
 }
 
 /* Itinerary layout */
