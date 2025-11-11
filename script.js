@@ -42,6 +42,26 @@ function createSnowflakes() {
   document.head.appendChild(styleEl);
 })();
 
+// ============ Build datalist for invitee suggestions ============
+
+function populateInviteeDatalist() {
+  const dataList = document.getElementById('inviteeNames');
+  if (!dataList) return;
+
+  const list = (typeof INVITEES !== "undefined" && Array.isArray(INVITEES))
+    ? INVITEES
+    : [];
+
+  // Clear in case it's called twice
+  dataList.innerHTML = "";
+
+  list.forEach(p => {
+    const option = document.createElement('option');
+    option.value = `${p.first} ${p.last}`;
+    dataList.appendChild(option);
+  });
+}
+
 // ============ Helper functions for invitees ============
 
 function normalizeName(str) {
