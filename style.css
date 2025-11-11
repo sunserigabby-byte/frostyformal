@@ -1,3 +1,17 @@
+/* Garland at top of page */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: url('./garland.jpg') repeat-x center top;
+  background-size: contain;
+  z-index: 3;
+  pointer-events: none;
+}
+
 .hero::after {
   content: "";
   position: absolute;
