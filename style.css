@@ -1,37 +1,3 @@
-/* Garland at top of page */
-.hero::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 150px;
-  background: url('./garland.jpg') repeat-x center top;
-  background-size: contain;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 150px;
-  background: radial-gradient(circle at 30% 50%, rgba(255,255,180,0.25), transparent 60%),
-              radial-gradient(circle at 70% 40%, rgba(255,240,200,0.2), transparent 60%);
-  mix-blend-mode: screen;
-  animation: garlandGlow 3s ease-in-out infinite alternate;
-  pointer-events: none;
-  z-index: 4;
-}
-
-@keyframes garlandGlow {
-  from { opacity: 0.2; }
-  to { opacity: 0.6; }
-}
-
 :root {
   --blue:#163f88;
   --blue2:#1f4fa5;
@@ -39,9 +5,7 @@
   --ink:#0b1220;
 }
 
-* {
-  box-sizing:border-box;
-}
+* { box-sizing:border-box; }
 
 body {
   margin:0;
@@ -49,18 +13,12 @@ body {
   font-family:'Poppins',sans-serif;
   color:var(--ink);
   line-height:1.7;
-  /* Darker, richer winter gradient */
   background:linear-gradient(180deg,#0f2348,#162d5b 55%,#1b3667 100%);
   overflow-x:hidden;
 }
 
-/* Snowfall container (populated by JS) */
-#snow-layer {
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:2;
-}
+/* Snowfall container */
+#snow-layer { position:fixed; inset:0; pointer-events:none; z-index:2; }
 
 /* Large drifting flakes */
 .big-snowflake {
@@ -90,8 +48,7 @@ body {
 }
 
 /* HERO
-   - Soft snowy fade at top
-   - Gentle shimmer/twinkle overlay
+   - Garland + snowy fade + shimmer overlay
 */
 .hero {
   position:relative;
@@ -106,22 +63,20 @@ body {
   overflow:hidden;
 }
 
-/* Soft snow fade band at very top of hero */
+/* Garland + soft snow fade */
 .hero::before {
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:90px;
-  background:linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.85),
-    rgba(255,255,255,0.4),
-    transparent
-  );
-  pointer-events:none;
-  z-index:1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background:
+    url("./garland.jpg") repeat-x center top,
+    linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(255,255,255,0.4), transparent);
+  background-size: auto 120px, 100% 150px;
+  pointer-events: none;
+  z-index: 3;
 }
 
 /* Subtle shimmer / twinkle overlay */
@@ -137,7 +92,7 @@ body {
   opacity:0.0;
   animation:heroTwinkle 7s ease-in-out infinite alternate;
   pointer-events:none;
-  z-index:1;
+  z-index:2;
 }
 
 @keyframes heroTwinkle {
@@ -149,19 +104,17 @@ body {
 /* Title */
 .title-fancy {
   position:relative;
-  z-index:2;
+  z-index:4;
   font-family:'Great Vibes',cursive;
   font-size:clamp(72px,10vw,132px);
   color:#e6f0ff;
-  text-shadow:
-    0 4px 14px rgba(0,0,0,0.45),
-    0 0 18px rgba(103,163,255,0.6);
+  text-shadow:0 4px 14px rgba(0,0,0,0.45), 0 0 18px rgba(103,163,255,0.6);
   margin:0 0 10px;
 }
 
 .subtitle {
   position:relative;
-  z-index:2;
+  z-index:4;
   font-size:20px;
   margin:12px 0 8px;
   color:#dde7ff;
@@ -208,7 +161,7 @@ body {
   text-decoration:none;
   box-shadow:0 4px 12px rgba(0,0,0,0.35);
   transition:all .25s;
-  z-index:3;
+  z-index:4;
 }
 
 .btn-primary:hover {
@@ -232,7 +185,7 @@ body {
   box-shadow:0 4px 10px rgba(0,0,0,0.3);
   transition:all .25s;
   position:relative;
-  z-index:2;
+  z-index:3;
 }
 
 .btn-secondary:hover {
@@ -240,9 +193,7 @@ body {
   transform:translateY(-2px);
 }
 
-.arrow-down {
-  margin-left:6px;
-}
+.arrow-down { margin-left:6px; }
 
 .btn-bottom,
 .rsvp-submit {
@@ -285,15 +236,9 @@ body {
   border-bottom:1px dashed rgba(160,190,255,0.65);
 }
 
-.itinerary li:last-child {
-  border-bottom:none;
-}
+.itinerary li:last-child { border-bottom:none; }
 
-.icon {
-  width:26px;
-  text-align:center;
-  font-size:22px;
-}
+.icon { width:26px; text-align:center; font-size:22px; }
 
 .time {
   width:185px;
@@ -302,10 +247,7 @@ body {
   font-size:14px;
 }
 
-.event {
-  flex:1;
-  font-size:14px;
-}
+.event { flex:1; font-size:14px; }
 
 /* Footer */
 .footer {
@@ -317,132 +259,38 @@ body {
 }
 
 /* Links inside text */
-a.inline {
-  color:var(--blue2);
-  font-weight:600;
-  text-decoration:none;
-}
-
-a.inline:hover {
-  text-decoration:underline;
-}
+a.inline { color:var(--blue2); font-weight:600; text-decoration:none; }
+a.inline:hover { text-decoration:underline; }
 
 /* String light separator */
-.lights {
-  margin:14px 0 14px;
-}
-
-.lights svg {
-  width:100%;
-  height:60px;
-  display:block;
-}
-
-.wire {
-  stroke:#404a40;
-  stroke-width:2.5;
-  fill:none;
-}
-
-.cap {
-  fill:#3b553b;
-  stroke:#213721;
-  stroke-width:.8;
-}
-
-.glass {
-  fill:url(#warmGlass);
-  stroke:#b07a00;
-  stroke-width:.8;
-}
-
-.halo {
-  fill:#ffd97a;
-  opacity:.35;
-  filter:url(#halo);
-}
-
-.tw1, .tw2, .tw3 {
-  animation: lamp 2.4s ease-in-out infinite alternate;
-}
-
-.tw2 { animation-duration:2.8s; }
-.tw3 { animation-duration:3.2s; }
-
-@keyframes lamp {
-  from { opacity:.75; }
-  to { opacity:1; }
-}
+.lights { margin:14px 0 14px; }
+.lights svg { width:100%; height:60px; display:block; }
+.wire { stroke:#404a40; stroke-width:2.5; fill:none; }
+.cap { fill:#3b553b; stroke:#213721; stroke-width:.8; }
+.glass { fill:url(#warmGlass); stroke:#b07a00; stroke-width:.8; }
+.halo { fill:#ffd97a; opacity:.35; filter:url(#halo); }
+.tw1, .tw2, .tw3 { animation: lamp 2.4s ease-in-out infinite alternate; }
+.tw2 { animation-duration:2.8s; } .tw3 { animation-duration:3.2s; }
+@keyframes lamp { from { opacity:.75; } to { opacity:1; } }
 
 /* RSVP form */
-.rsvp-card .field {
-  margin-bottom:14px;
+.rsvp-card .field { margin-bottom:14px; }
+.rsvp-card label { display:block; font-weight:600; margin-bottom:4px; font-size:14px; }
+.rsvp-card input, .rsvp-card select, .rsvp-card textarea {
+  width:100%; padding:8px 10px; border-radius:8px;
+  border:1px solid rgba(160,190,255,0.9); font-family:inherit; font-size:14px;
 }
-
-.rsvp-card label {
-  display:block;
-  font-weight:600;
-  margin-bottom:4px;
-  font-size:14px;
-}
-
-.rsvp-card input,
-.rsvp-card select,
-.rsvp-card textarea {
-  width:100%;
-  padding:8px 10px;
-  border-radius:8px;
-  border:1px solid rgba(160,190,255,0.9);
-  font-family:inherit;
-  font-size:14px;
-}
-
-.inline-fields {
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-}
-
-.inline-fields > div {
-  flex:1;
-}
-
-.hint {
-  display:block;
-  font-size:11px;
-  color:#6b7aa8;
-}
-
-.venmo-amount {
-  font-weight:700;
-  font-size:18px;
-  color:var(--blue2);
-}
-
-.rsvp-message {
-  margin-top:10px;
-  font-size:13px;
-  color:var(--blue2);
-}
-
-.rsvp-message.error {
-  color:#c0392b;
-}
+.inline-fields { display:flex; gap:14px; flex-wrap:wrap; }
+.inline-fields > div { flex:1; }
+.hint { display:block; font-size:11px; color:#6b7aa8; }
+.venmo-amount { font-weight:700; font-size:18px; color:var(--blue2); }
+.rsvp-message { margin-top:10px; font-size:13px; color:var(--blue2); }
+.rsvp-message.error { color:#c0392b; }
 
 /* Responsive tweaks */
 @media (max-width:600px) {
-  .card {
-    padding:20px;
-  }
-  .btn-primary {
-    position:static;
-    display:inline-block;
-    margin-top:10px;
-  }
-  .itinerary li {
-    flex-direction:column;
-    align-items:flex-start;
-  }
-  .time {
-    width:auto;
-  }
+  .card { padding:20px; }
+  .btn-primary { position:static; display:inline-block; margin-top:10px; }
+  .itinerary li { flex-direction:column; align-items:flex-start; }
+  .time { width:auto; }
+}
