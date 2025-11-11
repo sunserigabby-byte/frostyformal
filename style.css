@@ -50,7 +50,7 @@ body {
   right:0;
   height:150px;
   background:url('garlandb.jpg') no-repeat center top;
-  background-size:100% auto;   /* stretch to full width, keep proportions */
+  background-size:contain;   /* stretch to full width, keep proportions */
   z-index:4;
   pointer-events:none;
 }
