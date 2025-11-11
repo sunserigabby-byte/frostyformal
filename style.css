@@ -89,13 +89,13 @@ body {
   top:0;
   left:0;
   right:0;
-  height:190px;
+  height:200px;
   background:
     url("./garlandb.jpg") center top no-repeat,
     linear-gradient(to bottom, rgba(255,255,255,0.9),
                              rgba(255,255,255,0.45),
                              transparent);
-  background-size:100% auto, 100% 190px;
+  background-size:100% auto, 100% 200px;
   pointer-events:none;
   z-index:3;
 }
