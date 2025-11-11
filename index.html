@@ -162,76 +162,106 @@
 
     <!-- RSVP FORM -->
     <section id="rsvp" class="card rsvp-card">
-      <h2>RSVP</h2>
-      <p>Find your name, add your plus one if applicable, and submit your RSVP. After submitting, please send <strong>$45 per person</strong> to Venmo <strong>@kyle-Warzecha</strong> to confirm.</p>
+  <h2>RSVP</h2>
+  <p>
+    Find your name, add your plus one if applicable, and submit your RSVP.
+    After submitting, please send <strong>$45 per person</strong> to Venmo
+    <strong>@kyle-Warzecha</strong> to confirm.
+  </p>
 
-      
+  <!-- ✅ Start form -->
+  <form id="rsvp-form">
+    <div class="field">
+      <label for="inviteeName">Your Name</label>
+      <input
+        id="inviteeName"
+        name="inviteeName"
+        type="text"
+        placeholder="Start typing your name..."
+        list="inviteeNames"
+        required
+      />
+      <small class="hint">Invite-only: please select your name from the list.</small>
+    </div>
+
+    <datalist id="inviteeNames"></datalist>
+
+    <div class="field">
+      <label for="plusOneName">Plus One (optional)</label>
+      <input
+        id="plusOneName"
+        name="plusOneName"
+        type="text"
+        placeholder="Plus one full name (if attending)"
+      />
+      <small class="hint">
+        If your significant other is on the invite list, we'll help you include them.
+      </small>
+    </div>
+
+    <div class="field">
+      <label for="email">Email Address</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        placeholder="you@example.com"
+        required
+      />
+      <small class="hint">We'll send your confirmation and event updates here.</small>
+    </div>
+
+    <div class="inline-fields">
       <div class="field">
-  <label for="inviteeName">Your Name</label>
-  <input
-    id="inviteeName"
-    name="inviteeName"
-    type="text"
-    placeholder="Start typing your name..."
-    list="inviteeNames"
-    required
-  />
-  <small class="hint">Invite-only: please select your name from the list.</small>
-</div>
+        <label for="attending">Are you attending?</label>
+        <select id="attending" name="attending" required>
+          <option value="yes" selected>Yes, I'll be there</option>
+          <option value="no">No, can't make it</option>
+        </select>
+      </div>
 
-<datalist id="inviteeNames"></datalist>
+      <div class="field">
+        <label for="guestCount">Total Guests (including you)</label>
+        <select id="guestCount" name="guestCount">
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+        </select>
+        <small class="hint">$45 per person — suggested total shows below.</small>
+      </div>
+    </div>
 
-        <div class="field">
-          <label for="plusOneName">Plus One (optional)</label>
-          <input id="plusOneName" name="plusOneName" type="text" placeholder="Plus one full name (if attending)" />
-          <small class="hint">If your significant other is on the invite list, we'll help you include them.</small>
-        </div>
+    <div class="field">
+      <label>Amount to Venmo</label>
+      <div id="venmo-amount" class="venmo-amount">$45</div>
+    </div>
 
-        <div class="field">
-          <label for="email">Email Address</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" required />
-          <small class="hint">We'll send your confirmation and event updates here.</small>
-        </div>
+    <div class="field">
+      <label for="notes">Notes (dietary needs, accessibility, etc.)</label>
+      <textarea
+        id="notes"
+        name="notes"
+        rows="2"
+        placeholder="Anything we should know?"
+      ></textarea>
+    </div>
 
-        <div class="inline-fields">
-          <div class="field">
-            <label for="attending">Are you attending?</label>
-            <select id="attending" name="attending" required>
-              <option value="yes" selected>Yes, I'll be there</option>
-              <option value="no">No, can't make it</option>
-            </select>
-          </div>
+    <button type="submit" class="rsvp-submit">Submit RSVP</button>
+    <p id="rsvp-message" class="rsvp-message"></p>
+  </form>
+  <!-- ✅ End form -->
 
-          <div class="field">
-            <label for="guestCount">Total Guests (including you)</label>
-            <select id="guestCount" name="guestCount">
-              <option value="1" selected>1</option>
-              <option value="2">2</option>
-            </select>
-            <small class="hint">$45 per person — suggested total shows below.</small>
-          </div>
-        </div>
- 
-
-        <div class="field">
-          <label for="notes">Notes (dietary needs, accessibility, etc.)</label>
-          <textarea id="notes" name="notes" rows="2" placeholder="Anything we should know?"></textarea>
-        </div>
-      
-
-        <button type="submit" class="rsvp-submit">Submit RSVP</button>
-        <p id="rsvp-message" class="rsvp-message"></p>
-            
-      <div style="text-align: left;">
-    <a href="https://account.venmo.com/u/Kyle-Warzecha" 
-       target="_blank" 
-       class="btn-bottom venmo-button">
-       Venmo Here
+  <!-- ✅ Left-aligned Venmo button -->
+  <div class="venmo-button-wrap">
+    <a
+      href="https://account.venmo.com/u/Kyle-Warzecha"
+      target="_blank"
+      class="btn-bottom venmo-button"
+    >
+      Venmo Here
     </a>
   </div>
-</div>
-      </form>
-    </section>
+</section>
+
 
     
   </main>
