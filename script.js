@@ -52,7 +52,6 @@ function populateInviteeDatalist() {
     ? INVITEES
     : [];
 
-  // Clear in case it's called twice
   dataList.innerHTML = "";
 
   list.forEach(p => {
@@ -115,6 +114,26 @@ function updateVenmoAmount() {
   }
 }
 
+// ============ Sync guest count with plus one ============
+
+function syncGuestCountWithPlusOne() {
+  const plusOneInput = document.getElementById('plusOneName');
+  const guestCountEl = document.getElementById('guestCount');
+  const attendingEl = document.getElementById('attending');
+  if (!plusOneInput || !guestCountEl) return;
+
+  const hasPlusOne = plusOneInput.value.trim().length > 0;
+
+  // Only bump to 2 if attending = yes
+  if (hasPlusOne && (!attendingEl || attendingEl.value !== 'no')) {
+    guestCountEl.value = '2';
+  } else if (!hasPlusOne) {
+    guestCountEl.value = '1';
+  }
+
+  updateVenmoAmount();
+}
+
 // ============ Plus-one auto-suggestion using group IDs ============
 
 function setupPlusOneSuggestion() {
@@ -122,6 +141,7 @@ function setupPlusOneSuggestion() {
   const plusOneInput = document.getElementById('plusOneName');
   if (!nameInput || !plusOneInput) return;
 
+  // Auto-suggest grouped partner
   nameInput.addEventListener('blur', () => {
     const me = findInviteeByName(nameInput.value);
     if (!me) return;
@@ -130,7 +150,13 @@ function setupPlusOneSuggestion() {
     if (others.length === 1 && !plusOneInput.value.trim()) {
       const partner = others[0];
       plusOneInput.value = `${partner.first} ${partner.last}`;
+      syncGuestCountWithPlusOne();
     }
+  });
+
+  // Manually typing / clearing plus one adjusts guest count
+  plusOneInput.addEventListener('input', () => {
+    syncGuestCountWithPlusOne();
   });
 }
 
@@ -174,7 +200,7 @@ function setupRSVP() {
       return;
     }
 
-    // Optional: soft check for plus one
+    // Optional soft check for plus one consistency
     if (plusOne) {
       const plusInvitee = findInviteeByName(plusOne);
       if (plusInvitee && invitee.group && plusInvitee.group && plusInvitee.group !== invitee.group) {
@@ -182,7 +208,6 @@ function setupRSVP() {
       }
     }
 
-    // If not attending
     if (attending === 'no') {
       msg.textContent = `Sorry you can't make it, ${name}. Your response has been recorded.`;
       form.reset();
@@ -194,7 +219,6 @@ function setupRSVP() {
 
     const amount = 45 * guestCount;
 
-    // Payload ready for Google Sheets / backend if you add it later
     const payload = {
       name,
       plusOne,
@@ -205,20 +229,18 @@ function setupRSVP() {
       notes
     };
 
-    // Example hook (commented until you have an endpoint):
+    // Hook for Google Sheets / backend if you add it later:
     // fetch('YOUR_APPS_SCRIPT_WEB_APP_URL', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(payload)
     // }).catch(() => {});
 
-    // On-page confirmation
     let text = `RSVP received for ${name}`;
     if (plusOne) text += ` + ${plusOne}`;
     text += `. Please Venmo $${amount} to @kyle-Warzecha or use the Venmo button above to confirm your spot.`;
     msg.textContent = text;
 
-    // Reset form
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
