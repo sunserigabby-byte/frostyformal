@@ -17,13 +17,32 @@ function createSnowflakes() {
     dot.style.opacity = 0.55 + Math.random() * 0.4;
     dot.style.filter = 'drop-shadow(0 0 6px rgba(255,255,255,0.7))';
     dot.style.left = Math.random() * 100 + '%';
+
     const dur = 9 + Math.random() * 10;
     const delay = Math.random() * dur;
+
     dot.style.animation = `fall ${dur}s linear infinite`;
     dot.style.animationDelay = `-${delay}s`;
+
     snowLayer.appendChild(dot);
   }
 }
+
+// Falling animation for the JS-generated dots
+// (this was missing before, which is why they didn't move)
+const style = document.createElement('style');
+style.textContent = `
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -10vh, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 110vh, 0);
+    opacity: 0.85;
+  }
+}`;
+document.head.appendChild(style);
 
 function updateAmount() {
   const countEl = document.getElementById('guestCount');
@@ -89,3 +108,4 @@ document.addEventListener('DOMContentLoaded', function() {
   createSnowflakes();
   setupRSVP();
 });
+
