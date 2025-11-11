@@ -9,85 +9,240 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Small falling snow (added via JS) -->
   <div id="snow-layer" aria-hidden="true"></div>
 
-  <!-- 10 large snowflakes -->
-  <div class="big-snowflake" style="--x:5%; --size:90px; --duration:17s; --delay:0s;">❄️</div>
-  <div class="big-snowflake" style="--x:15%; --size:80px; --duration:16s; --delay:1s;">❆</div>
-  <div class="big-snowflake" style="--x:25%; --size:95px; --duration:18s; --delay:.5s;">❅</div>
-  <div class="big-snowflake" style="--x:35%; --size:100px; --duration:19s; --delay:2s;">❄️</div>
-  <div class="big-snowflake" style="--x:45%; --size:90px; --duration:17s; --delay:1.5s;">❆</div>
-  <div class="big-snowflake" style="--x:55%; --size:80px; --duration:18s; --delay:.8s;">❅</div>
-  <div class="big-snowflake" style="--x:65%; --size:95px; --duration:20s; --delay:1.2s;">❄️</div>
-  <div class="big-snowflake" style="--x:75%; --size:85px; --duration:18s; --delay:2.5s;">❆</div>
-  <div class="big-snowflake" style="--x:85%; --size:90px; --duration:17s; --delay:.3s;">❅</div>
-  <div class="big-snowflake" style="--x:95%; --size:88px; --duration:19s; --delay:1.8s;">❄️</div>
+  <!-- Large decorative drifting flakes (10) -->
+  <div class="big-snowflake" style="--x:6%; --size:90px; --duration:18s; --delay:0s;">❄️</div>
+  <div class="big-snowflake" style="--x:18%; --size:86px; --duration:19s; --delay:.6s;">❆</div>
+  <div class="big-snowflake" style="--x:30%; --size:96px; --duration:17s; --delay:1.2s;">❅</div>
+  <div class="big-snowflake" style="--x:42%; --size:88px; --duration:18s; --delay:.9s;">❄️</div>
+  <div class="big-snowflake" style="--x:54%; --size:92px; --duration:19s; --delay:1.6s;">❆</div>
+  <div class="big-snowflake" style="--x:66%; --size:90px; --duration:18s; --delay:2.1s;">❅</div>
+  <div class="big-snowflake" style="--x:74%; --size:94px; --duration:20s; --delay:.3s;">❄️</div>
+  <div class="big-snowflake" style="--x:82%; --size:88px; --duration:17s; --delay:2.4s;">❆</div>
+  <div class="big-snowflake" style="--x:90%; --size:100px; --duration:19s; --delay:1.1s;">❅</div>
+  <div class="big-snowflake" style="--x:96%; --size:86px; --duration:18s; --delay:1.8s;">❄️</div>
 
-  <!-- Static flakes -->
-  <div class="static-snowflake" style="top:10%; left:10%; --size:70px;">❆</div>
-  <div class="static-snowflake" style="top:20%; left:80%; --size:90px;">❅</div>
-  <div class="static-snowflake" style="top:40%; left:15%; --size:80px;">❄️</div>
-  <div class="static-snowflake" style="top:70%; left:85%; --size:70px;">❆</div>
-  <div class="static-snowflake" style="top:85%; left:35%; --size:95px;">❅</div>
+  <!-- Static glowing flakes for depth -->
+  <div class="static-snowflake" style="top:10%; left:8%; --size:70px;">❆</div>
+  <div class="static-snowflake" style="top:22%; left:82%; --size:90px;">❅</div>
+  <div class="static-snowflake" style="top:40%; left:12%; --size:80px;">❄️</div>
+  <div class="static-snowflake" style="top:68%; left:88%; --size:70px;">❆</div>
+  <div class="static-snowflake" style="top:83%; left:36%; --size:95px;">❅</div>
 
+  <!-- HERO -->
   <header class="hero">
-    <div class="container">
+    <div class="container hero-inner">
       <h1 class="title-fancy">Frosty Formal</h1>
       <p class="subtitle">Saturday, January 24, 2026 — 7:00 PM to 11:00 PM</p>
-      <p><strong>Venue:</strong> <a class="inline" href="https://www.garlandhalldurham.com/" target="_blank">Garland Hall</a>, East Durham</p>
+      <p><strong>Venue:</strong>
+        <a class="inline" href="https://www.garlandhalldurham.com/" target="_blank" rel="noopener">
+          Garland Hall
+        </a>, East Durham
+      </p>
       <p><strong>Featuring:</strong> Open Bar, DJ, Photographer, Games, and Friends!</p>
 
+      <!-- Invite card -->
       <section class="card">
         <h2>You're Cordially Invited to Party!</h2>
         <a href="#rsvp" class="btn-primary">RSVP Now</a>
+
         <p>Celebrate the New Year together off the court!</p>
+
         <p>
-          <strong>Open Bar:</strong> <a class="inline" href="https://shakeitupnc.com/" target="_blank">Shake It Up NC</a> |
-          <strong>DJ:</strong> <a class="inline" href="https://djv1ral.com/" target="_blank">DJ V1RAL</a> |
-          <strong>Photographer:</strong> <a class="inline" href="https://www.instagram.com/justin.jenkins4/?hl=en" target="_blank">Justin Jenkins</a>
+          <strong>Open Bar:</strong>
+          <a class="inline" href="https://shakeitupnc.com/" target="_blank" rel="noopener">Shake It Up NC</a> |
+          <strong>DJ:</strong>
+          <a class="inline" href="https://djv1ral.com/" target="_blank" rel="noopener">DJ V1RAL</a> |
+          <strong>Photographer:</strong>
+          <a class="inline" href="https://www.instagram.com/justin.jenkins4/?hl=en" target="_blank" rel="noopener">Justin Jenkins</a>
         </p>
-        <p><strong>By Invitation Only.</strong> Invitees may bring a plus one. $45 per person.<br>Please RSVP below and Venmo <strong>@kyle-Warzecha</strong> to confirm your spot.</p>
-        <p>We encourage eating dinner beforehand as we will not be serving food at this event. A good excuse to go out to a nice restaurant with friends anyways :)</p>
-        <p><strong>We are looking to add more members to our Planning Team.</strong> If you want to help with setup, teardown, decorating, or sponsorship, please text Gabby : <strong>570-575-0322</strong></p>
+
+        <p>
+          <strong>By Invitation Only.</strong> Invitees may bring a plus one. $45 per person.
+          Please RSVP below and Venmo <strong>@kyle-Warzecha</strong> to confirm your spot.
+        </p>
+
+        <p>
+          We encourage eating dinner beforehand as we will not be serving food at this event.
+          A good excuse to go out to a nice restaurant with friends anyways :)
+        </p>
+
+        <p>
+          <strong>We are looking to add more members to our Planning Team.</strong>
+          If you want to help with setting up or tearing down, are skilled with decorating or planning,
+          have an organization that wants to sponsor us, or have resources you’d like to offer to make our event better,
+          please text Gabby : <strong>570-575-0322</strong>
+        </p>
       </section>
+
+      <a href="#info" class="btn-secondary">
+        More Info Below <span class="arrow-down">⬇️</span>
+      </a>
     </div>
   </header>
 
+  <!-- MAIN CONTENT -->
   <main id="info" class="container">
+    <!-- Lights separator -->
+    <div class="lights">
+      <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <filter id="halo" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="5" />
+          </filter>
+          <radialGradient id="warmGlass" cx="35%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#fffbe3" />
+            <stop offset="60%" stop-color="#ffe08a" />
+            <stop offset="95%" stop-color="#d49a00" />
+          </radialGradient>
+        </defs>
+        <path class="wire" d="M0,26 L900,26" />
+        <!-- evenly spaced bulbs -->
+        <g class="tw1" transform="translate(50,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw2" transform="translate(150,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw3" transform="translate(250,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw1" transform="translate(350,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw2" transform="translate(450,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw3" transform="translate(550,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw1" transform="translate(650,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw2" transform="translate(750,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw3" transform="translate(850,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+      </svg>
+    </div>
+
+    <!-- Dress Code card -->
     <section class="card">
       <h2>Dress Code</h2>
-      <p><strong>Formal</strong> — Suits and elegant floor-length gowns. It's like prom all over again… but better!</p>
+      <p><strong>Formal</strong> — Suits and elegant floor-length gowns! It's like prom all over again... but better!</p>
     </section>
 
+    <!-- Lights separator -->
+    <div class="lights">
+      <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
+        <path class="wire" d="M0,26 L900,26" />
+        <g class="tw1" transform="translate(100,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw2" transform="translate(300,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw3" transform="translate(500,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw1" transform="translate(700,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+      </svg>
+    </div>
+
+    <!-- Party Itinerary card -->
     <section class="card">
       <h2>Party Itinerary</h2>
       <ul class="itinerary">
-        <li><span class="icon">🥂</span>7:00–7:30 PM — Arrive and Mingle</li>
-        <li><span class="icon">🎁</span>7:30–8:00 PM — Official Welcome, Games, and Awards</li>
-        <li><span class="icon">🎶</span>8:00–10:55 PM — Groove and Booze</li>
-        <li><span class="icon">🎇</span>10:55–11:00 PM — Final Banger</li>
+        <li>
+          <span class="icon">🥂</span>
+          <span class="time">7:00 PM - 7:30 PM</span>
+          <span class="event"><strong>Arrive and Mingle</strong> — Get a photo on our red carpet, grab a drink, sign up for games, and vote on our volleyball superlatives!</span>
+        </li>
+        <li>
+          <span class="icon">🎁</span>
+          <span class="time">7:30 PM - 8:00 PM</span>
+          <span class="event"><strong>Official Welcome, Party Game, and Awards</strong> — We’ll play a few Christmas themed games and announce our volleyball superlative winners!</span>
+        </li>
+        <li>
+          <span class="icon">🎶</span>
+          <span class="time">8:00 PM - 10:55 PM</span>
+          <span class="event"><strong>Groove and Booze</strong> — Dance, drink, play a board game, people watch, stand in a corner… just enjoy the night!</span>
+        </li>
+        <li>
+          <span class="icon">🎇</span>
+          <span class="time">10:55 PM - 11:00 PM</span>
+          <span class="event"><strong>Final Banger</strong> — Our final song and then you’re free to leave and continue the party elsewhere!</span>
+        </li>
       </ul>
     </section>
 
+    <!-- Lights separator -->
+    <div class="lights">
+      <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
+        <path class="wire" d="M0,26 L900,26" />
+        <g class="tw1" transform="translate(120,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw2" transform="translate(320,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw3" transform="translate(520,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw1" transform="translate(720,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+      </svg>
+    </div>
+
+    <!-- Entrance & Parking card -->
     <section class="card">
       <h2>Entrance & Parking</h2>
-      <p>There is a gravel lot to the left of the venue, street parking, and two nearby lots available event-by-event.</p>
+      <p>We will have a sign on the entrance door where you will take the stairs to the second floor.</p>
+      <p>There is a gravel parking lot to the left of the venue, street parking on Salem Street, and 2 parking lots on Salem Street that are available on an event-by-event basis.</p>
     </section>
 
-    <section class="card rsvp-card" id="rsvp">
+    <!-- Lights separator -->
+    <div class="lights">
+      <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
+        <path class="wire" d="M0,26 L900,26" />
+        <g class="tw1" transform="translate(90,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw2" transform="translate(270,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw3" transform="translate(450,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw1" transform="translate(630,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+        <g class="tw2" transform="translate(810,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+      </svg>
+    </div>
+
+    <!-- Contact & RSVP info card -->
+    <section class="card">
+      <h2>Contact & RSVP Info</h2>
+      <p><strong>Questions?</strong> Email <a class="inline" href="mailto:kickoff2christmas@gmail.com">kickoff2christmas@gmail.com</a></p>
+      <p><strong>RSVP Deadline:</strong> January 10, 2026</p>
+      <p><strong>Confirm:</strong> Please RSVP below and Venmo <strong>@kyle-Warzecha</strong> to confirm your spot.</p>
+    </section>
+
+    <!-- RSVP form card -->
+    <section id="rsvp" class="card rsvp-card">
       <h2>RSVP</h2>
+      <p>Find your name, add your plus one if applicable, and submit your RSVP. After submitting, please send <strong>$45 per person</strong> to Venmo <strong>@kyle-Warzecha</strong> to confirm.</p>
+
       <form id="rsvp-form">
-        <label>Your Name</label>
-        <input id="inviteeName" type="text" required />
-        <label>Plus One (optional)</label>
-        <input id="plusOne" type="text" />
-        <label>Guests</label>
-        <select id="guestCount">
-          <option value="1">1</option>
-          <option value="2">2</option>
-        </select>
-        <p><strong>Amount to Venmo:</strong> <span id="venmo-amount">$45</span></p>
-        <button class="rsvp-submit">Submit RSVP</button>
+        <div class="field">
+          <label for="inviteeName">Your Name</label>
+          <input id="inviteeName" name="inviteeName" type="text" placeholder="Start typing your name..." required />
+          <small class="hint">(We’ll plug in the invitee list here so names can be auto-suggested.)</small>
+        </div>
+
+        <div class="field">
+          <label for="plusOneName">Plus One (optional)</label>
+          <input id="plusOneName" name="plusOneName" type="text" placeholder="Plus one full name (if attending)" />
+          <small class="hint">If your partner is also on the invite list, you can include their name so both are RSVP'd together.</small>
+        </div>
+
+        <div class="inline-fields">
+          <div class="field">
+            <label for="attending">Are you attending?</label>
+            <select id="attending" name="attending" required>
+              <option value="yes" selected>Yes, I'll be there</option>
+              <option value="no">No, can't make it</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="guestCount">Total Guests (including you)</label>
+            <select id="guestCount" name="guestCount">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+            </select>
+            <small class="hint">$45 per person — suggested total shows below.</small>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Amount to Venmo</label>
+          <div id="venmo-amount" class="venmo-amount">$45</div>
+        </div>
+
+        <div class="field">
+          <label for="notes">Notes (dietary needs, accessibility, etc.)</label>
+          <textarea id="notes" name="notes" rows="2" placeholder="Anything we should know?"></textarea>
+        </div>
+
+        <button type="submit" class="rsvp-submit">Submit RSVP</button>
+        <p id="rsvp-message" class="rsvp-message"></p>
       </form>
     </section>
 
@@ -95,7 +250,7 @@
   </main>
 
   <footer class="footer">
-    <p>© 2026 Frosty Formal — Triangle Volleyball Community</p>
+    <p>© 2026 Frosty Formal — Created for the Triangle Volleyball Community</p>
   </footer>
 
   <script src="script.js"></script>
