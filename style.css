@@ -70,9 +70,10 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 160px; /* or adjust to your image height */
+  height: 200px;                /* adjust to match your garland image height */
+  background-color: transparent;
   background: url("./garland.jpg") center top no-repeat;
-  background-size: cover; /* or `100% auto` if you want proportional height */
+  background-size: 100% auto;    /* full width, auto height */
   pointer-events: none;
   z-index: 3;
 }
