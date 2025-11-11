@@ -90,7 +90,7 @@
     <!-- Dress Code -->
     <section class="card">
       <h2>Dress Code</h2>
-      <p><strong>Formal</strong> — Suits and elegant floor-length gowns! It's like prom all over again... but better!</p>
+      <p><strong>Elevated Formal</strong> — Suits and elegant floor-length gowns! It's like prom all over again... but better!</p>
     </section>
 
     <!-- Lights separator -->
@@ -170,12 +170,20 @@
         <a class="btn-venmo" href="https://account.venmo.com/u/Kyle-Warzecha" target="_blank" rel="noopener">Open Venmo</a>
       </p>
 
-      <form id="rsvp-form">
-        <div class="field">
-          <label for="inviteeName">Your Name</label>
-          <input id="inviteeName" name="inviteeName" type="text" placeholder="Start typing your name..." required />
-          <small class="hint">Invite-only: please use the name we have on file.</small>
-        </div>
+      <div class="field">
+  <label for="inviteeName">Your Name</label>
+  <input
+    id="inviteeName"
+    name="inviteeName"
+    type="text"
+    placeholder="Start typing your name..."
+    list="inviteeNames"
+    required
+  />
+  <small class="hint">Invite-only: please select your name from the list.</small>
+</div>
+
+<datalist id="inviteeNames"></datalist>
 
         <div class="field">
           <label for="plusOneName">Plus One (optional)</label>
