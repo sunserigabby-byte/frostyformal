@@ -91,7 +91,7 @@ body {
   right:0;
   height:190px;
   background:
-    url("./garland.jpg") center top no-repeat,
+    url("./garlandb.jpg") center top no-repeat,
     linear-gradient(to bottom, rgba(255,255,255,0.9),
                              rgba(255,255,255,0.45),
                              transparent);
