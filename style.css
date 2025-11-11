@@ -8,13 +8,13 @@
 * { box-sizing:border-box; }
 
 body {
-  margin:0;
-  padding:0;
-  font-family:'Poppins',sans-serif;
-  color:var(--ink);
-  line-height:1.7;
-  background:linear-gradient(180deg,#0f2348,#162d5b 55%,#1b3667 100%);
-  overflow-x:hidden;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  color: var(--ink);
+  line-height: 1.7;
+  background: linear-gradient(180deg, #bcd8ff 0%, #d6e7ff 45%, #edf4ff 100%);
+  overflow-x: hidden;
 }
 
 /* Snowfall container */
@@ -36,6 +36,24 @@ body {
 @keyframes drift {
   0% { transform: translateY(-12vh); opacity:.95; }
   100% { transform: translateY(125vh); opacity:.6; }
+}
+
+/* Small falling snowflakes */
+.snowflake {
+  position: fixed;
+  top: -5vh;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--size, 14px);
+  left: var(--x, 50%);
+  animation: fall var(--duration, 15s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  z-index: 1;
+  user-select: none;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0.8; }
 }
 
 /* Layout wrapper */
