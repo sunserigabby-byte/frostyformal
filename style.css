@@ -72,7 +72,7 @@ body {
   right: 0;
   height: 400px;                /* adjust to match your garland image height */
   background-color: transparent;
-  background: url("./garlandrb.jpg") center top no-repeat;
+  background: url("./garlandrb.png") center top no-repeat;
   background-size: 100% auto;    /* full width, auto height */
   pointer-events: none;
   z-index: 3;
