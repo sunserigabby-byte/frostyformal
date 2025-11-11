@@ -70,11 +70,9 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 150px;
-  background:
-    url("./garland.jpg") repeat-x center top,
-    linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(255,255,255,0.4), transparent);
-  background-size: auto 120px, 100% 150px;
+  height: 160px; /* or adjust to your image height */
+  background: url("./garland.jpg") center top no-repeat;
+  background-size: cover; /* or `100% auto` if you want proportional height */
   pointer-events: none;
   z-index: 3;
 }
