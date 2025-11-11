@@ -9,23 +9,22 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Falling snow container (dots added via JS) -->
+  <!-- Falling snow container -->
   <div id="snow-layer" aria-hidden="true"></div>
 
-  <!-- Large decorative drifting flakes -->
-  <div class="big-snowflake" style="--x:6%; --size:90px; --duration:12s; --delay:0s;">❄️</div>
-  <div class="big-snowflake" style="--x:22%; --size:82px; --duration:14s; --delay:.8s;">❆</div>
-  <div class="big-snowflake" style="--x:40%; --size:96px; --duration:16s; --delay:1.4s;">❅</div>
-  <div class="big-snowflake" style="--x:58%; --size:88px; --durationn:18s; --delay:.5s;">❄️</div>
-  <div class="big-snowflake" style="--x:76%; --size:92px; --duration:20s; --delay:1.6s;">❆</div>
-  <div class="big-snowflake" style="--x:12%; --size:84px; --duration:22s; --delay:2s;">❅</div>
-<div class="big-snowflake" style="--x:33%; --size:100px; --duration:24s; --delay:3s;">❄️</div>
-<div class="big-snowflake" style="--x:47%; --size:86px; --duration:26s; --delay:1.2s;">❆</div>
-<div class="big-snowflake" style="--x:67%; --size:95px; --duration:28s; --delay:2.4s;">❅</div>
-<div class="big-snowflake" style="--x:85%; --size:110px; --duration:32s; --delay:3.6s;">❄️</div>
+  <!-- Big decorative snowflakes (10 total) -->
+  <div class="big-snowflake" style="--x:6%; --size:90px; --duration:16s; --delay:0s;">❄️</div>
+  <div class="big-snowflake" style="--x:18%; --size:82px; --duration:18s; --delay:.6s;">❆</div>
+  <div class="big-snowflake" style="--x:30%; --size:96px; --duration:17s; --delay:1.2s;">❅</div>
+  <div class="big-snowflake" style="--x:42%; --size:88px; --duration:19s; --delay:.9s;">❄️</div>
+  <div class="big-snowflake" style="--x:54%; --size:92px; --duration:18s; --delay:1.5s;">❆</div>
+  <div class="big-snowflake" style="--x:66%; --size:86px; --duration:17s; --delay:2.1s;">❅</div>
+  <div class="big-snowflake" style="--x:72%; --size:94px; --duration:20s; --delay:.3s;">❄️</div>
+  <div class="big-snowflake" style="--x:80%; --size:88px; --duration:17s; --delay:1.8s;">❆</div>
+  <div class="big-snowflake" style="--x:88%; --size:100px; --duration:19s; --delay:2.4s;">❅</div>
+  <div class="big-snowflake" style="--x:94%; --size:90px; --duration:18s; --delay:1.1s;">❄️</div>
 
-
-  <!-- Static glowing background snowflakes -->
+  <!-- Static glowing background flakes -->
   <div class="static-snowflake" style="top:12%; left:4%; --size:70px;">❆</div>
   <div class="static-snowflake" style="top:22%; left:82%; --size:90px;">❅</div>
   <div class="static-snowflake" style="top:42%; left:10%; --size:80px;">❄️</div>
@@ -73,7 +72,6 @@
   <main id="info" class="container">
     <section class="section">
 
-      <!-- Lights separator -->
       <div class="lights">
         <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
           <defs>
@@ -85,7 +83,7 @@
             </radialGradient>
           </defs>
           <path class="wire" d="M0,26 L900,26" />
-          <!-- bulbs row -->
+          <!-- simple evenly spaced bulbs -->
           <g class="tw1" transform="translate(50,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
           <g class="tw2" transform="translate(150,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
           <g class="tw3" transform="translate(250,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
@@ -101,17 +99,6 @@
       <div class="card">
         <h2>Dress Code</h2>
         <p><strong>Formal -</strong> Suits and elegant floor length gowns! It's like prom all over again... but better!</p>
-      </div>
-
-      <div class="lights">
-        <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
-          <path class="wire" d="M0,26 L900,26" />
-          <!-- repeat bulbs -->
-          <g class="tw1" transform="translate(50,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(150,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(250,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0 cy="11" r="13"/></g>
-          <!-- (you can keep or trim repeats as desired) -->
-        </svg>
       </div>
 
       <div class="card">
@@ -183,7 +170,6 @@
       </div>
 
       <a href="#rsvp" class="btn-bottom">RSVP Here</a>
-
     </section>
   </main>
 
