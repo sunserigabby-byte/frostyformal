@@ -239,10 +239,9 @@ body {
 
 .big-snowflake {
   position:fixed;
-  top:-2vh;
+  top:-10vh;
   left:var(--x,50%);
   font-size:var(--size,90px);
-  color:rgba(255,255,255,0.95);
   text-shadow:0 0 14px rgba(0,0,0,0.35);
   opacity:0.95;
   animation:drift var(--duration,18s) linear infinite;
@@ -250,6 +249,11 @@ body {
   pointer-events:none;
   z-index:1;
 }
+
+.big-snowflake.white  { color:#ffffff; }
+.big-snowflake.light  { color:#dbe9ff; }  /* soft icy blue */
+.big-snowflake.deep   { color:#8fb8ff; }  /* richer blue */
+
 
 @keyframes drift {
   0% { transform:translateY(-10vh); opacity:0.98; }
