@@ -2,7 +2,7 @@
   --blue:#163f88;
   --blue2:#1f4fa5;
   --gold:#f4e3b3;
-  --ink:#0c1320;
+  --ink:#0b1220;
 }
 
 * {
@@ -15,11 +15,12 @@ body {
   font-family:'Poppins',sans-serif;
   color:var(--ink);
   line-height:1.7;
-  background:linear-gradient(180deg,#c3d8fa,#e5efff 80%,#ffffff);
+  /* Darker, richer winter gradient */
+  background:linear-gradient(180deg,#0f2348,#162d5b 55%,#1b3667 100%);
   overflow-x:hidden;
 }
 
-/* Snow layer is filled via JS */
+/* Snowfall container (populated by JS) */
 #snow-layer {
   position:fixed;
   inset:0;
@@ -27,14 +28,7 @@ body {
   z-index:2;
 }
 
-@keyframes fall {
-  to {
-    transform: translateY(110vh) translateX(var(--drift, 0px));
-    opacity: 0.7;
-  }
-}
-
-/* Big drifting flakes */
+/* Large drifting flakes */
 .big-snowflake {
   position:fixed;
   top:-12vh;
@@ -52,6 +46,7 @@ body {
   100% { transform: translateY(125vh); opacity:.6; }
 }
 
+/* Layout wrapper */
 .container {
   max-width:900px;
   margin:0 auto;
@@ -60,60 +55,96 @@ body {
   z-index:3;
 }
 
-/* Hero with subtle garland at top */
+/* HERO
+   - Soft snowy fade at top
+   - Gentle shimmer/twinkle overlay
+*/
 .hero {
   position:relative;
-  background:radial-gradient(circle at top,rgba(219,234,255,0.98),rgba(173,205,255,0.9));
-  border-bottom:1px solid #d0e0f5;
+  background:
+    radial-gradient(circle at top,rgba(255,255,255,0.16),transparent 65%),
+    radial-gradient(circle at top,rgba(217,234,255,0.9),rgba(24,55,115,0.92));
+  border-bottom:1px solid rgba(208,224,245,0.85);
   padding:160px 20px 40px;
   border-radius:0 0 50% 50% / 10%;
-  box-shadow:inset 0 0 80px rgba(255,255,255,0.7);
+  box-shadow:inset 0 0 80px rgba(255,255,255,0.62);
   text-align:center;
   overflow:hidden;
 }
 
-.garland {
+/* Soft snow fade band at very top of hero */
+.hero::before {
+  content:"";
   position:absolute;
   top:0;
   left:0;
   right:0;
-  height:80px;
-  background:
-    radial-gradient(circle at 10px 40px,#114d24 0, #114d24 12px, transparent 13px),
-    radial-gradient(circle at 40px 40px,#1b6a30 0, #1b6a30 14px, transparent 15px),
-    radial-gradient(circle at 80px 40px,#145528 0, #145528 13px, transparent 14px);
-  background-size:90px 80px;
-  background-repeat:repeat-x;
-  box-shadow:0 6px 12px rgba(0,0,0,0.18);
-  z-index:4;
+  height:90px;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.85),
+    rgba(255,255,255,0.4),
+    transparent
+  );
+  pointer-events:none;
+  z-index:1;
 }
 
-/* Frosty Formal title */
+/* Subtle shimmer / twinkle overlay */
+.hero::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255,255,255,0.12), transparent 55%),
+    radial-gradient(circle at 80% 18%, rgba(255,255,255,0.1), transparent 50%),
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08), transparent 60%);
+  mix-blend-mode:screen;
+  opacity:0.0;
+  animation:heroTwinkle 7s ease-in-out infinite alternate;
+  pointer-events:none;
+  z-index:1;
+}
+
+@keyframes heroTwinkle {
+  0% { opacity:0.02; }
+  50% { opacity:0.10; }
+  100% { opacity:0.05; }
+}
+
+/* Title */
 .title-fancy {
+  position:relative;
+  z-index:2;
   font-family:'Great Vibes',cursive;
   font-size:clamp(72px,10vw,132px);
-  color:var(--blue);
-  text-shadow:0 3px 12px rgba(31,102,229,0.35);
+  color:#e6f0ff;
+  text-shadow:
+    0 4px 14px rgba(0,0,0,0.45),
+    0 0 18px rgba(103,163,255,0.6);
   margin:0 0 10px;
 }
 
 .subtitle {
+  position:relative;
+  z-index:2;
   font-size:20px;
   margin:12px 0 8px;
-  color:#163b8f;
+  color:#dde7ff;
 }
 
-/* Cards */
+/* White cards */
 .card {
   background:rgba(255,255,255,0.97);
   border:1px solid rgba(180,200,255,0.4);
   border-radius:16px;
-  box-shadow:0 8px 24px rgba(39,71,125,0.16);
+  box-shadow:0 8px 24px rgba(9,16,35,0.45);
   padding:28px;
   margin:10px 0;
   backdrop-filter:blur(6px);
   position:relative;
   text-align:left;
+  color:var(--ink);
 }
 
 .card h2 {
@@ -141,8 +172,9 @@ body {
   letter-spacing:.8px;
   border:2px solid var(--gold);
   text-decoration:none;
-  box-shadow:0 4px 12px rgba(31,102,229,0.25);
+  box-shadow:0 4px 12px rgba(0,0,0,0.35);
   transition:all .25s;
+  z-index:3;
 }
 
 .btn-primary:hover {
@@ -163,8 +195,10 @@ body {
   letter-spacing:.5px;
   border:2px solid var(--gold);
   text-decoration:none;
-  box-shadow:0 4px 10px rgba(31,102,229,0.22);
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
   transition:all .25s;
+  position:relative;
+  z-index:2;
 }
 
 .btn-secondary:hover {
@@ -191,7 +225,7 @@ body {
   letter-spacing:1px;
   border:2px solid var(--gold);
   text-decoration:none;
-  box-shadow:0 4px 12px rgba(31,102,229,0.25);
+  box-shadow:0 4px 12px rgba(0,0,0,0.35);
   transition:all .25s;
   cursor:pointer;
 }
@@ -243,11 +277,12 @@ body {
 .footer {
   text-align:center;
   font-size:13px;
-  color:#3a4a74;
-  opacity:.85;
+  color:#c4d2ff;
+  opacity:.9;
   padding:24px 0 36px;
 }
 
+/* Links inside text */
 a.inline {
   color:var(--blue2);
   font-weight:600;
@@ -377,4 +412,3 @@ a.inline:hover {
   .time {
     width:auto;
   }
-}
