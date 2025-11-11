@@ -4,7 +4,7 @@ function createSnowflakes() {
   const snowLayer = document.getElementById('snow-layer');
   if (!snowLayer) return;
 
-  const flakes = 60; // adjust if you want denser/lighter
+  const flakes = 60;
   for (let i = 0; i < flakes; i++) {
     const dot = document.createElement('div');
     const size = 1 + Math.random() * 3;
@@ -20,7 +20,7 @@ function createSnowflakes() {
     dot.style.zIndex = 1;
     dot.style.opacity = 0.7 + Math.random() * 0.3;
 
-    const duration = 7 + Math.random() * 8; // 7–15s
+    const duration = 7 + Math.random() * 8;
     const delay = Math.random() * duration;
 
     dot.style.animation = `fall ${duration}s linear infinite`;
@@ -53,7 +53,6 @@ function populateInviteeDatalist() {
     : [];
 
   dataList.innerHTML = "";
-
   list.forEach(p => {
     const option = document.createElement('option');
     option.value = `${p.first} ${p.last}`;
@@ -64,10 +63,7 @@ function populateInviteeDatalist() {
 // ============ Helper functions for invitees ============
 
 function normalizeName(str) {
-  return (str || "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
+  return (str || "").trim().toLowerCase().replace(/\s+/g, " ");
 }
 
 function findInviteeByName(fullName) {
@@ -124,7 +120,6 @@ function syncGuestCountWithPlusOne() {
 
   const hasPlusOne = plusOneInput.value.trim().length > 0;
 
-  // Only bump to 2 if attending = yes
   if (hasPlusOne && (!attendingEl || attendingEl.value !== 'no')) {
     guestCountEl.value = '2';
   } else if (!hasPlusOne) {
@@ -141,7 +136,6 @@ function setupPlusOneSuggestion() {
   const plusOneInput = document.getElementById('plusOneName');
   if (!nameInput || !plusOneInput) return;
 
-  // Auto-suggest grouped partner
   nameInput.addEventListener('blur', () => {
     const me = findInviteeByName(nameInput.value);
     if (!me) return;
@@ -154,7 +148,6 @@ function setupPlusOneSuggestion() {
     }
   });
 
-  // Manually typing / clearing plus one adjusts guest count
   plusOneInput.addEventListener('input', () => {
     syncGuestCountWithPlusOne();
   });
@@ -192,7 +185,6 @@ function setupRSVP() {
       return;
     }
 
-    // Invite-only check
     const invitee = findInviteeByName(name);
     if (!invitee) {
       msg.textContent = 'This RSVP form is for invited guests only. If you believe this is an error, please contact us.';
@@ -200,7 +192,6 @@ function setupRSVP() {
       return;
     }
 
-    // Optional soft check for plus one consistency
     if (plusOne) {
       const plusInvitee = findInviteeByName(plusOne);
       if (plusInvitee && invitee.group && plusInvitee.group && plusInvitee.group !== invitee.group) {
@@ -229,12 +220,7 @@ function setupRSVP() {
       notes
     };
 
-    // Hook for Google Sheets / backend if you add it later:
-    // fetch('YOUR_APPS_SCRIPT_WEB_APP_URL', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(payload)
-    // }).catch(() => {});
+    // Hook for Google Sheets / backend can go here
 
     let text = `RSVP received for ${name}`;
     if (plusOne) text += ` + ${plusOne}`;
@@ -248,7 +234,7 @@ function setupRSVP() {
   });
 }
 
-// ============ Initialize on page load ============
+// ============ Init ============
 
 document.addEventListener('DOMContentLoaded', () => {
   createSnowflakes();
