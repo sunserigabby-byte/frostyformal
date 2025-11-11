@@ -17,7 +17,7 @@ body {
   overflow-x:hidden;
 }
 
-/* Dynamic snow layer */
+/* Snow container for JS dots */
 #snow-layer {
   position:fixed;
   inset:0;
@@ -25,7 +25,7 @@ body {
   z-index:2;
 }
 
-/* Big drifting flakes */
+/* Big drifting flakes (emoji) */
 .big-snowflake {
   position:fixed;
   top:-12vh;
@@ -43,7 +43,7 @@ body {
   100% { transform: translateY(125vh); opacity:.6; }
 }
 
-/* Static glowing flakes */
+/* Extra static background flakes */
 .static-snowflake {
   position:absolute;
   color:rgba(255,255,255,0.4);
@@ -58,6 +58,7 @@ body {
   100% { opacity:0.6; transform:scale(1.08); }
 }
 
+/* Layout */
 .container {
   max-width:900px;
   margin:0 auto;
@@ -80,7 +81,8 @@ body {
   overflow:hidden;
 }
 
-/* Garland + fade */
+/* Garland + soft fade
+   Make sure garland.jpg is in the same folder as index.html */
 .hero::before {
   content:"";
   position:absolute;
@@ -89,14 +91,16 @@ body {
   right:0;
   height:190px;
   background:
-    url("./garlandb.jpg") center top no-repeat,
-    linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.45), transparent);
+    url("./garland.jpg") center top no-repeat,
+    linear-gradient(to bottom, rgba(255,255,255,0.9),
+                             rgba(255,255,255,0.45),
+                             transparent);
   background-size:100% auto, 100% 190px;
   pointer-events:none;
   z-index:3;
 }
 
-/* Shimmer overlay */
+/* Subtle shimmer overlay */
 .hero::after {
   content:"";
   position:absolute;
@@ -180,7 +184,6 @@ body {
   transition:all .25s;
   z-index:4;
 }
-
 .btn-primary:hover {
   background:var(--blue2);
   transform:translateY(-2px);
@@ -204,7 +207,6 @@ body {
   position:relative;
   z-index:3;
 }
-
 .btn-secondary:hover {
   background:var(--blue);
   transform:translateY(-2px);
@@ -231,7 +233,6 @@ body {
   transition:all .25s;
   cursor:pointer;
 }
-
 .btn-bottom:hover,
 .rsvp-submit:hover {
   background:var(--blue2);
@@ -244,7 +245,6 @@ body {
   padding:0;
   margin:6px 0 0;
 }
-
 .itinerary li {
   display:flex;
   align-items:center;
@@ -252,18 +252,14 @@ body {
   padding:8px 0;
   border-bottom:1px dashed rgba(160,190,255,0.65);
 }
-
 .itinerary li:last-child { border-bottom:none; }
-
 .icon { width:26px; text-align:center; font-size:22px; }
-
 .time {
   width:185px;
   font-weight:600;
   color:var(--blue2);
   font-size:14px;
 }
-
 .event { flex:1; font-size:14px; }
 
 /* Footer */
@@ -283,7 +279,7 @@ a.inline {
 }
 a.inline:hover { text-decoration:underline; }
 
-/* String light separators */
+/* String lights between cards */
 .lights {
   margin:14px 0 14px;
 }
@@ -324,14 +320,12 @@ a.inline:hover { text-decoration:underline; }
 
 /* RSVP form */
 .rsvp-card .field { margin-bottom:14px; }
-
 .rsvp-card label {
   display:block;
   font-weight:600;
   margin-bottom:4px;
   font-size:14px;
 }
-
 .rsvp-card input,
 .rsvp-card select,
 .rsvp-card textarea {
@@ -342,33 +336,27 @@ a.inline:hover { text-decoration:underline; }
   font-family:inherit;
   font-size:14px;
 }
-
 .inline-fields {
   display:flex;
   gap:14px;
   flex-wrap:wrap;
 }
-
 .inline-fields > div { flex:1; }
-
 .hint {
   display:block;
   font-size:11px;
   color:#6b7aa8;
 }
-
 .venmo-amount {
   font-weight:700;
   font-size:18px;
   color:var(--blue2);
 }
-
 .rsvp-message {
   margin-top:10px;
   font-size:13px;
   color:var(--blue2);
 }
-
 .rsvp-message.error { color:#c0392b; }
 
 /* Responsive */
