@@ -9,27 +9,27 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Snow layer for small flakes -->
+  <!-- Snow layer for generated tiny flakes -->
   <div id="snow-layer" aria-hidden="true"></div>
 
-  <!-- Large drifting decorative flakes -->
-  <div class="big-snowflake" style="--x:6%; --size:90px; --duration:18s; --delay:0s;">❄️</div>
-  <div class="big-snowflake" style="--x:18%; --size:86px; --duration:19s; --delay:.6s;">❆</div>
-  <div class="big-snowflake" style="--x:30%; --size:96px; --duration:17s; --delay:1.2s;">❅</div>
-  <div class="big-snowflake" style="--x:42%; --size:88px; --duration:18s; --delay:.9s;">❄️</div>
-  <div class="big-snowflake" style="--x:54%; --size:92px; --duration:19s; --delay:1.6s;">❆</div>
-  <div class="big-snowflake" style="--x:66%; --size:90px; --duration:18s; --delay:2.1s;">❅</div>
-  <div class="big-snowflake" style="--x:74%; --size:94px; --duration:20s; --delay:.3s;">❄️</div>
-  <div class="big-snowflake" style="--x:82%; --size:88px; --duration:17s; --delay:2.4s;">❆</div>
-  <div class="big-snowflake" style="--x:90%; --size:100px; --duration:19s; --delay:1.1s;">❅</div>
-  <div class="big-snowflake" style="--x:96%; --size:86px; --duration:18s; --delay:1.8s;">❄️</div>
+  <!-- Large decorative drifting flakes (white) -->
+  <div class="big-snowflake" style="--x:6%; --size:90px; --duration:18s; --delay:0s;">❄</div>
+  <div class="big-snowflake" style="--x:18%; --size:86px; --duration:19s; --delay:.6s;">❄</div>
+  <div class="big-snowflake" style="--x:30%; --size:96px; --duration:17s; --delay:1.2s;">❄</div>
+  <div class="big-snowflake" style="--x:42%; --size:88px; --duration:18s; --delay:.9s;">❄</div>
+  <div class="big-snowflake" style="--x:54%; --size:92px; --duration:19s; --delay:1.6s;">❄</div>
+  <div class="big-snowflake" style="--x:66%; --size:90px; --duration:18s; --delay:2.1s;">❄</div>
+  <div class="big-snowflake" style="--x:74%; --size:94px; --duration:20s; --delay:.3s;">❄</div>
+  <div class="big-snowflake" style="--x:82%; --size:88px; --duration:17s; --delay:2.4s;">❄</div>
+  <div class="big-snowflake" style="--x:90%; --size:100px; --duration:19s; --delay:1.1s;">❄</div>
+  <div class="big-snowflake" style="--x:96%; --size:86px; --duration:18s; --delay:1.8s;">❄</div>
 
-  <!-- Static background flakes -->
-  <div class="static-snowflake" style="top:10%; left:8%; --size:70px;">❆</div>
-  <div class="static-snowflake" style="top:22%; left:82%; --size:90px;">❅</div>
-  <div class="static-snowflake" style="top:40%; left:12%; --size:80px;">❄️</div>
-  <div class="static-snowflake" style="top:68%; left:88%; --size:70px;">❆</div>
-  <div class="static-snowflake" style="top:83%; left:36%; --size:95px;">❅</div>
+  <!-- Static subtle background flakes -->
+  <div class="static-snowflake" style="top:10%; left:8%; --size:70px;">✻</div>
+  <div class="static-snowflake" style="top:22%; left:82%; --size:90px;">✻</div>
+  <div class="static-snowflake" style="top:40%; left:12%; --size:80px;">✻</div>
+  <div class="static-snowflake" style="top:68%; left:88%; --size:70px;">✻</div>
+  <div class="static-snowflake" style="top:83%; left:36%; --size:95px;">✻</div>
 
   <!-- HERO -->
   <header class="hero">
@@ -96,7 +96,7 @@
       <p><strong>Formal</strong> — Suits and elegant floor-length gowns! It's like prom all over again... but better!</p>
     </section>
 
-    <!-- String light separator -->
+    <!-- String lights separator -->
     <div class="lights">
       <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
         <defs>
@@ -239,6 +239,17 @@
           <div id="venmo-amount" class="venmo-amount">$45</div>
         </div>
 
+        <!-- 👇 Venmo button directly under Amount to Venmo -->
+        <div class="venmo-button-wrap">
+          <a
+            href="https://account.venmo.com/u/Kyle-Warzecha"
+            target="_blank"
+            class="venmo-button"
+          >
+            Venmo Here
+          </a>
+        </div>
+
         <div class="field">
           <label for="notes">Notes (dietary needs, accessibility, etc.)</label>
           <textarea
@@ -252,17 +263,6 @@
         <button type="submit" class="rsvp-submit">Submit RSVP</button>
         <p id="rsvp-message" class="rsvp-message"></p>
       </form>
-
-      <!-- Left aligned Venmo button INSIDE the RSVP card -->
-      <div class="venmo-button-wrap">
-        <a
-          href="https://account.venmo.com/u/Kyle-Warzecha"
-          target="_blank"
-          class="venmo-button"
-        >
-          Venmo Here
-        </a>
-      </div>
     </section>
 
     <!-- Bottom CTA -->
