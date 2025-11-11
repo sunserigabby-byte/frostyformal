@@ -32,7 +32,7 @@ body {
   color:rgba(255,255,255,0.96);
   font-size:var(--size,96px);
   left:var(--x,50%);
-  animation: drift var(--duration,18s) linear infinite;
+  animation: drift var(--duration,16s) linear infinite;
   animation-delay: var(--delay,0s);
   z-index:1;
   user-select:none;
@@ -41,21 +41,6 @@ body {
 @keyframes drift {
   0% { transform: translateY(-12vh); opacity:.95; }
   100% { transform: translateY(125vh); opacity:.6; }
-}
-
-/* Extra static background flakes */
-.static-snowflake {
-  position:absolute;
-  color:rgba(255,255,255,0.4);
-  font-size:var(--size,70px);
-  text-shadow:0 0 10px rgba(255,255,255,0.35);
-  z-index:0;
-  animation: twinkle 6s ease-in-out infinite alternate;
-}
-
-@keyframes twinkle {
-  0% { opacity:0.28; transform:scale(1); }
-  100% { opacity:0.6; transform:scale(1.08); }
 }
 
 /* Layout */
@@ -89,7 +74,7 @@ body {
   top:0;
   left:0;
   right:0;
-  height:200px;
+  height:220px;
   background:
     url("./garlandb.jpg") center top no-repeat,
     linear-gradient(to bottom, rgba(255,255,255,0.9),
