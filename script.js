@@ -136,8 +136,28 @@ function setupPlusOneSuggestion() {
   const plusOneInput = document.getElementById('plusOneName');
   if (!nameInput || !plusOneInput) return;
 
+  // When they finish choosing their name (blur)
   nameInput.addEventListener('blur', () => {
+    autoFillPlusOne();
+  });
+
+  // Also react as they select from the datalist / type (more responsive)
+  nameInput.addEventListener('change', () => {
+    autoFillPlusOne();
+  });
+
+  nameInput.addEventListener('input', () => {
+    // Only auto-fill if value exactly matches one invitee
     const me = findInviteeByName(nameInput.value);
+    if (me) autoFillPlusOne(me);
+  });
+
+  plusOneInput.addEventListener('input', () => {
+    syncGuestCountWithPlusOne();
+  });
+
+  function autoFillPlusOne(existingInvitee) {
+    const me = existingInvitee || findInviteeByName(nameInput.value);
     if (!me) return;
 
     const others = getGroupMembers(me);
@@ -146,11 +166,7 @@ function setupPlusOneSuggestion() {
       plusOneInput.value = `${partner.first} ${partner.last}`;
       syncGuestCountWithPlusOne();
     }
-  });
-
-  plusOneInput.addEventListener('input', () => {
-    syncGuestCountWithPlusOne();
-  });
+  }
 }
 
 // ============ RSVP form behavior (invite-only) ============
@@ -168,7 +184,7 @@ function setupRSVP() {
   updateVenmoAmount();
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault();
+    e.preventDefault(); // prevent page reload
     msg.classList.remove('error');
     msg.textContent = '';
 
@@ -220,29 +236,33 @@ function setupRSVP() {
       notes
     };
 
-    // Hook for Google Sheets / backend can go here
+    // === Google Sheets logging via Apps Script ===
+    fetch('https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(() => {
+        console.log('RSVP saved to Google Sheet!');
+      })
+      .catch(err => {
+        console.error('Error saving to Google Sheet:', err);
+      });
 
+    // Front-end confirmation
     let text = `RSVP received for ${name}`;
     if (plusOne) text += ` + ${plusOne}`;
     text += `. Please Venmo $${amount} to @kyle-Warzecha or use the Venmo button above to confirm your spot.`;
     msg.textContent = text;
 
+    // Reset visible form while keeping logic sane
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
     updateVenmoAmount();
   });
 }
-
-fetch('https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(payload)
-}).then(res => res.json())
-  .then(() => {
-    console.log('RSVP saved to Google Sheet!');
-  })
-  .catch(err => console.error('Error:', err));
 
 // ============ Init ============
 
