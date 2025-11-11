@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Dynamic snow layer (filled via JS) -->
+  <!-- Falling snow container (dots added via JS) -->
   <div id="snow-layer" aria-hidden="true"></div>
 
   <!-- Large decorative drifting flakes -->
@@ -71,9 +71,7 @@
       <div class="lights">
         <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
           <defs>
-            <filter id="halo" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="5" />
-            </filter>
+            <filter id="halo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" /></filter>
             <radialGradient id="warmGlass" cx="35%" cy="35%" r="65%">
               <stop offset="0%" stop-color="#fffbe3" />
               <stop offset="60%" stop-color="#ffe08a" />
@@ -102,16 +100,11 @@
       <div class="lights">
         <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
           <path class="wire" d="M0,26 L900,26" />
-          <!-- reuse bulbs -->
+          <!-- repeat bulbs -->
           <g class="tw1" transform="translate(50,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
           <g class="tw2" transform="translate(150,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(250,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw1" transform="translate(350,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(450,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(550,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw1" transform="translate(650,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(750,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(850,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
+          <g class="tw3" transform="translate(250,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0 cy="11" r="13"/></g>
+          <!-- (you can keep or trim repeats as desired) -->
         </svg>
       </div>
 
@@ -125,42 +118,10 @@
         </ul>
       </div>
 
-      <div class="lights">
-        <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
-          <path class="wire" d="M0,26 L900,26" />
-          <!-- reuse bulbs -->
-          <g class="tw1" transform="translate(50,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(150,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(250,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw1" transform="translate(350,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(450,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(550,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw1" transform="translate(650,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(750,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(850,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-        </svg>
-      </div>
-
       <div class="card">
         <h2>Entrance & Parking</h2>
         <p>We will have a sign on the entrance door where you will take the stairs to the second floor.</p>
         <p>There is a gravel parking lot to the left of the venue, street parking on Salem Street, and 2 parking lots on Salem Street that are available on an event-by-event basis.</p>
-      </div>
-
-      <div class="lights">
-        <svg viewBox="0 0 900 60" preserveAspectRatio="none" aria-hidden="true">
-          <path class="wire" d="M0,26 L900,26" />
-          <!-- reuse bulbs -->
-          <g class="tw1" transform="translate(50,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(150,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(250,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw1" transform="translate(350,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(450,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(550,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw1" transform="translate(650,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw2" transform="translate(750,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-          <g class="tw3" transform="translate(850,26)"><rect class="cap" x="-4" y="-3" width="8" height="6" rx="1"/><circle class="glass" cx="0" cy="11" r="7"/><circle class="halo" cx="0" cy="11" r="13"/></g>
-        </svg>
       </div>
 
       <div class="card">
@@ -170,6 +131,7 @@
         <p><strong>Confirm:</strong> Please RSVP below and Venmo <strong>@kyle-Warzecha</strong> to confirm your spot.</p>
       </div>
 
+      <!-- RSVP Section -->
       <div id="rsvp" class="card rsvp-card">
         <h2>RSVP</h2>
         <p>Find your name, add your plus one if applicable, and submit your RSVP. After submitting, please send <strong>$45 per person</strong> to Venmo <strong>@kyle-Warzecha</strong> to confirm.</p>
