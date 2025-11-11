@@ -4,7 +4,7 @@ function createSnowflakes() {
   const snowLayer = document.getElementById('snow-layer');
   if (!snowLayer) return;
 
-  const flakes = 120;
+  const flakes = 60;
   for (let i = 0; i < flakes; i++) {
     const dot = document.createElement('span');
     dot.style.position = 'fixed';
