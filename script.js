@@ -230,6 +230,7 @@ function setupRSVP() {
 
 document.addEventListener('DOMContentLoaded', () => {
   createSnowflakes();
+  populateInviteeDatalist();
   setupPlusOneSuggestion();
   setupRSVP();
 });
