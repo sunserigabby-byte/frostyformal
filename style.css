@@ -230,7 +230,11 @@ body {
 .rsvp-submit:hover {
   background:var(--blue2);
   transform:translateY(-2px);
- 
+
+.venmo-button-wrap {
+  margin-top: 8px;
+}
+  
 .venmo-button {
   background: var(--gold);
   color: var(--ink);
@@ -244,15 +248,13 @@ body {
   text-decoration: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   transition: all 0.25s;
-  display: inline-block;
-  margin: 24px 0 0 0;
+  display: inline-block;   /* key: no full-width block */
+  margin: 0;               /* no auto-centering */
 }
 
 .venmo-button:hover {
   background: #ffe6a5;
   transform: translateY(-2px);
-}
-
 }
 
 /* Itinerary layout */
@@ -326,6 +328,9 @@ a.inline:hover { text-decoration:underline; }
 }
 
 /* RSVP form */
+.rsvp-card {
+  text-align: left; /* keeps everything in the card left-aligned */
+}
 .rsvp-card .field {
   margin-bottom:14px;
 }
