@@ -48,7 +48,7 @@ body {
   top:0;
   left:0;
   right:0;
-  height:150px;
+  height:220px;
   background:url('garlandb.jpg') no-repeat center top;
   background-size:contain;   /* stretch to full width, keep proportions */
   z-index:4;
