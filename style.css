@@ -48,9 +48,9 @@ body {
   top:0;
   left:0;
   right:0;
-  height:300px;
+  height:350px;
   background:url('garlandb.jpg') no-repeat center top;
-  background-size:100% auto;   /* stretch to full width, keep proportions */
+  background-size:110% auto;   /* stretch to full width, keep proportions */
   z-index:4;
   pointer-events:none;
 }
@@ -239,7 +239,7 @@ body {
 
 .big-snowflake {
   position:fixed;
-  top:-10vh;
+  top:-2vh;
   left:var(--x,50%);
   font-size:var(--size,90px);
   color:rgba(255,255,255,0.95);
