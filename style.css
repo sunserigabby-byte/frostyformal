@@ -30,7 +30,7 @@ body {
 /* Big drifting flakes */
 .big-snowflake {
   position:fixed;
-  top:-12vh;
+  top:-2vh;
   color:rgba(255,255,255,0.96);
   font-size:var(--size,96px);
   left:var(--x,50%);
@@ -41,8 +41,8 @@ body {
 }
 
 @keyframes drift {
-  0% { transform:translateY(-12vh) rotate(0deg); opacity:.95; }
-  100% { transform:translateY(125vh) rotate(360deg); opacity:.8; }
+  0% { transform:translateY(0vh) rotate(0deg); opacity:.95; }
+  100% { transform:translateY(115vh) rotate(360deg); opacity:.8; }
 }
 
 /* Static glowing flakes */
