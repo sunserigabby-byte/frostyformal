@@ -244,7 +244,7 @@ function setupRSVP() {
 
     // === Google Sheets logging via Apps Script ===
     // Replace with your actual Web App URL from "Manage deployments"
-    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
+    const appsSconst appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
 
     fetch(appsScriptUrl, {
       method: 'POST',
