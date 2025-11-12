@@ -244,22 +244,22 @@ function setupRSVP() {
 
     // === Google Sheets logging via Apps Script ===
     // Replace with your actual Web App URL from "Manage deployments"
-    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
+    // === Google Sheets logging via Apps Script (GET with data param) ===
+const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
 
-    fetch(appsScriptUrl, {
-      method: 'POST',
-      mode: 'no-cors', // send without CORS errors; response will be opaque
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: 'data=' + encodeURIComponent(JSON.stringify(payload))
-    })
-      .then(() => {
-        console.log('RSVP sent to Google Sheet (no-cors).');
-      })
-      .catch(err => {
-        console.error('Error saving to Google Sheet:', err);
-      });
+const urlWithData = appsScriptUrl + '?data=' + encodeURIComponent(JSON.stringify(payload));
+
+fetch(urlWithData, {
+  method: 'GET',
+  mode: 'no-cors'
+})
+  .then(() => {
+    console.log('RSVP sent to Google Sheet via GET (no-cors).');
+  })
+  .catch(err => {
+    console.error('Error saving to Google Sheet:', err);
+  });
+
 
     // --- Front-end confirmation ---
     let text = `RSVP received for ${name}`;
