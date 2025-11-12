@@ -179,79 +179,40 @@ function setupRSVP() {
 
   if (!form || !msg) return;
 
-  if (attendingEl) attendingEl.addEventListener('change', updateVenmoAmount);
-  if (guestCountEl) guestCountEl.addEventListener('change', updateVenmoAmount);
-  updateVenmoAmount();
-
   form.addEventListener('submit', (e) => {
-    e.preventDefault(); // prevent page reload
-    msg.classList.remove('error');
+    e.preventDefault();
     msg.textContent = '';
 
     const name = (document.getElementById('inviteeName').value || '').trim();
     const plusOne = (document.getElementById('plusOneName').value || '').trim();
     const email = (document.getElementById('email')?.value || '').trim();
-    const attending = attendingEl ? attendingEl.value : 'yes';
-    const guestCount = parseInt(guestCountEl?.value || '1', 10) || 1;
+    const attending = attendingEl.value;
+    const guestCount = parseInt(guestCountEl.value || '1', 10);
     const notes = (document.getElementById('notes')?.value || '').trim();
-
-    if (!name) {
-      msg.textContent = 'Please enter your name.';
-      msg.classList.add('error');
-      return;
-    }
-
-    const invitee = findInviteeByName(name);
-    if (!invitee) {
-      msg.textContent = 'This RSVP form is for invited guests only. If you believe this is an error, please contact us.';
-      msg.classList.add('error');
-      return;
-    }
-
-    if (plusOne) {
-      const plusInvitee = findInviteeByName(plusOne);
-      if (plusInvitee && invitee.group && plusInvitee.group && plusInvitee.group !== invitee.group) {
-        msg.textContent = 'Note: the plus one you entered is not in the same group on our list. We will review this manually.';
-      }
-    }
-
-    if (attending === 'no') {
-      msg.textContent = `Sorry you can't make it, ${name}. Your response has been recorded.`;
-      form.reset();
-      if (guestCountEl) guestCountEl.value = '1';
-      if (attendingEl) attendingEl.value = 'yes';
-      updateVenmoAmount();
-      return;
-    }
-
     const amount = 45 * guestCount;
 
-    const payload = {
-      name,
-      plusOne,
-      email,
-      attending,
-      guestCount,
-      amount,
-      notes
-    };
+    const payload = { name, plusOne, email, attending, guestCount, amount, notes };
 
-// === Google Sheets logging via Apps Script ===
-const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
+    // ✅ THIS fetch call is *inside* the submit listener
+    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
+    fetch(appsScriptUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: 'data=' + encodeURIComponent(JSON.stringify(payload))
+    })
+      .then(() => console.log('RSVP sent to Google Sheet'))
+      .catch(err => console.error('Error sending RSVP:', err));
 
-fetch(appsScriptUrl, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-  },
-  body: 'data=' + encodeURIComponent(JSON.stringify(payload))
-})
-  .then(() => {
-    console.log('RSVP sent to Google Sheet');
-  })
-  .catch(err => {
-    console.error('Error saving to Google Sheet:', err);
+    msg.textContent = `RSVP received for ${name}${plusOne ? ' + ' + plusOne : ''}. Please Venmo $${amount}.`;
+
+    form.reset();
   });
+}
+
+
 
 
     // Front-end confirmation
