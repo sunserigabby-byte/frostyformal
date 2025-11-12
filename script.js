@@ -242,6 +242,60 @@ function setupRSVP() {
       notes
     };
 
+    function buildGoogleCalLink() {
+  const toUTC = (d)=> {
+    const u = new Date(d.getTime() - d.getTimezoneOffset()*60000);
+    const Y = u.getUTCFullYear();
+    const M = String(u.getUTCMonth()+1).padStart(2,'0');
+    const D = String(u.getUTCDate()).padStart(2,'0');
+    const h = String(u.getUTCHours()).padStart(2,'0');
+    const m = String(u.getUTCMinutes()).padStart(2,'0');
+    const s = String(u.getUTCSeconds()).padStart(2,'0');
+    return `${Y}${M}${D}T${h}${m}${s}Z`;
+  };
+  const start = new Date('January 24, 2026 19:00:00 GMT-0500');
+  const end   = new Date('January 24, 2026 23:00:00 GMT-0500');
+  const dates = `${toUTC(start)}/${toUTC(end)}`;
+  const text = encodeURIComponent('Frosty Formal');
+  const details = encodeURIComponent(
+    'Open Bar (Shake It Up NC), DJ V1RAL, Photographer Justin Jenkins.\n' +
+    'Venue: Garland Hall (East Durham) — https://www.garlandhalldurham.com/\n' +
+    'Dress: Formal (suits & floor-length gowns)\n' +
+    'Confirm via Venmo: @Kyle-Warzecha (https://account.venmo.com/u/Kyle-Warzecha)'
+  );
+  const location = encodeURIComponent('Garland Hall (East Durham)');
+  return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}&location=${location}&sf=true&output=xml`;
+}
+
+function downloadICSClient() {
+  const ics =
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Frosty Formal//RSVP//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:${crypto.randomUUID()}
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z')}
+DTSTART:20260124T000000Z
+DTEND:20260124T040000Z
+SUMMARY:Frosty Formal
+LOCATION:Garland Hall (East Durham)
+DESCRIPTION:Open Bar (Shake It Up NC), DJ V1RAL, Photographer Justin Jenkins.\\nVenue: https://www.garlandhalldurham.com/\\nDress: Formal\\nConfirm via Venmo: @Kyle-Warzecha
+END:VEVENT
+END:VCALENDAR`;
+  const blob = new Blob([ics], {type:'text/calendar'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'FrostyFormal.ics';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+
     // === Google Sheets logging via Apps Script ===
     // Replace with your actual Web App URL from "Manage deployments"
     // === Google Sheets logging via Apps Script (GET with data param) ===
