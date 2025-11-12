@@ -171,13 +171,11 @@ function toUTCStampZ(dateLocal) {
 }
 
 function buildGoogleCalLink() {
-  // Local ET times
-  const startLocal = new Date('January 24, 2026 19:00:00 GMT-0500'); // 7:00 PM ET
-  const endLocal   = new Date('January 24, 2026 23:00:00 GMT-0500'); // 11:00 PM ET
+  // Jan 24, 2026 7:00–11:00 PM ET == Jan 25, 2026 00:00–04:00 UTC
+  const startUTC = '20260125T000000Z';
+  const endUTC   = '20260125T040000Z';
 
-  // Proper UTC stamps
-  const dates = `${toUTCStampZ(startLocal)}/${toUTCStampZ(endLocal)}`;
-
+  const dates = `${startUTC}/${endUTC}`;
   const text = encodeURIComponent('Frosty Formal');
   const details = encodeURIComponent(
     'Open Bar (Shake It Up NC), DJ V1RAL, Photographer Justin Jenkins.\n' +
@@ -190,15 +188,12 @@ function buildGoogleCalLink() {
   return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}&location=${location}&sf=true&output=xml`;
 }
 
-function downloadICSClient() {
-  // Use the same local ET times, then convert to UTC stamps for ICS
-  const startLocal = new Date('January 24, 2026 19:00:00 GMT-0500'); // 7 PM ET
-  const endLocal   = new Date('January 24, 2026 23:00:00 GMT-0500'); // 11 PM ET
 
-  const toZ = (d) => {
-    const u = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-    return u.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z'); // YYYYMMDDTHHMMSSZ
-  };
+function downloadICSClient() {
+  // Fixed UTC window for 7–11 PM ET
+  const startUTC = '20260125T000000Z';
+  const endUTC   = '20260125T040000Z';
+  const dtstamp  = new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
 
   const ics =
 `BEGIN:VCALENDAR
@@ -208,9 +203,9 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:${(crypto && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2)}
-DTSTAMP:${toZ(new Date())}
-DTSTART:${toZ(startLocal)}
-DTEND:${toZ(endLocal)}
+DTSTAMP:${dtstamp}
+DTSTART:${startUTC}
+DTEND:${endUTC}
 SUMMARY:Frosty Formal
 LOCATION:Garland Hall (East Durham)
 DESCRIPTION:Open Bar (Shake It Up NC), DJ V1RAL, Photographer Justin Jenkins.\\nVenue: https://www.garlandhalldurham.com/\\nDress: Formal\\nConfirm via Venmo: @Kyle-Warzecha
@@ -227,6 +222,7 @@ END:VCALENDAR`;
   a.remove();
   URL.revokeObjectURL(url);
 }
+
 
 
 /* =====================================
