@@ -237,18 +237,18 @@ function setupRSVP() {
     };
 
     // === Google Sheets logging via Apps Script ===
-    fetch('https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-      .then(res => res.json())
-      .then(() => {
-        console.log('RSVP saved to Google Sheet!');
-      })
-      .catch(err => {
-        console.error('Error saving to Google Sheet:', err);
-      });
+   fetch('https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload)
+})
+  .then(res => res.json())
+  .then(data => {
+    console.log('RSVP saved to Google Sheet!', data);
+  })
+  .catch(err => {
+    console.error('Error saving to Google Sheet:', err);
+  });
 
     // Front-end confirmation
     let text = `RSVP received for ${name}`;
