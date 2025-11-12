@@ -158,8 +158,9 @@ function setupPlusOneSuggestion() {
 /* =======================================
    7) Calendar helpers (Google + .ics dl)
    ======================================= */
-function toUTCStringForGCal(d) {
-  const u = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+function toUTCStampZ(dateLocal) {
+  // Convert a local Date (ET) to a UTC "YYYYMMDDTHHMMSSZ" string
+  const u = new Date(dateLocal.getTime() - dateLocal.getTimezoneOffset() * 60000);
   const Y = u.getUTCFullYear();
   const M = String(u.getUTCMonth() + 1).padStart(2, '0');
   const D = String(u.getUTCDate()).padStart(2, '0');
@@ -170,9 +171,13 @@ function toUTCStringForGCal(d) {
 }
 
 function buildGoogleCalLink() {
-  const start = new Date('January 24, 2026 19:00:00 GMT-0500');
-  const end   = new Date('January 24, 2026 23:00:00 GMT-0500');
-  const dates = `${toUTCStringForGCal(start)}/${toUTCStringForGCal(end)}`;
+  // Local ET times
+  const startLocal = new Date('January 24, 2026 19:00:00 GMT-0500'); // 7:00 PM ET
+  const endLocal   = new Date('January 24, 2026 23:00:00 GMT-0500'); // 11:00 PM ET
+
+  // Proper UTC stamps
+  const dates = `${toUTCStampZ(startLocal)}/${toUTCStampZ(endLocal)}`;
+
   const text = encodeURIComponent('Frosty Formal');
   const details = encodeURIComponent(
     'Open Bar (Shake It Up NC), DJ V1RAL, Photographer Justin Jenkins.\n' +
@@ -181,15 +186,19 @@ function buildGoogleCalLink() {
     'Confirm via Venmo: @Kyle-Warzecha (https://account.venmo.com/u/Kyle-Warzecha)'
   );
   const location = encodeURIComponent('Garland Hall (East Durham)');
+
   return `https://www.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}&location=${location}&sf=true&output=xml`;
 }
 
 function downloadICSClient() {
-  // UTC stamps for ICS
-  const start = new Date('January 25, 2026 00:00:00 GMT+0000'); // 7pm ET -> 00:00Z
-  const end   = new Date('January 25, 2026 04:00:00 GMT+0000'); // 11pm ET -> 04:00Z
+  // Use the same local ET times, then convert to UTC stamps for ICS
+  const startLocal = new Date('January 24, 2026 19:00:00 GMT-0500'); // 7 PM ET
+  const endLocal   = new Date('January 24, 2026 23:00:00 GMT-0500'); // 11 PM ET
 
-  const dt = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+  const toZ = (d) => {
+    const u = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+    return u.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z'); // YYYYMMDDTHHMMSSZ
+  };
 
   const ics =
 `BEGIN:VCALENDAR
@@ -198,17 +207,17 @@ PRODID:-//Frosty Formal//RSVP//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:${crypto.randomUUID()}
-DTSTAMP:${dt(new Date())}
-DTSTART:${dt(start)}
-DTEND:${dt(end)}
+UID:${(crypto && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).slice(2)}
+DTSTAMP:${toZ(new Date())}
+DTSTART:${toZ(startLocal)}
+DTEND:${toZ(endLocal)}
 SUMMARY:Frosty Formal
 LOCATION:Garland Hall (East Durham)
 DESCRIPTION:Open Bar (Shake It Up NC), DJ V1RAL, Photographer Justin Jenkins.\\nVenue: https://www.garlandhalldurham.com/\\nDress: Formal\\nConfirm via Venmo: @Kyle-Warzecha
 END:VEVENT
 END:VCALENDAR`;
 
-  const blob = new Blob([ics], { type: 'text/calendar' });
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -218,6 +227,7 @@ END:VCALENDAR`;
   a.remove();
   URL.revokeObjectURL(url);
 }
+
 
 /* =====================================
    8) RSVP (invite-only + Google Sheets)
@@ -339,7 +349,7 @@ function setupRSVP() {
    9) Send payload to Apps Script (GET)
    ====================================== */
 function sendToAppsScript(payload) {
-  const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
+  const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
   const urlWithData = appsScriptUrl + '?data=' + encodeURIComponent(JSON.stringify(payload));
 
   fetch(urlWithData, {
