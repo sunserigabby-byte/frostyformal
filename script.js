@@ -141,17 +141,18 @@ function setupPlusOneSuggestion() {
     autoFillPlusOne();
   });
 
-  // Also react as they select from the datalist / type (more responsive)
+  // Also when they select from datalist / change value
   nameInput.addEventListener('change', () => {
     autoFillPlusOne();
   });
 
+  // As they type, if it matches exactly one invitee
   nameInput.addEventListener('input', () => {
-    // Only auto-fill if value exactly matches one invitee
     const me = findInviteeByName(nameInput.value);
     if (me) autoFillPlusOne(me);
   });
 
+  // If they manually edit plus one, sync guest count
   plusOneInput.addEventListener('input', () => {
     syncGuestCountWithPlusOne();
   });
@@ -169,7 +170,7 @@ function setupPlusOneSuggestion() {
   }
 }
 
-// ============ RSVP form behavior (invite-only) ============
+// ============ RSVP form behavior (invite-only + Sheet logging) ============
 
 function setupRSVP() {
   const form = document.getElementById('rsvp-form');
@@ -179,49 +180,94 @@ function setupRSVP() {
 
   if (!form || !msg) return;
 
+  if (attendingEl) attendingEl.addEventListener('change', updateVenmoAmount);
+  if (guestCountEl) guestCountEl.addEventListener('change', updateVenmoAmount);
+  updateVenmoAmount();
+
   form.addEventListener('submit', (e) => {
-    e.preventDefault();
+    e.preventDefault(); // keep page from reloading
+
+    msg.classList.remove('error');
     msg.textContent = '';
 
     const name = (document.getElementById('inviteeName').value || '').trim();
     const plusOne = (document.getElementById('plusOneName').value || '').trim();
     const email = (document.getElementById('email')?.value || '').trim();
-    const attending = attendingEl.value;
-    const guestCount = parseInt(guestCountEl.value || '1', 10);
+    const attending = attendingEl ? attendingEl.value : 'yes';
+    const guestCount = parseInt(guestCountEl?.value || '1', 10) || 1;
     const notes = (document.getElementById('notes')?.value || '').trim();
+
+    // --- Basic validation ---
+    if (!name) {
+      msg.textContent = 'Please enter your name.';
+      msg.classList.add('error');
+      return;
+    }
+
+    // Invite-only enforcement
+    const invitee = findInviteeByName(name);
+    if (!invitee) {
+      msg.textContent = 'This RSVP form is for invited guests only. If you believe this is an error, please contact us.';
+      msg.classList.add('error');
+      return;
+    }
+
+    // Optional: soft check on plus one group
+    if (plusOne) {
+      const plusInvitee = findInviteeByName(plusOne);
+      if (plusInvitee && invitee.group && plusInvitee.group && plusInvitee.group !== invitee.group) {
+        msg.textContent = 'Note: the plus one you entered is not in the same group on our list. We will review this manually.';
+      }
+    }
+
+    // If not attending
+    if (attending === 'no') {
+      msg.textContent = `Sorry you can't make it, ${name}. Your response has been recorded.`;
+      form.reset();
+      if (guestCountEl) guestCountEl.value = '1';
+      if (attendingEl) attendingEl.value = 'yes';
+      updateVenmoAmount();
+      return;
+    }
+
     const amount = 45 * guestCount;
 
-    const payload = { name, plusOne, email, attending, guestCount, amount, notes };
+    const payload = {
+      name,
+      plusOne,
+      email,
+      attending,
+      guestCount,
+      amount,
+      notes
+    };
 
-    // ✅ THIS fetch call is *inside* the submit listener
+    // === Google Sheets logging via Apps Script ===
+    // Replace with your actual Web App URL from "Manage deployments"
     const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
+
     fetch(appsScriptUrl, {
       method: 'POST',
-      mode: 'no-cors',
+      mode: 'no-cors', // send without CORS errors; response will be opaque
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
       },
       body: 'data=' + encodeURIComponent(JSON.stringify(payload))
     })
-      .then(() => console.log('RSVP sent to Google Sheet'))
-      .catch(err => console.error('Error sending RSVP:', err));
+      .then(() => {
+        console.log('RSVP sent to Google Sheet (no-cors).');
+      })
+      .catch(err => {
+        console.error('Error saving to Google Sheet:', err);
+      });
 
-    msg.textContent = `RSVP received for ${name}${plusOne ? ' + ' + plusOne : ''}. Please Venmo $${amount}.`;
-
-    form.reset();
-  });
-}
-
-
-
-
-    // Front-end confirmation
+    // --- Front-end confirmation ---
     let text = `RSVP received for ${name}`;
     if (plusOne) text += ` + ${plusOne}`;
     text += `. Please Venmo $${amount} to @kyle-Warzecha or use the Venmo button above to confirm your spot.`;
     msg.textContent = text;
 
-    // Reset visible form while keeping logic sane
+    // Reset form + totals
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
@@ -229,7 +275,7 @@ function setupRSVP() {
   });
 }
 
-// ============ Init ============
+// ============ Initialize on page load ============
 
 document.addEventListener('DOMContentLoaded', () => {
   createSnowflakes();
