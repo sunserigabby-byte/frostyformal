@@ -241,17 +241,41 @@ function setupRSVP() {
   updateVenmoAmount();
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault(); // don't reload
+  e.preventDefault();
 
-    msg.classList.remove('error');
-    msg.textContent = '';
+  const name = document.getElementById('inviteeName').value.trim();
+  const plusOne = document.getElementById('plusOneName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const attending = document.getElementById('attending').value;
+  const guestCount = parseInt(document.getElementById('guestCount').value) || 1;
+  const notes = document.getElementById('notes').value.trim();
+  const amount = 45 * guestCount;
 
-    const name = (document.getElementById('inviteeName').value || '').trim();
-    const plusOne = (document.getElementById('plusOneName').value || '').trim();
-    const email = (document.getElementById('email')?.value || '').trim();
-    const attending = attendingEl ? attendingEl.value : 'yes';
-    const guestCount = parseInt(guestCountEl?.value || '1', 10) || 1;
-    const notes = (document.getElementById('notes')?.value || '').trim();
+  const payload = { name, plusOne, email, attending, guestCount, amount, notes };
+
+  // === Apps Script call ===
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
+  const qs = 'data=' + encodeURIComponent(JSON.stringify(payload));
+  const getUrl = APPS_SCRIPT_URL + '?' + qs;
+
+  console.log('[RSVP] sending to Apps Script:', getUrl);
+
+  fetch(getUrl)
+    .then(r => r.text())
+    .then(txt => {
+      console.log('[RSVP] Apps Script response:', txt);
+      const msg = document.getElementById('rsvp-message');
+      if (msg) msg.textContent = `RSVP submitted! Check your email for confirmation.`;
+    })
+    .catch(err => {
+      console.error('[RSVP] fetch error:', err);
+      const msg = document.getElementById('rsvp-message');
+      if (msg) msg.textContent = 'Error submitting RSVP. Please try again.';
+    });
+
+  // Optional: Reset form or update UI after submission
+  form.reset();
+});
 
     if (!name) {
       msg.textContent = 'Please enter your name.';
