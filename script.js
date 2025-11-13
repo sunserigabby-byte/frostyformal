@@ -246,7 +246,7 @@ function setupRSVP() {
 
     // === Google Sheets logging via Apps Script (GET so it's easy to debug) ===
     // === Google Sheets logging via Apps Script (POST, no-cors) ===
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
 
 const body = 'data=' + encodeURIComponent(JSON.stringify(payload));
 
