@@ -245,20 +245,26 @@ function setupRSVP() {
     };
 
     // === Google Sheets logging via Apps Script (GET so it's easy to debug) ===
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
-    const qs = 'data=' + encodeURIComponent(JSON.stringify(payload));
-    const getUrl = APPS_SCRIPT_URL + '?' + qs;
+    // === Google Sheets logging via Apps Script (POST, no-cors) ===
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLdMHKFiNTnoATzof_59O4zhYOuTVdkyK0Be4DaqNeyy_IWCbd_ZDdJSFQ0JfdK4k/exec';
 
-    console.log('[RSVP] sending to Apps Script:', getUrl);
+const body = 'data=' + encodeURIComponent(JSON.stringify(payload));
 
-    fetch(getUrl)
-      .then(r => r.text())
-      .then(txt => {
-        console.log('[RSVP] Apps Script response:', txt);
-      })
-      .catch(err => {
-        console.error('[RSVP] fetch error:', err);
-      });
+console.log('[RSVP] sending to Apps Script (no-cors POST)');
+
+fetch(APPS_SCRIPT_URL, {
+  method: 'POST',
+  mode: 'no-cors', // 👈 this avoids the CORS error
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+  },
+  body
+})
+  .catch(err => {
+    // We won't get a detailed response in no-cors mode, but we can still log failures
+    console.error('[RSVP] fetch error (no-cors):', err);
+  });
+
 
     // --- Front-end confirmation ---
     let text = `RSVP received for ${name}`;
