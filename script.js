@@ -3,7 +3,7 @@ function createSnowflakes() {
   const snowLayer = document.getElementById('snow-layer');
   if (!snowLayer) return;
 
-  const flakes = 60; // adjust density here
+  const flakes = 60;
   for (let i = 0; i < flakes; i++) {
     const dot = document.createElement('div');
     const size = 1 + Math.random() * 3;
@@ -17,9 +17,9 @@ function createSnowflakes() {
     dot.style.borderRadius = '50%';
     dot.style.pointerEvents = 'none';
     dot.style.zIndex = 1;
-    dot.style.opacity = (0.7 + Math.random() * 0.3).toString();
+    dot.style.opacity = 0.7 + Math.random() * 0.3;
 
-    const duration = 7 + Math.random() * 8; // 7–15s
+    const duration = 7 + Math.random() * 8;
     const delay = Math.random() * duration;
 
     dot.style.animation = `fall ${duration}s linear infinite`;
@@ -60,10 +60,7 @@ function populateInviteeDatalist() {
 
 // ============ Helper functions for invitees ============
 function normalizeName(str) {
-  return (str || "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, " ");
+  return (str || "").trim().toLowerCase().replace(/\s+/g, " ");
 }
 
 function findInviteeByName(fullName) {
@@ -133,24 +130,12 @@ function setupPlusOneSuggestion() {
   const plusOneInput = document.getElementById('plusOneName');
   if (!nameInput || !plusOneInput) return;
 
-  function autoFillPlusOne(existingInvitee) {
-    const me = existingInvitee || findInviteeByName(nameInput.value);
-    if (!me) return;
-
-    const others = getGroupMembers(me);
-    if (others.length === 1 && !plusOneInput.value.trim()) {
-      const partner = others[0];
-      plusOneInput.value = `${partner.first} ${partner.last}`;
-      syncGuestCountWithPlusOne();
-    }
-  }
-
   // When they finish choosing their name (blur)
   nameInput.addEventListener('blur', () => {
     autoFillPlusOne();
   });
 
-  // When they select from datalist / change value
+  // Also when they select from datalist / change value
   nameInput.addEventListener('change', () => {
     autoFillPlusOne();
   });
@@ -165,6 +150,18 @@ function setupPlusOneSuggestion() {
   plusOneInput.addEventListener('input', () => {
     syncGuestCountWithPlusOne();
   });
+
+  function autoFillPlusOne(existingInvitee) {
+    const me = existingInvitee || findInviteeByName(nameInput.value);
+    if (!me) return;
+
+    const others = getGroupMembers(me);
+    if (others.length === 1 && !plusOneInput.value.trim()) {
+      const partner = others[0];
+      plusOneInput.value = `${partner.first} ${partner.last}`;
+      syncGuestCountWithPlusOne();
+    }
+  }
 }
 
 // ============ RSVP form behavior (invite-only + Sheet logging) ============
@@ -181,7 +178,7 @@ function setupRSVP() {
   updateVenmoAmount();
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault(); // ✅ keep page from reloading
+    e.preventDefault(); // keep page from reloading
 
     msg.classList.remove('error');
     msg.textContent = '';
@@ -238,17 +235,18 @@ function setupRSVP() {
       notes
     };
 
-    // === Google Sheets logging via Apps Script (GET, urlencoded, no-cors) ===
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
 
-    const qs = 'data=' + encodeURIComponent(JSON.stringify(payload));
-    console.log('[RSVP] sending to Apps Script via GET (no-cors)');
+    console.log('[RSVP] sending to Apps Script (GET ?data=...)', payload);
 
-    fetch(`${APPS_SCRIPT_URL}?${qs}`, {
+    const url = APPS_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
+
+    // Fire-and-forget GET; Apps Script doGet will handle it
+    fetch(url, {
       method: 'GET',
       mode: 'no-cors'
     }).catch(err => {
-      console.error('[RSVP] fetch error (no-cors):', err);
+      console.error('[RSVP] fetch error:', err);
     });
 
     // --- Front-end confirmation ---
@@ -257,7 +255,7 @@ function setupRSVP() {
     text += `. Please Venmo $${amount} to @kyle-Warzecha or use the Venmo button above to confirm your spot.`;
     msg.textContent = text;
 
-    // Reset form + totals for the next person
+    // Reset form + totals
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
