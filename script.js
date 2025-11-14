@@ -225,7 +225,7 @@ function setupRSVP() {
 
     const amount = 45 * guestCount;
 
-    const payload = {
+      const payload = {
       name,
       plusOne,
       email,
@@ -235,19 +235,23 @@ function setupRSVP() {
       notes
     };
 
-    // === Google Sheets + email via Apps Script (POST JSON, no-cors) ===
+    // === Google Sheets + email via Apps Script (POST form-style "data=") ===
     const APPS_SCRIPT_URL =
       'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
 
-    console.log('[RSVP] sending to Apps Script (POST JSON, no-cors)', payload);
+    console.log('[RSVP] sending to Apps Script (POST form data)', payload);
 
     fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',          // no CORS preflight, just send it
-      body: JSON.stringify(payload) // raw JSON; Apps Script parses e.postData.contents
+      mode: 'no-cors', // avoid CORS errors
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: 'data=' + encodeURIComponent(JSON.stringify(payload))
     }).catch(err => {
       console.error('[RSVP] fetch error:', err);
     });
+
 
     // --- Front-end confirmation ---
     let text = `RSVP received for ${name}`;
