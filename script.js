@@ -225,7 +225,7 @@ function setupRSVP() {
 
     const amount = 45 * guestCount;
 
-          const payload = {
+     const payload = {
       name,
       plusOne,
       email,
@@ -241,7 +241,6 @@ function setupRSVP() {
 
     console.log('[RSVP] sending to Apps Script via image GET', payload);
 
-    // Fire-and-forget tracking pixel
     const img = new Image();
     img.src = APPS_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
 
