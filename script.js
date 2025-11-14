@@ -235,16 +235,16 @@ function setupRSVP() {
       notes
     };
 
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
+    // === Google Sheets + email via Apps Script (POST JSON, no-cors) ===
+    const APPS_SCRIPT_URL =
+      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
 
-    console.log('[RSVP] sending to Apps Script (GET ?data=...)', payload);
+    console.log('[RSVP] sending to Apps Script (POST JSON, no-cors)', payload);
 
-    const url = APPS_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
-
-    // Fire-and-forget GET; Apps Script doGet will handle it
-    fetch(url, {
-      method: 'GET',
-      mode: 'no-cors'
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',          // no CORS preflight, just send it
+      body: JSON.stringify(payload) // raw JSON; Apps Script parses e.postData.contents
     }).catch(err => {
       console.error('[RSVP] fetch error:', err);
     });
