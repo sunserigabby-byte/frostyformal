@@ -225,7 +225,7 @@ function setupRSVP() {
 
     const amount = 45 * guestCount;
 
-      const payload = {
+          const payload = {
       name,
       plusOne,
       email,
@@ -235,22 +235,15 @@ function setupRSVP() {
       notes
     };
 
-    // === Google Sheets + email via Apps Script (POST form-style "data=") ===
+    // === Send RSVP to Apps Script via GET image (no CORS issues) ===
     const APPS_SCRIPT_URL =
       'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
 
-    console.log('[RSVP] sending to Apps Script (POST form data)', payload);
+    console.log('[RSVP] sending to Apps Script via image GET', payload);
 
-    fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors', // avoid CORS errors
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: 'data=' + encodeURIComponent(JSON.stringify(payload))
-    }).catch(err => {
-      console.error('[RSVP] fetch error:', err);
-    });
+    // Fire-and-forget tracking pixel
+    const img = new Image();
+    img.src = APPS_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
 
 
     // --- Front-end confirmation ---
