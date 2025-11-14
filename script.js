@@ -249,15 +249,29 @@ function setupRSVP() {
 // === Google Sheets logging via Apps Script (POST, JSON, no-cors) ===
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
 
-console.log('[RSVP] sending to Apps Script (no-cors POST, JSON body)');
+const payload = {
+  name,
+  plusOne,
+  email,
+  attending,
+  guestCount,
+  amount,
+  notes
+};
 
-fetch(APPS_SCRIPT_URL, {
-  method: 'POST',
-  mode: 'no-cors',               // avoids CORS errors
-  body: JSON.stringify(payload), // raw JSON body
-}).catch(err => {
-  console.error('[RSVP] fetch error (no-cors):', err);
-});
+const qs = encodeURIComponent(JSON.stringify(payload));
+const url = `${APPS_SCRIPT_URL}?data=${qs}`;
+
+console.log('[RSVP] sending to Apps Script via GET:', url);
+
+fetch(url)
+  .then(() => {
+    console.log('[RSVP] Apps Script request sent');
+  })
+  .catch(err => {
+    console.error('[RSVP] fetch error:', err);
+  });
+
 
 
 
