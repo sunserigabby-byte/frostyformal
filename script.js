@@ -1,10 +1,9 @@
 // ============ Snowflakes (small background snow) ============
-
 function createSnowflakes() {
   const snowLayer = document.getElementById('snow-layer');
   if (!snowLayer) return;
 
-  const flakes = 60;
+  const flakes = 60; // adjust density here
   for (let i = 0; i < flakes; i++) {
     const dot = document.createElement('div');
     const size = 1 + Math.random() * 3;
@@ -18,9 +17,9 @@ function createSnowflakes() {
     dot.style.borderRadius = '50%';
     dot.style.pointerEvents = 'none';
     dot.style.zIndex = 1;
-    dot.style.opacity = 0.7 + Math.random() * 0.3;
+    dot.style.opacity = (0.7 + Math.random() * 0.3).toString();
 
-    const duration = 7 + Math.random() * 8;
+    const duration = 7 + Math.random() * 8; // 7–15s
     const delay = Math.random() * duration;
 
     dot.style.animation = `fall ${duration}s linear infinite`;
@@ -43,7 +42,6 @@ function createSnowflakes() {
 })();
 
 // ============ Build datalist for invitee suggestions ============
-
 function populateInviteeDatalist() {
   const dataList = document.getElementById('inviteeNames');
   if (!dataList) return;
@@ -61,9 +59,11 @@ function populateInviteeDatalist() {
 }
 
 // ============ Helper functions for invitees ============
-
 function normalizeName(str) {
-  return (str || "").trim().toLowerCase().replace(/\s+/g, " ");
+  return (str || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 }
 
 function findInviteeByName(fullName) {
@@ -93,7 +93,6 @@ function getGroupMembers(invitee) {
 }
 
 // ============ Venmo amount logic ============
-
 function updateVenmoAmount() {
   const attendingEl = document.getElementById('attending');
   const guestCountEl = document.getElementById('guestCount');
@@ -111,7 +110,6 @@ function updateVenmoAmount() {
 }
 
 // ============ Sync guest count with plus one ============
-
 function syncGuestCountWithPlusOne() {
   const plusOneInput = document.getElementById('plusOneName');
   const guestCountEl = document.getElementById('guestCount');
@@ -120,7 +118,6 @@ function syncGuestCountWithPlusOne() {
 
   const hasPlusOne = plusOneInput.value.trim().length > 0;
 
-  // Only bump to 2 if they are attending "yes"
   if (hasPlusOne && (!attendingEl || attendingEl.value !== 'no')) {
     guestCountEl.value = '2';
   } else if (!hasPlusOne) {
@@ -131,11 +128,22 @@ function syncGuestCountWithPlusOne() {
 }
 
 // ============ Plus-one auto-suggestion using group IDs ============
-
 function setupPlusOneSuggestion() {
   const nameInput = document.getElementById('inviteeName');
   const plusOneInput = document.getElementById('plusOneName');
   if (!nameInput || !plusOneInput) return;
+
+  function autoFillPlusOne(existingInvitee) {
+    const me = existingInvitee || findInviteeByName(nameInput.value);
+    if (!me) return;
+
+    const others = getGroupMembers(me);
+    if (others.length === 1 && !plusOneInput.value.trim()) {
+      const partner = others[0];
+      plusOneInput.value = `${partner.first} ${partner.last}`;
+      syncGuestCountWithPlusOne();
+    }
+  }
 
   // When they finish choosing their name (blur)
   nameInput.addEventListener('blur', () => {
@@ -157,22 +165,9 @@ function setupPlusOneSuggestion() {
   plusOneInput.addEventListener('input', () => {
     syncGuestCountWithPlusOne();
   });
-
-  function autoFillPlusOne(existingInvitee) {
-    const me = existingInvitee || findInviteeByName(nameInput.value);
-    if (!me) return;
-
-    const others = getGroupMembers(me);
-    if (others.length === 1 && !plusOneInput.value.trim()) {
-      const partner = others[0];
-      plusOneInput.value = `${partner.first} ${partner.last}`;
-      syncGuestCountWithPlusOne();
-    }
-  }
 }
 
-// ============ RSVP form behavior (invite-only + Sheets logging) ============
-
+// ============ RSVP form behavior (invite-only + Sheet logging) ============
 function setupRSVP() {
   const form = document.getElementById('rsvp-form');
   const msg = document.getElementById('rsvp-message');
@@ -181,13 +176,12 @@ function setupRSVP() {
 
   if (!form || !msg) return;
 
-  // keep amount in sync if they change attending or guest count manually
   if (attendingEl) attendingEl.addEventListener('change', updateVenmoAmount);
   if (guestCountEl) guestCountEl.addEventListener('change', updateVenmoAmount);
   updateVenmoAmount();
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault(); // 🛑 stop page refresh
+    e.preventDefault(); // ✅ keep page from reloading
 
     msg.classList.remove('error');
     msg.textContent = '';
@@ -244,36 +238,18 @@ function setupRSVP() {
       notes
     };
 
-    // === Google Sheets logging via Apps Script (GET so it's easy to debug) ===
-    // === Google Sheets logging via Apps Script (POST, no-cors) ===
-// === Google Sheets logging via Apps Script (POST, JSON, no-cors) ===
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
+    // === Google Sheets logging via Apps Script (GET, urlencoded, no-cors) ===
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
 
-const payload = {
-  name,
-  plusOne,
-  email,
-  attending,
-  guestCount,
-  amount,
-  notes
-};
+    const qs = 'data=' + encodeURIComponent(JSON.stringify(payload));
+    console.log('[RSVP] sending to Apps Script via GET (no-cors)');
 
-const qs = encodeURIComponent(JSON.stringify(payload));
-const url = `${APPS_SCRIPT_URL}?data=${qs}`;
-
-console.log('[RSVP] sending to Apps Script via GET:', url);
-
-fetch(url)
-  .then(() => {
-    console.log('[RSVP] Apps Script request sent');
-  })
-  .catch(err => {
-    console.error('[RSVP] fetch error:', err);
-  });
-
-
-
+    fetch(`${APPS_SCRIPT_URL}?${qs}`, {
+      method: 'GET',
+      mode: 'no-cors'
+    }).catch(err => {
+      console.error('[RSVP] fetch error (no-cors):', err);
+    });
 
     // --- Front-end confirmation ---
     let text = `RSVP received for ${name}`;
@@ -290,7 +266,6 @@ fetch(url)
 }
 
 // ============ Initialize on page load ============
-
 document.addEventListener('DOMContentLoaded', () => {
   createSnowflakes();
   populateInviteeDatalist();
