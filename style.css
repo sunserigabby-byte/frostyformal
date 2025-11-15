@@ -355,71 +355,30 @@ body {
 }
 
 /* String lights – repeating strip with soft moving twinkle */
+/* String lights – static, bigger, full-width repeating strip */
 .string-lights-strip {
   margin: 1.75rem 0 1.25rem;
   position: relative;
   left: 50%;
-  width: 100vw;
-  height: 100px;
+  width: 100vw;                 /* full viewport width */
+  height: 120px;                /* controls vertical size of the lights */
   transform: translateX(-50%);
   pointer-events: none;
-  overflow: hidden;
-}
-
-/* Base layer: steady lights */
-.string-lights-strip::before {
-  content: "";
-  position: absolute;
-  inset: 0;
   background-image: url('Stringlights.jpg');
   background-repeat: repeat-x;
-  background-size: 320px auto;     /* controls bulb size */
+  background-size: 380px auto;  /* bigger value = bigger bulbs */
   background-position: center;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
-  opacity: 0.95;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
 }
 
-/* Highlight layer: soft twinkle stripes sweeping across */
-.string-lights-strip::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  /* vertical bands that brighten parts of the strand */
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0px,
-    rgba(255, 255, 255, 0) 55px,
-    rgba(255, 255, 255, 0.85) 55px,
-    rgba(255, 255, 255, 0.85) 65px,
-    rgba(255, 255, 255, 0) 65px,
-    rgba(255, 255, 255, 0) 120px
-  );
-  mix-blend-mode: screen;
-  opacity: 0.45;
-  filter: blur(1px);
-  pointer-events: none;
-  animation: twinkleSweep 7s linear infinite;
-}
-
-/* shimmer passes over, but the image itself doesn't move */
-@keyframes twinkleSweep {
-  0%   { background-position:   0   0; opacity: 0.35; }
-  20%  { background-position: -80px  0; opacity: 0.7;  }
-  40%  { background-position: -160px 0; opacity: 0.4;  }
-  60%  { background-position: -240px 0; opacity: 0.7;  }
-  80%  { background-position: -320px 0; opacity: 0.35; }
-  100% { background-position: -400px 0; opacity: 0.45; }
-}
-
-
+/* Slight tweak for small screens */
 @media (max-width: 600px) {
   .string-lights-strip {
-    height: 80px;
-  }
-  .string-lights-strip::before {
-    background-size: 260px auto;
+    height: 100px;
+    background-size: 340px auto;
   }
 }
+
 
 
 /* RSVP Card */
