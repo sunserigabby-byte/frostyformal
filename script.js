@@ -177,92 +177,63 @@ function setupRSVP() {
   if (guestCountEl) guestCountEl.addEventListener('change', updateVenmoAmount);
   updateVenmoAmount();
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault(); // keep page from reloading
+form.addEventListener('submit', (e) => {
+  e.preventDefault(); // <-- prevents the page refresh
 
-    msg.classList.remove('error');
-    msg.textContent = '';
+  // Grab values from your form fields
+  const name        = nameEl.value.trim();
+  const plusOne     = plusOneEl ? plusOneEl.value.trim() : '';
+  const email       = emailEl.value.trim();
+  const attending   = attendingEl ? attendingEl.value : 'yes';
+  const guestCount  = guestCountEl ? Number(guestCountEl.value || 1) : 1;
+  const amount      = Number(amountEl ? amountEl.value || (45 * guestCount) : (45 * guestCount));
+  const notes       = notesEl ? notesEl.value.trim() : '';
 
-    const name = (document.getElementById('inviteeName').value || '').trim();
-    const plusOne = (document.getElementById('plusOneName').value || '').trim();
-    const email = (document.getElementById('email')?.value || '').trim();
-    const attending = attendingEl ? attendingEl.value : 'yes';
-    const guestCount = parseInt(guestCountEl?.value || '1', 10) || 1;
-    const notes = (document.getElementById('notes')?.value || '').trim();
+  // (Optional) simple validation
+  if (!name || !email) {
+    msg.textContent = 'Please enter your name and email before submitting.';
+    return;
+  }
 
-    // --- Basic validation ---
-    if (!name) {
-      msg.textContent = 'Please enter your name.';
-      msg.classList.add('error');
-      return;
-    }
+  const payload = {
+    name,
+    plusOne,
+    email,
+    attending,
+    guestCount,
+    amount,
+    notes
+  };
 
-    // Invite-only enforcement
-    const invitee = findInviteeByName(name);
-    if (!invitee) {
-      msg.textContent = 'This RSVP form is for invited guests only. If you believe this is an error, please contact us.';
-      msg.classList.add('error');
-      return;
-    }
+  // === Send to Google Apps Script (GET + no-cors) ===
+  const APPS_SCRIPT_URL =
+    'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // <-- replace with YOUR web app URL if different
 
-    // Optional: soft check on plus one group
-    if (plusOne) {
-      const plusInvitee = findInviteeByName(plusOne);
-      if (plusInvitee && invitee.group && plusInvitee.group && plusInvitee.group !== invitee.group) {
-        msg.textContent = 'Note: the plus one you entered is not in the same group on our list. We will review this manually.';
-      }
-    }
+  const params = new URLSearchParams({
+    data: JSON.stringify(payload)
+  });
 
-    // If not attending
-    if (attending === 'no') {
-      msg.textContent = `Sorry you can't make it, ${name}. Your response has been recorded.`;
-      form.reset();
-      if (guestCountEl) guestCountEl.value = '1';
-      if (attendingEl) attendingEl.value = 'yes';
-      updateVenmoAmount();
-      return;
-    }
+  console.log('[RSVP] sending to Apps Script via GET', APPS_SCRIPT_URL);
 
-    const amount = 45 * guestCount;
+  fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
+    method: 'GET',
+    mode: 'no-cors'
+  }).catch(err => {
+    console.error('[RSVP] fetch error:', err);
+  });
 
-    const payload = {
-      name,
-      plusOne,
-      email,
-      attending,
-      guestCount,
-      amount,
-      notes
-    };
+  // --- Front-end confirmation ---
+  let text = `RSVP received for ${name}`;
+  if (plusOne) text += ` + ${plusOne}`;
+  text += `. Please Venmo $${amount} to @kyle-Warzecha or use the Venmo button above to confirm your spot.`;
+  msg.textContent = text;
 
-    // === Send to Google Apps Script (GET + no-cors) ===
-    const APPS_SCRIPT_URL =
-      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
-      // if your Web App URL is different, paste YOUR URL here
+  form.reset();
+  if (guestCountEl) guestCountEl.value = '1';
+  if (attendingEl) attendingEl.value = 'yes';
+  updateVenmoAmount();
+});
 
-    const params = new URLSearchParams({
-      data: JSON.stringify(payload)
-    });
-
-    console.log('[RSVP] sending to Apps Script via GET', APPS_SCRIPT_URL);
-
-    fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
-      method: 'GET',
-      mode: 'no-cors'   // browser won’t block on CORS; we don’t need the response
-    }).catch(err => {
-      console.error('[RSVP] fetch error:', err);
-    });
-
-    // --- Front-end confirmation (keep / tweak this as you like) ---
-    let text = `RSVP received for ${name}`;
-    if (plusOne) text += ` + ${plusOne}`;
-    text += `. Please Venmo $${amount} to @kyle-Warzecha or use the Venmo button above to confirm your spot.`;
-    msg.textContent = text;
-
-    form.reset();
-    if (guestCountEl) guestCountEl.value = '1';
-    if (attendingEl) attendingEl.value = 'yes';
-    updateVenmoAmount();
 
 
 // ============ Initialize on page load ============
