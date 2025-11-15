@@ -354,26 +354,30 @@ body {
   pointer-events:none;
 }
 
-/* String lights photo separators – truly full-width */
-.string-lights-separator {
-  margin: 2rem 0;
+/* String lights – smaller, repeating strip across the page */
+.string-lights-strip {
+  margin: 1.75rem 0 1.25rem;
   position: relative;
   left: 50%;
   width: 100vw;              /* span the whole viewport */
+  height: 80px;              /* controls how tall the strip feels */
   transform: translateX(-50%);
+  background-image: url('Stringlights.jpg');
+  background-repeat: repeat-x;
+  background-size: 260px auto;   /* smaller bulbs, repeated */
+  background-position: center;
   pointer-events: none;      /* decorative only */
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
 }
 
-.string-lights-separator img {
-  display: block;
-  width: 100vw;              /* force the image to fill the viewport */
-  max-width: none;           /* remove any width cap */
-  height: auto;
-  opacity: 0.95;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+/* Slightly shorter on phones so it doesn’t dominate */
+@media (max-width: 600px) {
+  .string-lights-strip {
+    height: 60px;
+    background-size: 220px auto;
+  }
 }
 
-/* DELETE this */
 @media (min-width: 900px) {
   .string-lights-separator img {
     max-width: 700px;
