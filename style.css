@@ -113,6 +113,91 @@ body {
   letter-spacing:.4px;
 }
 
+/* Meet the Team toggle/button */
+.team-toggle-btn {
+  margin-top: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(10, 32, 52, 0.5);
+  color: #f8fbff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.team-toggle-btn:hover {
+  background: rgba(16, 48, 78, 0.8);
+}
+
+/* Collapsible container */
+.team-collapsible {
+  display: none;
+  margin-top: 0.75rem;
+}
+
+.team-collapsible.open {
+  display: block;
+}
+
+.team-intro {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Grid + cards */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.team-member {
+  text-align: center;
+}
+
+.team-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
+  margin-bottom: 0.3rem;
+}
+
+.team-name {
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+/* Small “coming soon” note before you add members */
+.team-empty-note {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Slight tweaks on larger screens */
+@media (min-width: 700px) {
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  }
+
+  .team-photo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .team-name {
+    font-size: 0.85rem;
+  }
+}
+
 /* Buttons */
 
 .btn-primary {
