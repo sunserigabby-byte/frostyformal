@@ -225,7 +225,7 @@ function setupRSVP() {
 
     const amount = 45 * guestCount;
 
-     const payload = {
+    const payload = {
       name,
       plusOne,
       email,
@@ -235,29 +235,35 @@ function setupRSVP() {
       notes
     };
 
-    // === Send RSVP to Apps Script via GET image (no CORS issues) ===
+    // === Send to Google Apps Script (GET + no-cors) ===
     const APPS_SCRIPT_URL =
       'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
+      // if your Web App URL is different, paste YOUR URL here
 
-    console.log('[RSVP] sending to Apps Script via image GET', payload);
+    const params = new URLSearchParams({
+      data: JSON.stringify(payload)
+    });
 
-    const img = new Image();
-    img.src = APPS_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(payload));
+    console.log('[RSVP] sending to Apps Script via GET', APPS_SCRIPT_URL);
 
+    fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
+      method: 'GET',
+      mode: 'no-cors'   // browser won’t block on CORS; we don’t need the response
+    }).catch(err => {
+      console.error('[RSVP] fetch error:', err);
+    });
 
-    // --- Front-end confirmation ---
+    // --- Front-end confirmation (keep / tweak this as you like) ---
     let text = `RSVP received for ${name}`;
     if (plusOne) text += ` + ${plusOne}`;
     text += `. Please Venmo $${amount} to @kyle-Warzecha or use the Venmo button above to confirm your spot.`;
     msg.textContent = text;
 
-    // Reset form + totals
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
     updateVenmoAmount();
-  });
-}
+
 
 // ============ Initialize on page load ============
 document.addEventListener('DOMContentLoaded', () => {
