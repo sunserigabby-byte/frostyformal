@@ -354,9 +354,24 @@ body {
 }
 
 .rsvp-message {
-  margin-top:8px;
-  font-size:13px;
-  color:var(--blue2);
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #143047;          /* deep wintery blue */
+  line-height: 1.5;
+}
+
+.rsvp-message strong {
+  font-size: 1.2rem;
+}
+
+.rsvp-refund {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #35536b;
+
 }
 
 .rsvp-message.error { color:#c0392b; }
