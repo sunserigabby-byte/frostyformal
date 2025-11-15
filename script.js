@@ -263,11 +263,79 @@ if (attending === 'no') {
     updateVenmoAmount();
   });
 }
+// ============ Meet the Team (randomized grid + toggle) ============
 
-// ============ Initialize on page load ============
+// Add your real people + photo paths here when ready:
+const TEAM_MEMBERS = [
+  // Example:
+  // { name: 'Gabby Sunseri', photo: 'images/gabby.jpg' },
+  // { name: 'Kyle Warzecha', photo: 'images/kyle.jpg' },
+];
+
+function shuffleArray(arr) {
+  const copy = arr.slice();
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function renderTeam() {
+  const grid = document.getElementById('team-grid');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+
+  if (!Array.isArray(TEAM_MEMBERS) || TEAM_MEMBERS.length === 0) {
+    const note = document.createElement('p');
+    note.className = 'team-empty-note';
+    note.textContent = 'Team photos coming soon!';
+    grid.appendChild(note);
+    return;
+  }
+
+  const shuffled = shuffleArray(TEAM_MEMBERS);
+
+  shuffled.forEach(member => {
+    const card = document.createElement('div');
+    card.className = 'team-member';
+
+    const img = document.createElement('img');
+    img.className = 'team-photo';
+    img.src = member.photo;
+    img.alt = member.name;
+
+    const name = document.createElement('div');
+    name.className = 'team-name';
+    name.textContent = member.name;
+
+    card.appendChild(img);
+    card.appendChild(name);
+    grid.appendChild(card);
+  });
+}
+
+function setupTeamToggle() {
+  const btn = document.getElementById('team-toggle');
+  const section = document.getElementById('team-section');
+  if (!btn || !section) return;
+
+  btn.addEventListener('click', () => {
+    const isOpen = section.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    section.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+
+    btn.textContent = isOpen ? 'Hide the Team' : 'Meet the Team';
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   createSnowflakes();
   populateInviteeDatalist();
   setupPlusOneSuggestion();
   setupRSVP();
+  renderTeam();       // build the grid in a random order for this page load
+  setupTeamToggle();  // wire up the expand/collapse button
 });
+
