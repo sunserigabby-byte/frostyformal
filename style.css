@@ -375,13 +375,6 @@ body {
 
 
 
-/* Slightly wider on big screens */
-@media (min-width: 900px) {
-  .string-lights-separator img {
-    max-width: 700px;
-  }
-}
-
 
 /* RSVP Card */
 
