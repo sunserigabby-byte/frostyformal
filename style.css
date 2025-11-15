@@ -354,24 +354,25 @@ body {
   pointer-events:none;
 }
 
-/* String lights photo separators – full-width */
+/* String lights photo separators – truly full-width */
 .string-lights-separator {
   margin: 2rem 0;
   position: relative;
   left: 50%;
-  width: 100vw;            /* span full viewport width */
+  width: 100vw;              /* span the whole viewport */
   transform: translateX(-50%);
-  pointer-events: none;    /* purely decorative */
+  pointer-events: none;      /* decorative only */
 }
 
 .string-lights-separator img {
   display: block;
-  width: 100%;             /* fill the 100vw wrapper */
-  max-width: none;
+  width: 100vw;              /* force the image to fill the viewport */
+  max-width: none;           /* remove any width cap */
   height: auto;
   opacity: 0.95;
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
 }
+
 
 
 /* Slightly wider on big screens */
