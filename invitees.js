@@ -1,5 +1,5 @@
 const INVITEES = [
-  { first: "Kyle ", last: "Warzacha", email: "", group: "1" },
+  { first: "Kyle ", last: "Warzecha", email: "", group: "1" },
   { first: "Jon", last: "Lamb", email: "", group: "2" },
   { first: "Gabby", last: "Sunseri", email: "", group: "2" },
   { first: "Gio", last: "Ramirez", email: "", group: "" },
