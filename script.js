@@ -237,14 +237,24 @@ function setupRSVP() {
     });
 
     // --- Front-end confirmation ---
-    let text = `RSVP received for ${name}`;
-    if (plusOne) text += ` + ${plusOne}`;
-    if (attending === 'no') {
-      text += `. Thanks for letting us know — we’ll miss you!`;
-    } else {
-      text += `. Please Venmo $${amount} to @Kyle-Warzecha or use the Venmo button above to confirm your spot.`;
-    }
-    msg.textContent = text;
+if (attending === 'no') {
+  // Not attending
+  msg.innerHTML = `
+    <strong>RSVP received for ${name}${plusOne ? ' + ' + plusOne : ''}.</strong><br>
+    We’re sad you can’t make it, but thank you for letting us know. We will miss you 💙
+  `;
+} else {
+  // Attending
+  msg.innerHTML = `
+    <strong>YAY! 🎉 RSVP received for ${name}${plusOne ? ' + ' + plusOne : ''}.</strong><br>
+    Please Venmo <strong>$${amount}</strong> to <strong>@Kyle-Warzecha</strong> to confirm your spot (or use the Venmo button above).<br>
+    <span class="rsvp-refund">
+      Refund policy: full refund if you cancel at least 7 days before the event.
+      No refunds within 48 hours of the event.
+    </span>
+  `;
+}
+
 
     // Reset form
     form.reset();
