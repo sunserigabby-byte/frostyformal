@@ -170,12 +170,16 @@ function setupRSVP() {
   const msg = document.getElementById('rsvp-message');
 
   // Inputs
-  const nameEl     = document.getElementById('inviteeName');   // your name field
+  const nameEl     = document.getElementById('inviteeName');   // name field
   const plusOneEl  = document.getElementById('plusOneName');   // plus-one field
-  const emailEl    = document.getElementById('email');         // change if your email input has a different id
+  const emailEl    =
+    document.getElementById('email') ||
+    document.getElementById('inviteeEmail') ||
+    document.getElementById('rsvp-email') ||
+    document.querySelector('input[type="email"]');             // fallback
   const attendingEl  = document.getElementById('attending');
   const guestCountEl = document.getElementById('guestCount');
-  const notesEl      = document.getElementById('notes');       // optional notes; change if needed
+  const notesEl      = document.getElementById('notes');       // optional; ok if null
 
   if (!form || !msg) return;
 
@@ -213,15 +217,17 @@ function setupRSVP() {
       notes
     };
 
+    console.log('[RSVP] payload going to Apps Script:', payload);
+
     // === Send to Google Apps Script (GET + no-cors) ===
     const APPS_SCRIPT_URL =
-      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // replace if your Web App URL is different
+      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // replace with YOUR web app URL if different
 
     const params = new URLSearchParams({
       data: JSON.stringify(payload)
     });
 
-    console.log('[RSVP] sending to Apps Script via GET', APPS_SCRIPT_URL, payload);
+    console.log('[RSVP] sending to Apps Script via GET', APPS_SCRIPT_URL);
 
     fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
       method: 'GET',
