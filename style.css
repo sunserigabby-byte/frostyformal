@@ -360,11 +360,11 @@ body {
   position: relative;
   left: 50%;
   width: 100vw;
-  height: 110px;                 /* was 80px */
+  height: 130px;                 /* was 80px */
   transform: translateX(-50%);
   background-image: url('Stringlights.jpg');
   background-repeat: repeat-x;
-  background-size: 330px auto;   /* was ~260px – bulbs appear larger */
+  background-size: 350px auto;   /* was ~260px – bulbs appear larger */
   background-position: center;
   pointer-events: none;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
@@ -372,7 +372,7 @@ body {
 
 @media (max-width: 600px) {
   .string-lights-strip {
-    height: 80px;                /* was 60px */
+    height: 100px;                /* was 60px */
     background-size: 260px auto; /* a bit larger on mobile too */
   }
 }
