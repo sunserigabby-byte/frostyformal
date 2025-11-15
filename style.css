@@ -379,48 +379,47 @@ body {
   opacity: 0.95;
 }
 
-/* Highlight layer: slides along + fades in/out so different bulbs sparkle */
+/* Highlight layer: soft twinkle stripes sweeping across */
 .string-lights-strip::after {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('Stringlights.jpg');
-  background-repeat: repeat-x;
-  background-size: 320px auto;
-  background-position: 0 0;
-  filter: brightness(1.5) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
-  opacity: 0;
+  /* vertical bands that brighten parts of the strand */
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0px,
+    rgba(255, 255, 255, 0) 55px,
+    rgba(255, 255, 255, 0.85) 55px,
+    rgba(255, 255, 255, 0.85) 65px,
+    rgba(255, 255, 255, 0) 65px,
+    rgba(255, 255, 255, 0) 120px
+  );
   mix-blend-mode: screen;
-  animation: twinkleSweep 4.5s linear infinite;
+  opacity: 0.45;
+  filter: blur(1px);
+  pointer-events: none;
+  animation: twinkleSweep 7s linear infinite;
 }
 
-/* Mobile tweaks */
+/* shimmer passes over, but the image itself doesn't move */
+@keyframes twinkleSweep {
+  0%   { background-position:   0   0; opacity: 0.35; }
+  20%  { background-position: -80px  0; opacity: 0.7;  }
+  40%  { background-position: -160px 0; opacity: 0.4;  }
+  60%  { background-position: -240px 0; opacity: 0.7;  }
+  80%  { background-position: -320px 0; opacity: 0.35; }
+  100% { background-position: -400px 0; opacity: 0.45; }
+}
+
+
 @media (max-width: 600px) {
   .string-lights-strip {
     height: 80px;
   }
-  .string-lights-strip::before,
-  .string-lights-strip::after {
+  .string-lights-strip::before {
     background-size: 260px auto;
   }
 }
-
-/* Twinkle: bright patches glide along the strand */
-@keyframes twinkleSweep {
-  0%   { opacity: 0;   background-position: 0    0; }
-  10%  { opacity: 0.8; background-position: -40px 0; }
-  20%  { opacity: 0;   background-position: -80px 0; }
-
-  35%  { opacity: 0.9; background-position: -140px 0; }
-  45%  { opacity: 0;   background-position: -190px 0; }
-
-  60%  { opacity: 0.8; background-position: -260px 0; }
-  70%  { opacity: 0;   background-position: -300px 0; }
-
-  85%  { opacity: 0.9; background-position: -360px 0; }
-  100% { opacity: 0;   background-position: -420px 0; }
-}
-
 
 
 /* RSVP Card */
