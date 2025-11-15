@@ -354,7 +354,7 @@ body {
   pointer-events:none;
 }
 
-/* String lights – repeating + twinkling */
+/* String lights – repeating strip with soft moving twinkle */
 .string-lights-strip {
   margin: 1.75rem 0 1.25rem;
   position: relative;
@@ -363,11 +363,11 @@ body {
   height: 100px;
   transform: translateX(-50%);
   pointer-events: none;
+  overflow: hidden;
 }
 
-/* Two overlapping layers of the same image */
-.string-lights-strip::before,
-.string-lights-strip::after {
+/* Base layer: steady lights */
+.string-lights-strip::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -376,19 +376,22 @@ body {
   background-size: 320px auto;     /* controls bulb size */
   background-position: center;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+  opacity: 0.95;
 }
 
-/* Layer A – slower pulse */
-.string-lights-strip::before {
-  opacity: 0.9;
-  animation: twinkleA 3.4s ease-in-out infinite;
-}
-
-/* Layer B – offset, different rhythm for scattered sparkle */
+/* Highlight layer: slides along + fades in/out so different bulbs sparkle */
 .string-lights-strip::after {
-  opacity: 0.6;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('Stringlights.jpg');
+  background-repeat: repeat-x;
+  background-size: 320px auto;
+  background-position: 0 0;
+  filter: brightness(1.5) drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
+  opacity: 0;
   mix-blend-mode: screen;
-  animation: twinkleB 4.1s ease-in-out infinite 0.5s;
+  animation: twinkleSweep 4.5s linear infinite;
 }
 
 /* Mobile tweaks */
@@ -402,26 +405,21 @@ body {
   }
 }
 
-/* Twinkle keyframes – irregular opacity changes */
-@keyframes twinkleA {
-  0%   { opacity: 0.8; }
-  10%  { opacity: 0.5; }
-  25%  { opacity: 1;   }
-  40%  { opacity: 0.6; }
-  60%  { opacity: 0.95;}
-  80%  { opacity: 0.55;}
-  100% { opacity: 0.9; }
-}
+/* Twinkle: bright patches glide along the strand */
+@keyframes twinkleSweep {
+  0%   { opacity: 0;   background-position: 0    0; }
+  10%  { opacity: 0.8; background-position: -40px 0; }
+  20%  { opacity: 0;   background-position: -80px 0; }
 
-@keyframes twinkleB {
-  0%   { opacity: 0.4; }
-  15%  { opacity: 0.9; }
-  35%  { opacity: 0.6; }
-  55%  { opacity: 1;   }
-  70%  { opacity: 0.5; }
-  100% { opacity: 0.8; }
-}
+  35%  { opacity: 0.9; background-position: -140px 0; }
+  45%  { opacity: 0;   background-position: -190px 0; }
 
+  60%  { opacity: 0.8; background-position: -260px 0; }
+  70%  { opacity: 0;   background-position: -300px 0; }
+
+  85%  { opacity: 0.9; background-position: -360px 0; }
+  100% { opacity: 0;   background-position: -420px 0; }
+}
 
 
 
