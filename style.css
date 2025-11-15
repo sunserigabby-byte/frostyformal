@@ -359,31 +359,23 @@ body {
   margin: 1.75rem 0 1.25rem;
   position: relative;
   left: 50%;
-  width: 100vw;              /* span the whole viewport */
-  height: 80px;              /* controls how tall the strip feels */
+  width: 100vw;
+  height: 80px;
   transform: translateX(-50%);
   background-image: url('Stringlights.jpg');
   background-repeat: repeat-x;
-  background-size: 260px auto;   /* smaller bulbs, repeated */
+  background-size: 260px auto;
   background-position: center;
-  pointer-events: none;      /* decorative only */
+  pointer-events: none;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
 }
 
-/* Slightly shorter on phones so it doesn’t dominate */
 @media (max-width: 600px) {
   .string-lights-strip {
     height: 60px;
     background-size: 220px auto;
   }
 }
-
-@media (min-width: 900px) {
-  .string-lights-separator img {
-    max-width: 700px;
-  }
-}
-
 
 
 /* RSVP Card */
