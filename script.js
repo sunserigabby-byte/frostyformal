@@ -247,7 +247,7 @@ if (attending === 'no') {
   // Attending
   msg.innerHTML = `
     <strong>YAY! 🎉 RSVP received for ${name}${plusOne ? ' + ' + plusOne : ''}.</strong><br>
-    Please Venmo <strong>$${amount}</strong> to <strong>@Kyle-Warzecha</strong> to confirm your spot (or use the Venmo button above).<br>
+    Please Venmo <strong>$${amount}</strong> to <strong>@Kyle-Warzecha</strong> to confirm your spot.<br>
     <span class="rsvp-refund">
       Refund policy: full refund if you cancel at least 7 days before the event.
       No refunds within 48 hours of the event.
