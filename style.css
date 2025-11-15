@@ -354,28 +354,74 @@ body {
   pointer-events:none;
 }
 
-/* String lights – slightly larger repeating strip */
+/* String lights – repeating + twinkling */
 .string-lights-strip {
   margin: 1.75rem 0 1.25rem;
   position: relative;
   left: 50%;
   width: 100vw;
-  height: 130px;                 /* was 80px */
+  height: 100px;
   transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* Two overlapping layers of the same image */
+.string-lights-strip::before,
+.string-lights-strip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background-image: url('Stringlights.jpg');
   background-repeat: repeat-x;
-  background-size: 350px auto;   /* was ~260px – bulbs appear larger */
+  background-size: 320px auto;     /* controls bulb size */
   background-position: center;
-  pointer-events: none;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
 }
 
+/* Layer A – slower pulse */
+.string-lights-strip::before {
+  opacity: 0.9;
+  animation: twinkleA 3.4s ease-in-out infinite;
+}
+
+/* Layer B – offset, different rhythm for scattered sparkle */
+.string-lights-strip::after {
+  opacity: 0.6;
+  mix-blend-mode: screen;
+  animation: twinkleB 4.1s ease-in-out infinite 0.5s;
+}
+
+/* Mobile tweaks */
 @media (max-width: 600px) {
   .string-lights-strip {
-    height: 100px;                /* was 60px */
-    background-size: 260px auto; /* a bit larger on mobile too */
+    height: 80px;
+  }
+  .string-lights-strip::before,
+  .string-lights-strip::after {
+    background-size: 260px auto;
   }
 }
+
+/* Twinkle keyframes – irregular opacity changes */
+@keyframes twinkleA {
+  0%   { opacity: 0.8; }
+  10%  { opacity: 0.5; }
+  25%  { opacity: 1;   }
+  40%  { opacity: 0.6; }
+  60%  { opacity: 0.95;}
+  80%  { opacity: 0.55;}
+  100% { opacity: 0.9; }
+}
+
+@keyframes twinkleB {
+  0%   { opacity: 0.4; }
+  15%  { opacity: 0.9; }
+  35%  { opacity: 0.6; }
+  55%  { opacity: 1;   }
+  70%  { opacity: 0.5; }
+  100% { opacity: 0.8; }
+}
+
 
 
 
