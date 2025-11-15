@@ -354,17 +354,17 @@ body {
   pointer-events:none;
 }
 
-/* String lights – smaller, repeating strip across the page */
+/* String lights – slightly larger repeating strip */
 .string-lights-strip {
   margin: 1.75rem 0 1.25rem;
   position: relative;
   left: 50%;
   width: 100vw;
-  height: 80px;
+  height: 110px;                 /* was 80px */
   transform: translateX(-50%);
   background-image: url('Stringlights.jpg');
   background-repeat: repeat-x;
-  background-size: 260px auto;
+  background-size: 330px auto;   /* was ~260px – bulbs appear larger */
   background-position: center;
   pointer-events: none;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
@@ -372,10 +372,11 @@ body {
 
 @media (max-width: 600px) {
   .string-lights-strip {
-    height: 60px;
-    background-size: 220px auto;
+    height: 80px;                /* was 60px */
+    background-size: 260px auto; /* a bit larger on mobile too */
   }
 }
+
 
 
 /* RSVP Card */
