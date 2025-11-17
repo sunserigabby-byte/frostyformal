@@ -164,7 +164,7 @@ body {
 /* Grid + cards */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 1rem;
   margin-top: 0.5rem;
 }
@@ -174,19 +174,20 @@ body {
 }
 
 .team-photo {
-  width: 70px;
-  height: 70px;
+  width: 95px;
+  height: 95px;
   border-radius: 999px;
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.85);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
 }
 
 .team-name {
   font-weight: 500;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 }
+
 
 /* Small “coming soon” note before you add members */
 .team-empty-note {
