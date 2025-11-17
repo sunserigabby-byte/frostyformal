@@ -81,31 +81,30 @@
           please text Gabby : <strong>570-575-0322</strong>
         </p>
               <!-- Meet the Team (collapsible) -->
-      <button
-        id="team-toggle"
-        class="team-toggle-btn"
-        type="button"
-        aria-expanded="false"
-      >
-        Meet the Team
-      </button>
+      <section class="card">
+  <h2>Meet the Team</h2>
+  <p class="team-intro">
+    We are honored to be planning this event for our community. If you are
+    interested in joining our team to help with this event, email us at
+    <strong>kickoff2christmas@gmail.com</strong>.
+  </p>
 
-      <div
-        id="team-section"
-        class="team-collapsible"
-        aria-hidden="true"
-      >
-        <p class="team-intro">
-          We are honored to be planning this event for our community. If you are
-          interested in joining the team to help with this event, text Gabby.
-        </p>
+  <button
+    type="button"
+    class="team-toggle-btn"
+    id="team-toggle-btn"
+    aria-expanded="false"
+  >
+    Meet the Team <span aria-hidden="true">✨</span>
+  </button>
 
-        <div id="team-grid" class="team-grid">
-          <!-- Filled by script.js -->
-        </div>
-      </div>
+  <div id="team-collapsible" class="team-collapsible">
+    <div id="team-grid" class="team-grid">
+      <!-- JS will inject team-member cards here -->
+    </div>
+  </div>
+</section>
 
-      </section>
       
     </div>
   </header>
