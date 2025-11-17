@@ -210,7 +210,7 @@ function setupRSVP() {
     if (!me) {
       msg.textContent =
         "We couldn't find your name on the invite list. This event is invite-only. " +
-        "If you believe this is a mistake, please text Gabby at 570-575-0322.";
+        "If you believe this is a mistake, please email us: kickoff2christmas@gmail.com.";
       msg.classList.add('error');
       return;
     }
