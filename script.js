@@ -308,9 +308,17 @@ function renderTeamGrid() {
     <div class="team-member">
       <img class="team-photo" src="${m.photo}" alt="${m.alt}">
       <div class="team-name">${m.name}</div>
+      ${
+        m.linkHref
+          ? `<a class="team-link" href="${m.linkHref}" target="_blank" rel="noopener">
+               ${m.linkLabel || "Visit website"}
+             </a>`
+          : ""
+      }
     </div>
   `).join("");
 }
+
 
 function setupTeamToggle() {
   const btn = document.getElementById("team-toggle");
