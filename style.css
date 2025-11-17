@@ -482,6 +482,17 @@ body {
 
 }
 
+/* Metallic gold border just for the RSVP card */
+.card.rsvp-card {
+  /* keep your existing card styles, but override the border */
+  border-radius: 16px;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #fff7da, #f5d27a, #f1c155, #f8e4b2) border-box;
+  box-shadow: 0 10px 26px rgba(9, 16, 35, 0.55);
+}
+
 .rsvp-message.error { color:#c0392b; }
 
 /* Links */
