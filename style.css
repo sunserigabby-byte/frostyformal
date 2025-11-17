@@ -145,7 +145,7 @@ body {
   transform: translateY(-1px);
 }
 
-/* Collapsible container */
+/* Collapsible container stays the same */
 .team-collapsible {
   display: none;
   margin-top: 0.75rem;
@@ -156,36 +156,55 @@ body {
 }
 
 .team-intro {
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  margin: 0.75rem 0 0.5rem;
 }
 
-/* GRID – 2–3 per row on phone, more on desktop */
+/* GRID: responsive, centered */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1.25rem;
-  margin-top: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 2rem;
+  margin-top: 1.25rem;
+  align-items: flex-start;
+  justify-items: center;
 }
 
+/* Card for each person */
 .team-member {
   text-align: center;
 }
 
 /* Bigger circular photos */
 .team-photo {
-  width: 100px;
-  height: 100px;
+  width: 140px;
+  height: 140px;
   border-radius: 999px;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-  margin-bottom: 0.35rem;
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+  margin-bottom: 0.6rem;
 }
 
+/* Name text */
 .team-name {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .team-grid {
+    gap: 1.4rem;
+  }
+
+  .team-photo {
+    width: 115px;
+    height: 115px;
+  }
+
+  .team-name {
+    font-size: 0.9rem;
+  }
 }
 
 /* Slightly larger on wider screens */
