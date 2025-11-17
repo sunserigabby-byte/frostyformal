@@ -149,6 +149,19 @@ body {
   display: block;
 }
 
+.team-link {
+  display: inline-block;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--blue2);
+  text-decoration: none;
+}
+
+.team-link:hover {
+  text-decoration: underline;
+}
+
 .team-intro {
   font-size: 0.95rem;
   margin-bottom: 0.75rem;
