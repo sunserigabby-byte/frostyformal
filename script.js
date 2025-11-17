@@ -284,43 +284,44 @@ const TEAM_MEMBERS = [
   { name: 'Kyle Warzecha', photo: 'kyle.jpeg' },
 ];
 
-// Shuffle the existing .team-member elements inside #team-grid
-function randomizeTeamGrid() {
-  const grid = document.getElementById('team-grid');
-  if (!grid) return;
-
-  const items = Array.from(grid.querySelectorAll('.team-member'));
-  if (items.length <= 1) return;
-
-  // Fisher–Yates style shuffle into a new order
-  const pool = items.slice();
-  grid.innerHTML = '';
-  while (pool.length) {
-    const idx = Math.floor(Math.random() * pool.length);
-    const el = pool.splice(idx, 1)[0];
-    grid.appendChild(el);
+function shuffleArray(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
+  return a;
 }
 
-// Set up expand/collapse for the team section
-function setupTeamToggle() {
-  const btn = document.getElementById('team-toggle-btn');
-  const panel = document.getElementById('team-collapsible');
-  if (!btn || !panel) return;
+function renderTeamGrid() {
+  const grid = document.getElementById("team-grid");
+  if (!grid) return;
 
-  btn.addEventListener('click', () => {
-    const isOpen = panel.classList.toggle('open');
-    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  const shuffled = shuffleArray(TEAM_MEMBERS);
+  grid.innerHTML = shuffled.map(m => `
+    <div class="team-member">
+      <img class="team-photo" src="${m.photo}" alt="${m.alt}">
+      <div class="team-name">${m.name}</div>
+    </div>
+  `).join("");
+}
+
+function setupTeamToggle() {
+  const btn = document.getElementById("team-toggle");
+  const section = document.getElementById("team-collapsible");
+  if (!btn || !section) return;
+
+  btn.addEventListener("click", () => {
+    section.classList.toggle("open");
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   createSnowflakes();
   populateInviteeDatalist();
   setupPlusOneSuggestion();
   setupRSVP();
 
-  // Meet the Team
-  randomizeTeamGrid();  // random order each load
-  setupTeamToggle();    // collapsible behavior
+  renderTeamGrid();
+  setupTeamToggle();
 });
