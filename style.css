@@ -486,7 +486,7 @@ body {
 .card.rsvp-card {
   /* keep your existing card styles, but override the border */
   border-radius: 16px;
-  border: 2px solid transparent;
+  border: 20px solid transparent;
   background:
     linear-gradient(#ffffff, #ffffff) padding-box,
     linear-gradient(135deg, #fff7da, #f5d27a, #f1c155, #f8e4b2) border-box;
