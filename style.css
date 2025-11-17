@@ -114,38 +114,32 @@ body {
 }
 
 /* Meet the Team toggle/button (you already have this, keep your gold styling if you like) */
+/* --- Meet the Team --- */
+
 .team-toggle-btn {
   margin-top: 0.75rem;
-  padding: 0.45rem 1.1rem;
+  padding: 0.5rem 1.4rem;
   border-radius: 999px;
-  border: 1px solid rgba(140, 104, 35, 0.95);
-  background-image: linear-gradient(
-    135deg,
-    #fff7da,
-    #f5d27a,
-    #f1c155,
-    #f8e4b2
-  );
-  color: #3b2a10;
-  font-size: 0.85rem;
-  font-weight: 600;
+  border: 2px solid #f7e0a8;
+  background: linear-gradient(135deg, #f7d47a, #f5b85c);
+  color: #1a2235;
+  font-size: 0.9rem;
+  font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .team-toggle-btn:hover {
-  filter: brightness(1.06);
+  filter: brightness(1.05);
   transform: translateY(-1px);
 }
 
-/* Collapsible container stays the same */
+/* Collapsible area */
 .team-collapsible {
   display: none;
   margin-top: 0.75rem;
@@ -157,43 +151,17 @@ body {
 
 .team-intro {
   font-size: 0.95rem;
-  margin: 0.75rem 0 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-/* GRID: responsive, centered */
+/* TRUE GRID */
 .team-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2rem;
-  margin-top: 1.25rem;
+  margin-top: 1rem;
   justify-items: center;
   align-items: flex-start;
-}
-
-/* Card for each person */
-.team-member {
-  text-align: center;
-}
-
-/* Bigger circular photos */
-.team-photo {
-  width: 140px;
-  height: 140px;
-  border-radius: 999px;
-  object-fit: cover;
-
-  /* ✨ metallic-ish gold ring */
-  border: 3px solid #f5d589; /* warm gold */
-  box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.45),   /* soft outer halo */
-    0 12px 22px rgba(0, 0, 0, 0.28);       /* drop shadow */
-  margin-bottom: 0.6rem;
-}
-
-/* Name text */
-.team-name {
-  font-weight: 600;
-  font-size: 1rem;
 }
 
 @media (min-width: 900px) {
@@ -202,24 +170,35 @@ body {
   }
 }
 
-  .team-photo {
-    width: 115px;
-    height: 115px;
-  }
-
-  .team-name {
-    font-size: 0.9rem;
-  }
+.team-member {
+  text-align: center;
 }
 
-/* Slightly larger on wider screens */
-@media (min-width: 700px) {
-  .team-photo {
-    width: 115px;
-    height: 115px;
-  }
+/* Bigger photos with metallic-gold ring */
+.team-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 999px;
+  object-fit: cover;
+
+  border: 3px solid #f5d589;                         /* gold ring */
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.45),            /* soft halo */
+    0 10px 22px rgba(0, 0, 0, 0.25);                 /* drop shadow */
+  margin-bottom: 0.5rem;
 }
 
+.team-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+
+@media (min-width: 900px) {
+  .team-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
 
 
 /* Small “coming soon” note before you add members */
@@ -227,22 +206,6 @@ body {
   font-size: 0.8rem;
   font-style: italic;
   color: rgba(255, 255, 255, 0.8);
-}
-
-/* Slight tweaks on larger screens */
-@media (min-width: 700px) {
-  .team-grid {
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  }
-
-  .team-photo {
-    width: 80px;
-    height: 80px;
-  }
-
-  .team-name {
-    font-size: 0.85rem;
-  }
 }
 
 /* Buttons */
