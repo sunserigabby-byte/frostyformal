@@ -282,7 +282,7 @@ const TEAM_MEMBERS = [
   { name: 'Gio Ramirez', photo: 'gio.jpeg' },
    {
     name: "Caity and Cole",
-    photo: "headshots/caity-cole.jpg",
+    photo: "caitycole.jpeg",
     alt: "Caity and Cole",
     linkLabel: "Shake It Up NC",
     linkHref: "https://shakeitupnc.com/"
