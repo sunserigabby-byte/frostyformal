@@ -198,14 +198,28 @@ function setupRSVP() {
     const guestCount = guestCountEl ? Number(guestCountEl.value || 1) : 1;
     const notes     = notesEl   ? notesEl.value.trim()   : '';
 
-    // Calculate amount (0 if not attending)
-    const amount = (attending === 'no') ? 0 : 45 * guestCount;
-
-    // Simple validation
+    // Basic required fields
     if (!name || !email) {
       msg.textContent = 'Please enter your name and email before submitting.';
+      msg.classList.add('error');
       return;
     }
+
+    // ✅ INVITE-ONLY CHECK: make sure name is on the invite list
+    const me = findInviteeByName(name);
+    if (!me) {
+      msg.textContent =
+        "We couldn't find your name on the invite list. This event is invite-only. " +
+        "If you believe this is a mistake, please text Gabby at 570-575-0322.";
+      msg.classList.add('error');
+      return;
+    }
+
+    // Passed validation – clear error state
+    msg.classList.remove('error');
+
+    // Calculate amount (0 if not attending)
+    const amount = (attending === 'no') ? 0 : 45 * guestCount;
 
     const payload = {
       name,
@@ -221,7 +235,7 @@ function setupRSVP() {
 
     // === Send to Google Apps Script (GET + no-cors) ===
     const APPS_SCRIPT_URL =
-      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // replace with YOUR web app URL if different
+      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // your web app URL
 
     const params = new URLSearchParams({
       data: JSON.stringify(payload)
@@ -237,24 +251,16 @@ function setupRSVP() {
     });
 
     // --- Front-end confirmation ---
-if (attending === 'no') {
-  // Not attending
-  msg.innerHTML = `
-    <strong>RSVP received for ${name}${plusOne ? ' + ' + plusOne : ''}.</strong><br>
-    We’re sad you can’t make it, but thank you for letting us know. We will miss you 💙
-  `;
-} else {
-  // Attending
-  msg.innerHTML = `
-    <strong>YAY! 🎉 RSVP received for ${name}${plusOne ? ' + ' + plusOne : ''}.</strong><br>
-    Please Venmo <strong>$${amount}</strong> to <strong>@Kyle-Warzecha</strong> to confirm your spot.<br>
-    <span class="rsvp-refund">
-      Refund policy: full refund if you cancel at least 7 days before the event.
-      No refunds within 48 hours of the event.
-    </span>
-  `;
-}
-
+    let text = `YAY! RSVP received for ${name}`;
+    if (plusOne) text += ` + ${plusOne}`;
+    if (attending === 'no') {
+      text += `. Thanks for letting us know — we’ll miss you!`;
+    } else {
+      text += `. If you are attending, please Venmo $${amount} to @Kyle-Warzecha to confirm your spot.`;
+      text += ` Refund policy: If you need to cancel your RSVP, we can provide a full refund with at least 1 week's notice. `;
+      text += `No refunds are available within 48 hours of the event.`;
+    }
+    msg.textContent = text;
 
     // Reset form
     form.reset();
@@ -263,6 +269,7 @@ if (attending === 'no') {
     updateVenmoAmount();
   });
 }
+
 // ============ Meet the Team (randomized grid + toggle) ============
 
 // Add your real people + photo paths here when ready:
