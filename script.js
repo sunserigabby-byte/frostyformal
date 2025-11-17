@@ -277,6 +277,11 @@ const TEAM_MEMBERS = [
   // Example:
   // { name: 'Gabby Sunseri', photo: 'images/gabby.jpg' },
   // { name: 'Kyle Warzecha', photo: 'images/kyle.jpg' },
+  { name: 'Gabby Sunseri', photo: 'gabby.jpg' },
+  { name: 'Jon Lamb', photo: 'jon.jpg' },
+  { name: 'Gio Ramirez', photo: 'gio.jpg' },
+  { name: 'Caity and Cole', photo: 'caitycole.jpg' },
+  { name: 'Kyle Warzecha', photo: 'kyle.jpg' },
 ];
 
 function shuffleArray(arr) {
