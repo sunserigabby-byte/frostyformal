@@ -280,7 +280,13 @@ const TEAM_MEMBERS = [
   { name: 'Gabby Sunseri', photo: 'gabby.jpeg' },
   { name: 'Jon Lamb', photo: 'jon.jpeg' },
   { name: 'Gio Ramirez', photo: 'gio.jpeg' },
-  { name: 'Caity and Cole', photo: 'caitycole.jpeg' },
+   {
+    name: "Caity and Cole",
+    photo: "headshots/caity-cole.jpg",
+    alt: "Caity and Cole",
+    linkLabel: "Shake It Up NC",
+    linkHref: "https://shakeitupnc.com/"
+  },
   { name: 'Kyle Warzecha', photo: 'kyle.jpeg' },
 ];
 
