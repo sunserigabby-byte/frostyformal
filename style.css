@@ -113,25 +113,38 @@ body {
   letter-spacing:.4px;
 }
 
-/* Meet the Team toggle/button */
+/* Meet the Team – metallic gold pill button */
 .team-toggle-btn {
   margin-top: 0.75rem;
-  padding: 0.4rem 0.9rem;
+  padding: 0.45rem 1.1rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  background: rgba(10, 32, 52, 0.5);
-  color: #f8fbff;
+  border: 1px solid rgba(140, 104, 35, 0.95);
+  background-image: linear-gradient(
+    135deg,
+    #fff7da,
+    #f5d27a,
+    #f1c155,
+    #f8e4b2
+  );
+  color: #3b2a10;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .team-toggle-btn:hover {
-  background: rgba(16, 48, 78, 0.8);
+  filter: brightness(1.06);
+  transform: translateY(-1px);
 }
+
 
 /* Collapsible container */
 .team-collapsible {
