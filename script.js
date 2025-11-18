@@ -259,7 +259,7 @@ function setupRSVP() {
       // ✅ RSVP = YES message
       msg.innerHTML = `
         <strong>YAY! RSVP received for ${namesLabel}.</strong><br>
-        Check your email for a message from us :)
+        We're so excited you're coming! Check your email for a message from us :)
       `;
     }
 
