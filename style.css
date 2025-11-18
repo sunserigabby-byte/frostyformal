@@ -538,4 +538,22 @@ a.inline:hover { text-decoration:underline; }
     align-items:flex-start;
   }
   .time { width:auto; }
+  
+}
+.entrance-photo-wrapper {
+  margin: 1rem auto 0;
+  text-align: center;
+}
+
+.entrance-photo {
+  display: block;
+  width: 100%;
+  max-width: 700px;        /* controls how wide it can get */
+  max-height: 360px;       /* controls how tall it can get */
+  height: auto;            /* keep proportions */
+  border-radius: 16px;
+  margin: 0 auto;
+  object-fit: cover;       /* fill the frame nicely */
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.9);
 }
