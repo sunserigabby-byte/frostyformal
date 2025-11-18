@@ -251,11 +251,11 @@ function setupRSVP() {
     });
 
     // --- Front-end confirmation ---
-    let text = `YAY! RSVP received for ${name}`;
+    if (attending === 'yes') { 'YAY! RSVP received for ${name}`;
     if (plusOne) text += ` + ${plusOne}`;
      text += `. Check your email for your confirmation :) So excited to have you!`;
     if (attending === 'no') {
-      text += `. Thanks for letting us know — we’ll miss you! Hopefully we will see you next time!`;
+      text += `. RSVP Received! Thanks for letting us know — we’ll miss you! Hopefully we will see you next time!`;
     } else {
   
   
