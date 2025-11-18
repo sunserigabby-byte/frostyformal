@@ -550,7 +550,7 @@ a.inline:hover { text-decoration:underline; }
 img[src$="parking.jpeg"] {
   display: block;
   width: 100% !important;      /* responsive inside the card */
-  max-width: 520px !important; /* overall width limit */
+  max-width: 220px !important; /* overall width limit */
   height: auto !important;     /* keep proportions */
   max-height: 320px !important;/* keeps it from being super tall */
   margin: 0 auto;
