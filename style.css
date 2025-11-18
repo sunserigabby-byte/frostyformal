@@ -539,20 +539,25 @@ a.inline:hover { text-decoration:underline; }
   }
   .time { width:auto; }
   
+/* Entrance & Parking photo */
 .entrance-photo-wrapper {
-  margin: 1.25rem auto 0;
+  margin: 1.5rem auto 0;
   text-align: center;
 }
 
-.entrance-photo {
+/* Target by class AND by file name to be extra safe */
+.entrance-photo,
+img[src$="parking.jpeg"] {
   display: block;
-  width: 100%;          /* fill the card width, but… */
-  max-width: 100px;     /* …never larger than this */
-  height: auto;         /* keep the full proportions */
+  width: 100% !important;      /* responsive inside the card */
+  max-width: 520px !important; /* overall width limit */
+  height: auto !important;     /* keep proportions */
+  max-height: 320px !important;/* keeps it from being super tall */
   margin: 0 auto;
   border-radius: 16px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.9);
 }
+
 
 
