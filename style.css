@@ -539,7 +539,6 @@ a.inline:hover { text-decoration:underline; }
   }
   .time { width:auto; }
   
-}
 .entrance-photo-wrapper {
   margin: 1rem auto 0;
   text-align: center;
@@ -548,12 +547,12 @@ a.inline:hover { text-decoration:underline; }
 .entrance-photo {
   display: block;
   width: 100%;
-  max-width: 700px;        /* controls how wide it can get */
-  max-height: 360px;       /* controls how tall it can get */
-  height: auto;            /* keep proportions */
+  max-width: 800px;      /* how wide it can get inside the card */
+  height: auto;          /* keep full proportions, no cropping */
+  object-fit: contain;   /* show the entire image */
   border-radius: 16px;
   margin: 0 auto;
-  object-fit: cover;       /* fill the frame nicely */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.9);
 }
+
