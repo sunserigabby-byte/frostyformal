@@ -253,11 +253,12 @@ function setupRSVP() {
     // --- Front-end confirmation ---
     let text = `YAY! RSVP received for ${name}`;
     if (plusOne) text += ` + ${plusOne}`;
+     text += `. Check your email for your confirmation :) So excited to have you!`;
     if (attending === 'no') {
       text += `. Thanks for letting us know — we’ll miss you! Hopefully we will see you next time!`;
     } else {
-      text += `. If you change your mind, you can RSVP again through out website and Venmo $${amount} to @Kyle-Warzecha to confirm your spot.`;
-      text += ` We would love your thoughts on our event / why you may not be attending! We know this may not be everyone's idea of fun, but we hope to make it better next time! If you have a moment, please fill our this anonymous survey: https://forms.gle/MTLCKoYo5FW9drS27 `;
+  
+  
     }
     msg.textContent = text;
 
