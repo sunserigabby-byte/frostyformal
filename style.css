@@ -559,5 +559,18 @@ img[src$="parking.jpeg"] {
   border: 2px solid rgba(255, 255, 255, 0.9);
 }
 
+/* Parking photo – hard override */
+#parking-photo {
+  display: block !important;
+  width: 100% !important;        /* responsive inside the card */
+  max-width: 420px !important;   /* how wide it can get */
+  height: auto !important;       /* keep proportions */
+  max-height: 320px !important;  /* keep it from being super tall */
+  margin: 0 auto !important;
+  object-fit: contain !important;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+}
 
 
