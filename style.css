@@ -553,9 +553,9 @@ a.inline:hover { text-decoration:underline; }
 #parking-photo {
   display: block;
   width: 100%;          /* responsive inside the card */
-  max-width: 420px;     /* how wide it can get */
+  max-width: 520px;     /* how wide it can get */
   height: auto;         /* keep proportions */
-  max-height: 320px;    /* keep it from being super tall */
+  max-height: 420px;    /* keep it from being super tall */
   margin: 0 auto;
   object-fit: contain;
   border-radius: 16px;
