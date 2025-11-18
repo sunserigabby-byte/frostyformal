@@ -540,19 +540,19 @@ a.inline:hover { text-decoration:underline; }
   .time { width:auto; }
   
 .entrance-photo-wrapper {
-  margin: 1rem auto 0;
+  margin: 1.25rem auto 0;
   text-align: center;
 }
 
 .entrance-photo {
   display: block;
-  width: 100%;
-  max-width: 100px;       /* how wide it can get inside the card */
-  max-height: 100px;          /* keep full proportions, no cropping */
-  object-fit: contain;   /* show the entire image */
-  border-radius: 16px;
+  width: 100%;          /* fill the card width, but… */
+  max-width: 700px;     /* …never larger than this */
+  height: auto;         /* keep the full proportions */
   margin: 0 auto;
+  border-radius: 16px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.9);
 }
+
 
