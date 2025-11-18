@@ -167,19 +167,19 @@ function setupPlusOneSuggestion() {
 // ============ RSVP form behavior (invite-only + Sheet logging) ============
 function setupRSVP() {
   const form = document.getElementById('rsvp-form');
-  const msg = document.getElementById('rsvp-message');
+  const msg  = document.getElementById('rsvp-message');
 
   // Inputs
-  const nameEl     = document.getElementById('inviteeName');   // name field
-  const plusOneEl  = document.getElementById('plusOneName');   // plus-one field
-  const emailEl    =
+  const nameEl      = document.getElementById('inviteeName');   // name field
+  const plusOneEl   = document.getElementById('plusOneName');   // plus-one field
+  const emailEl     =
     document.getElementById('email') ||
     document.getElementById('inviteeEmail') ||
     document.getElementById('rsvp-email') ||
-    document.querySelector('input[type="email"]');             // fallback
+    document.querySelector('input[type="email"]');              // fallback
   const attendingEl  = document.getElementById('attending');
   const guestCountEl = document.getElementById('guestCount');
-  const notesEl      = document.getElementById('notes');       // optional; ok if null
+  const notesEl      = document.getElementById('notes');        // optional; ok if null
 
   if (!form || !msg) return;
 
@@ -191,31 +191,28 @@ function setupRSVP() {
   form.addEventListener('submit', (e) => {
     e.preventDefault(); // stop page refresh
 
-    const name      = nameEl    ? nameEl.value.trim()    : '';
-    const plusOne   = plusOneEl ? plusOneEl.value.trim() : '';
-    const email     = emailEl   ? emailEl.value.trim()   : '';
-    const attending = attendingEl ? attendingEl.value : 'yes';
+    const name       = nameEl      ? nameEl.value.trim()      : '';
+    const plusOne    = plusOneEl   ? plusOneEl.value.trim()   : '';
+    const email      = emailEl     ? emailEl.value.trim()     : '';
+    const attending  = attendingEl ? attendingEl.value        : 'yes';
     const guestCount = guestCountEl ? Number(guestCountEl.value || 1) : 1;
-    const notes     = notesEl   ? notesEl.value.trim()   : '';
+    const notes      = notesEl     ? notesEl.value.trim()     : '';
 
     // Basic required fields
     if (!name || !email) {
+      msg.classList.add('error');
       msg.textContent = 'Please enter your name and email before submitting.';
-      msg.classList.add('error');
       return;
     }
 
-    // ✅ INVITE-ONLY CHECK: make sure name is on the invite list
-    const me = findInviteeByName(name);
-    if (!me) {
+    // Invite-only guard: must be on INVITEES list
+    const inviteeRecord = findInviteeByName(name);
+    if (!inviteeRecord) {
+      msg.classList.add('error');
       msg.textContent =
-        "We couldn't find your name on the invite list. This event is invite-only. " +
-        "If you believe this is a mistake, please email us: kickoff2christmas@gmail.com.";
-      msg.classList.add('error');
+        'We sadly do not have you on our list. If you believe there has been a mistake, email us at kickoff2christmas@gmail.com';
       return;
     }
-
-    // Passed validation – clear error state
     msg.classList.remove('error');
 
     // Calculate amount (0 if not attending)
@@ -235,13 +232,11 @@ function setupRSVP() {
 
     // === Send to Google Apps Script (GET + no-cors) ===
     const APPS_SCRIPT_URL =
-      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // your web app URL
+      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // keep your current URL if different
 
     const params = new URLSearchParams({
       data: JSON.stringify(payload)
     });
-
-    console.log('[RSVP] sending to Apps Script via GET', APPS_SCRIPT_URL);
 
     fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
       method: 'GET',
@@ -250,19 +245,25 @@ function setupRSVP() {
       console.error('[RSVP] fetch error:', err);
     });
 
-    // --- Front-end confirmation ---
-    if (attending === 'yes') { 'YAY! RSVP received for ${name}`;
-    if (plusOne) text += ` + ${plusOne}`;
-     text += `. Check your email for your confirmation :) So excited to have you!`;
-    if (attending === 'no') {
-      text += `. RSVP Received! Thanks for letting us know — we’ll miss you! Hopefully we will see you next time!`;
-    } else {
-  
-  
-    }
-    msg.textContent = text;
+    // --- Front-end confirmation message ---
+    const namesLabel = plusOne ? `${name} + ${plusOne}` : name;
 
-    // Reset form
+    if (attending === 'no') {
+      // ❌ RSVP = NO message
+      msg.innerHTML = `
+        <strong>RSVP received!</strong><br>
+        Thanks for letting us know – we will miss you. Hopefully see you next time!<br>
+        Check your email for a survey to help us for next time.
+      `;
+    } else {
+      // ✅ RSVP = YES message
+      msg.innerHTML = `
+        <strong>YAY! RSVP received for ${namesLabel}.</strong><br>
+        Check your email for a message from us :)
+      `;
+    }
+
+    // Reset form & amount back to default
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
