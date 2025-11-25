@@ -112,6 +112,40 @@ body {
   padding-bottom:6px;
   letter-spacing:.4px;
 }
+/* Two-column layout for polls + ideas */
+.two-column-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 14px 0;          /* similar vertical spacing to .card */
+  align-items: flex-start;
+}
+
+/* Each column takes up about half the width on desktop */
+.two-column-section .column {
+  flex: 1 1 0;
+  min-width: 260px;        /* so they don't get too skinny */
+}
+
+/* Right column stacks its cards vertically */
+.two-column-section .column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Remove the default vertical margin from cards INSIDE this section
+   so the gap is controlled by the flexbox instead */
+.two-column-section .card {
+  margin: 0;
+}
+
+/* Mobile: stack columns on top of each other */
+@media (max-width: 800px) {
+  .two-column-section {
+    flex-direction: column;
+  }
+}
 
 /* Meet the Team toggle/button (you already have this, keep your gold styling if you like) */
 /* --- Meet the Team --- */
