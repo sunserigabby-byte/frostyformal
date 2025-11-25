@@ -41,6 +41,9 @@ function createSnowflakes() {
   document.head.appendChild(styleEl);
 })();
 
+// Polls backend URL – from your Apps Script deployment
+const POLL_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec'; //
+
 // ============ Build datalist for invitee suggestions ============
 function populateInviteeDatalist() {
   const dataList = document.getElementById('inviteeNames');
@@ -331,6 +334,94 @@ function setupTeamToggle() {
   });
 }
 
+/************ POLLS ************/
+
+function initPolls() {
+  if (!POLL_WEBAPP_URL) return;
+
+  const polls = document.querySelectorAll('.poll[data-poll-id]');
+  if (!polls.length) return;
+
+  polls.forEach(pollEl => {
+    const pollId = pollEl.dataset.pollId;
+    const buttons = pollEl.querySelectorAll('.poll-option');
+
+    // Attach click handlers
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const option = btn.dataset.option;
+        submitVote(pollId, option, pollEl);
+      });
+    });
+
+    // Load current results
+    fetchPollResults(pollId, pollEl);
+
+    // Restore "selected" state from localStorage if present
+    const stored = localStorage.getItem('frosty_poll_' + pollId);
+    if (stored) {
+      const match = pollEl.querySelector(
+        `.poll-option[data-option="${CSS.escape(stored)}"]`
+      );
+      if (match) match.classList.add('selected');
+    }
+  });
+}
+
+function submitVote(pollId, option, pollEl) {
+  const payload = { pollId, option };
+
+  fetch(
+    `${POLL_WEBAPP_URL}?mode=vote&data=${encodeURIComponent(
+      JSON.stringify(payload)
+    )}`
+  )
+    .then(r => r.json())
+    .then(data => {
+      if (!data || data.result !== 'success') return;
+      renderPollTotals(pollEl, data.totals);
+
+      // Highlight selected + remember in localStorage
+      pollEl.querySelectorAll('.poll-option').forEach(btn =>
+        btn.classList.toggle('selected', btn.dataset.option === option)
+      );
+      localStorage.setItem('frosty_poll_' + pollId, option);
+    })
+    .catch(err => {
+      console.error('Poll vote error', err);
+    });
+}
+
+function fetchPollResults(pollId, pollEl) {
+  const payload = { pollId };
+
+  fetch(
+    `${POLL_WEBAPP_URL}?mode=results&data=${encodeURIComponent(
+      JSON.stringify(payload)
+    )}`
+  )
+    .then(r => r.json())
+    .then(data => {
+      if (!data || data.result !== 'success') return;
+      renderPollTotals(pollEl, data.totals);
+    })
+    .catch(err => {
+      console.error('Poll results error', err);
+    });
+}
+
+function renderPollTotals(pollEl, totals) {
+  const countSpans = pollEl.querySelectorAll('[data-option-count]');
+
+  countSpans.forEach(span => {
+    const option = span.closest('.poll-option').dataset.option;
+    const value = totals && Object.prototype.hasOwnProperty.call(totals, option)
+      ? totals[option]
+      : 0;
+    span.textContent = value;
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   createSnowflakes();
   populateInviteeDatalist();
@@ -339,4 +430,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderTeamGrid();
   setupTeamToggle();
+  initPolls();
 });
