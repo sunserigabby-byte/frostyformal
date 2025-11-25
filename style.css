@@ -147,6 +147,17 @@ body {
   }
 }
 
+/* Slightly smaller text just for the right-column cards */
+#song-requests h2,
+#superlative-ideas h2 {
+  font-size: 22px;      /* was 26px on .card h2 */
+}
+
+#song-requests p,
+#superlative-ideas p {
+  font-size: 14px;      /* a bit smaller body text */
+}
+
 /* Meet the Team toggle/button (you already have this, keep your gold styling if you like) */
 /* --- Meet the Team --- */
 
