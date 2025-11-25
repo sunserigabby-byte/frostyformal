@@ -158,6 +158,31 @@ body {
   font-size: 14px;      /* a bit smaller body text */
 }
 
+/* Scrollable live-list boxes so they don't overpower the page */
+.live-list-container {
+  margin-top: 0.5rem;
+  max-height: 220px;          /* ~10 items tall; tweak if you want */
+  overflow-y: auto;           /* internal scroll if list gets long */
+  padding-right: 4px;         /* breathing room next to scrollbar */
+}
+
+/* List style inside the card */
+.live-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+.live-list li {
+  padding: 4px 0;
+  border-bottom: 1px dashed rgba(180, 200, 255, 0.6);
+}
+
+.live-list li:last-child {
+  border-bottom: none;
+}
+
 /* Meet the Team toggle/button (you already have this, keep your gold styling if you like) */
 /* --- Meet the Team --- */
 
