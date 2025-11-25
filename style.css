@@ -177,6 +177,48 @@ body {
   border-bottom: none;
 }
 
+/* Input row for Song Requests + Superlatives */
+.live-input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.live-input {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(180, 200, 255, 0.9);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.live-add-btn {
+  border-radius: 999px;
+  border: 1px solid #f7e0a8;
+  background: linear-gradient(135deg, #f7d47a, #f5b85c);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a2235;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.live-add-btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.live-add-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
 /* Stack into one column on smaller screens */
 @media (max-width: 768px) {
   .tools-grid {
