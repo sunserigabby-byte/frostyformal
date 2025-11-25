@@ -41,8 +41,12 @@ function createSnowflakes() {
   document.head.appendChild(styleEl);
 })();
 
-// Polls backend URL – from your Apps Script deployment
-const POLL_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec'; //
+// === Global URLs ===
+const RSVP_APPS_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
+
+const POLL_WEBAPP_URL =
+  'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
 
 // ============ Build datalist for invitee suggestions ============
 function populateInviteeDatalist() {
@@ -173,16 +177,16 @@ function setupRSVP() {
   const msg  = document.getElementById('rsvp-message');
 
   // Inputs
-  const nameEl      = document.getElementById('inviteeName');   // name field
-  const plusOneEl   = document.getElementById('plusOneName');   // plus-one field
+  const nameEl      = document.getElementById('inviteeName');
+  const plusOneEl   = document.getElementById('plusOneName');
   const emailEl     =
     document.getElementById('email') ||
     document.getElementById('inviteeEmail') ||
     document.getElementById('rsvp-email') ||
-    document.querySelector('input[type="email"]');              // fallback
+    document.querySelector('input[type="email"]');
   const attendingEl  = document.getElementById('attending');
   const guestCountEl = document.getElementById('guestCount');
-  const notesEl      = document.getElementById('notes');        // optional; ok if null
+  const notesEl      = document.getElementById('notes');
 
   if (!form || !msg) return;
 
@@ -192,7 +196,7 @@ function setupRSVP() {
   updateVenmoAmount();
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault(); // stop page refresh
+    e.preventDefault();
 
     const name       = nameEl      ? nameEl.value.trim()      : '';
     const plusOne    = plusOneEl   ? plusOneEl.value.trim()   : '';
@@ -233,19 +237,12 @@ function setupRSVP() {
 
     console.log('[RSVP] payload going to Apps Script:', payload);
 
-    // === Send to Google Apps Script (GET + no-cors) ===
-    const APPS_SCRIPT_URL =
-      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // keep your current URL if different
-
-        const APPS_SCRIPT_URL =
-      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
-
     const params = new URLSearchParams({
       data: JSON.stringify(payload)
     });
 
     // Send RSVP to Google Apps Script (no-cors)
-    fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
+    fetch(`${RSVP_APPS_SCRIPT_URL}?${params.toString()}`, {
       method: 'GET',
       mode: 'no-cors'
     }).catch(err => {
@@ -256,14 +253,12 @@ function setupRSVP() {
     const namesLabel = plusOne ? `${name} + ${plusOne}` : name;
 
     if (attending === 'no') {
-      // ❌ RSVP = NO message
       msg.innerHTML = `
         <strong>RSVP received!</strong><br>
         Thanks for letting us know – we will miss you. Hopefully see you next time!<br>
         Check your email for a survey to help us for next time.
       `;
     } else {
-      // ✅ RSVP = YES message
       msg.innerHTML = `
         <strong>YAY! RSVP received for ${namesLabel}.</strong><br>
         We're so excited you're coming! Check your email for a message from us :)
@@ -279,23 +274,18 @@ function setupRSVP() {
 }
 
 // ============ Meet the Team (randomized grid + toggle) ============
-
-// Add your real people + photo paths here when ready:
 const TEAM_MEMBERS = [
-  // Example:
-  // { name: 'Gabby Sunseri', photo: 'images/gabby.jpg' },
-  // { name: 'Kyle Warzecha', photo: 'images/kyle.jpg' },
-  { name: 'Gabby Sunseri', photo: 'gabby.jpeg' },
-  { name: 'Jon Lamb', photo: 'jon.jpeg' },
-  { name: 'Gio Ramirez', photo: 'gio.jpeg' },
-   {
+  { name: 'Gabby Sunseri', photo: 'gabby.jpeg', alt: 'Gabby Sunseri' },
+  { name: 'Jon Lamb', photo: 'jon.jpeg', alt: 'Jon Lamb' },
+  { name: 'Gio Ramirez', photo: 'gio.jpeg', alt: 'Gio Ramirez' },
+  {
     name: "Caity and Cole",
     photo: "caitycole.jpeg",
     alt: "Caity and Cole",
     linkLabel: "Shake It Up NC",
     linkHref: "https://shakeitupnc.com/"
   },
-  { name: 'Kyle Warzecha', photo: 'kyle.jpeg' },
+  { name: 'Kyle Warzecha', photo: 'kyle.jpeg', alt: 'Kyle Warzecha' },
 ];
 
 function shuffleArray(arr) {
@@ -327,7 +317,6 @@ function renderTeamGrid() {
   `).join("");
 }
 
-
 function setupTeamToggle() {
   const btn = document.getElementById("team-toggle");
   const section = document.getElementById("team-collapsible");
@@ -340,11 +329,6 @@ function setupTeamToggle() {
 
 /************ POLLS ************/
 
-// Apps Script endpoint for poll votes
-const POLL_WEBAPP_URL =
-  'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
-
-// Send a single poll vote to the backend (optional)
 function sendPollVoteToServer(pollId, option, previousOption) {
   if (!POLL_WEBAPP_URL) return;
 
@@ -458,8 +442,7 @@ function initPolls() {
   });
 }
 
-
-
+// ============ DOM READY ============
 document.addEventListener("DOMContentLoaded", () => {
   createSnowflakes();
   populateInviteeDatalist();
@@ -468,6 +451,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderTeamGrid();
   setupTeamToggle();
-  initPolls();   // now defined above
+  initPolls();
 });
-
