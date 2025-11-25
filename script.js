@@ -333,23 +333,54 @@ function sendPollVoteToServer(pollId, option, previousOption) {
   if (!POLL_WEBAPP_URL) return;
 
   try {
-    const payload = { pollId, option, previousOption };
     const params = new URLSearchParams({
-      data: JSON.stringify(payload)
+      mode: 'vote',
+      pollId,
+      option,
+      previousOption: previousOption || ''
     });
 
-    fetch(`${POLL_WEBAPP_URL}?${params.toString()}`, {
-      method: 'GET',
-      mode: 'no-cors'
-    }).catch(err => {
-      console.error('[POLL] fetch error:', err);
-    });
+    // Simple GET, we don't need to read the response for this call
+    fetch(`${POLL_WEBAPP_URL}?${params.toString()}`)
+      .catch(err => console.error('[POLL] vote fetch error:', err));
   } catch (err) {
-    console.error('[POLL] building request error:', err);
+    console.error('[POLL] building vote request error:', err);
   }
 }
 
-// One vote per poll per device, instant UI update
+function refreshPollResultsFromServer() {
+  if (!POLL_WEBAPP_URL) return;
+
+  const params = new URLSearchParams({ mode: 'results' });
+
+  fetch(`${POLL_WEBAPP_URL}?${params.toString()}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data || !data.success || !data.polls) return;
+
+      // data.polls looks like: { beer: { "Blue Moon": 3, ... }, mule: {...}, ... }
+      Object.keys(data.polls).forEach(pollId => {
+        const pollEl = document.querySelector(`.poll[data-poll-id="${pollId}"]`);
+        if (!pollEl) return;
+
+        const pollMap = data.polls[pollId];
+
+        pollEl.querySelectorAll('.poll-option').forEach(btn => {
+          const opt = btn.getAttribute('data-option');
+          if (!opt) return;
+          const span = btn.querySelector('[data-option-count]');
+          if (!span) return;
+
+          const value = pollMap[opt] || 0;
+          span.textContent = String(value);
+        });
+      });
+    })
+    .catch(err => {
+      console.error('[POLL] results fetch error:', err);
+    });
+}
+
 function initPolls() {
   const STORAGE_KEY = 'frostyPollSelections';
 
@@ -374,15 +405,11 @@ function initPolls() {
 
     pollEl.querySelectorAll('.poll-option').forEach(btn => {
       const opt = btn.getAttribute('data-option');
-      if (opt === savedOption) {
-        btn.classList.add('selected');
-      } else {
-        btn.classList.remove('selected');
-      }
+      btn.classList.toggle('selected', opt === savedOption);
     });
   });
 
-  // Click handler: enforce one vote per poll, update counts immediately
+  // Click handler: one vote per poll, local UI update + server update
   document.querySelectorAll('.poll-option').forEach(btn => {
     btn.addEventListener('click', () => {
       const pollEl = btn.closest('.poll');
@@ -395,7 +422,7 @@ function initPolls() {
       const selectionsNow = loadSelections();
       const previousOption = selectionsNow[pollId] || null;
 
-      // If they click the same option again, do nothing
+      // Same option? do nothing (already voted)
       if (previousOption === option) {
         return;
       }
@@ -420,27 +447,39 @@ function initPolls() {
         span.textContent = String(next);
       }
 
-      // Decrement the previous choice (if any)
+      // Decrement previous selection in the UI
       if (previousOption) {
         const prevBtn = findButtonFor(previousOption);
         adjustCount(prevBtn, -1);
       }
 
-      // Increment the new choice
+      // Increment new selection in the UI
       adjustCount(btn, 1);
 
-      // Visually mark the selected option
+      // Visually mark selected
       allButtons.forEach(b => {
         b.classList.toggle('selected', b === btn);
       });
 
-      // Save and send to server
+      // Save locally + send to server
       selectionsNow[pollId] = option;
       saveSelections(selectionsNow);
       sendPollVoteToServer(pollId, option, previousOption);
+
+      // Optionally refresh from server after a short delay to stay in sync
+      setTimeout(() => {
+        refreshPollResultsFromServer();
+      }, 800);
     });
   });
+
+  // Initial load from server so counts match the sheet
+  refreshPollResultsFromServer();
+
+  // Periodic refresh so multiple people watching see it move
+  setInterval(refreshPollResultsFromServer, 15000); // every 15s
 }
+
 
 // ============ DOM READY ============
 document.addEventListener("DOMContentLoaded", () => {
