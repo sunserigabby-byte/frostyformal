@@ -140,10 +140,10 @@ body {
   margin: 0;
 }
 
-/* Mobile: stack columns on top of each other */
-@media (max-width: 800px) {
-  .two-column-section {
-    flex-direction: column;
+/* Stack columns on mobile */
+@media (max-width: 768px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -157,13 +157,40 @@ body {
 #superlative-ideas p {
   font-size: 14px;      /* a bit smaller body text */
 }
+.tools-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: flex-start;
+  margin-top: 18px;
+}
 
-/* Scrollable live-list boxes so they don't overpower the page */
-.live-list-container {
-  margin-top: 0.5rem;
-  max-height: 220px;          /* ~10 items tall; tweak if you want */
-  overflow-y: auto;           /* internal scroll if list gets long */
-  padding-right: 4px;         /* breathing room next to scrollbar */
+.tools-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Slightly smaller headings + text in these utility cards */
+.live-box h3,
+#drink-polls h2 {
+  font-size: 20px;
+}
+
+.poll-note,
+.live-note,
+.poll-list li,
+.live-list li {
+  font-size: 14px;
+}
+
+/* Lists scroll inside their card instead of making the page huge */
+.live-list {
+  list-style: disc;
+  padding-left: 1.2rem;
+  margin: 0.25rem 0 0;
+  max-height: 220px;      /* show about ~10 items */
+  overflow-y: auto;       /* scroll inside the box if more than that */
 }
 
 /* List style inside the card */
