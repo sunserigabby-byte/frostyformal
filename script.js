@@ -326,6 +326,104 @@ function setupTeamToggle() {
     section.classList.toggle("open");
   });
 }
+// ============ Song Requests + Superlative Ideas (live lists) ============
+
+// Small helper to avoid weird HTML injection
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function renderLiveList(listEl, items) {
+  if (!listEl) return;
+
+  if (!items || !items.length) {
+    listEl.innerHTML = '<li style="font-style:italic; opacity:0.8;">No submissions yet — be the first!</li>';
+    return;
+  }
+
+  listEl.innerHTML = items
+    .map(item => `<li>${escapeHtml(item.text)}</li>`)
+    .join('');
+}
+
+// Load both lists (songs + superlatives) from Apps Script
+function loadLiveLists() {
+  fetch(`${POLL_WEBAPP_URL}?mode=listLive`)
+    .then(res => res.json())
+    .then(data => {
+      const songs = (data && data.songs) || [];
+      const supers = (data && data.superlatives) || [];
+      renderLiveList(document.getElementById('song-list'), songs);
+      renderLiveList(document.getElementById('superlative-list'), supers);
+    })
+    .catch(err => {
+      console.error('Error loading live lists:', err);
+    });
+}
+
+// Wire up inputs + buttons
+function setupLiveLists() {
+  const songInput = document.getElementById('song-input');
+  const songBtn   = document.getElementById('song-add-btn');
+  const supInput  = document.getElementById('superlative-input');
+  const supBtn    = document.getElementById('superlative-add-btn');
+
+  // Song requests
+  if (songInput && songBtn) {
+    songBtn.addEventListener('click', () => {
+      const text = songInput.value.trim();
+      if (!text) return;
+
+      songBtn.disabled = true;
+
+      const params = new URLSearchParams({
+        mode: 'addSong',
+        text
+      });
+
+      fetch(`${POLL_WEBAPP_URL}?${params.toString()}`)
+        .then(() => {
+          songInput.value = '';
+          loadLiveLists();
+        })
+        .catch(err => console.error('Error adding song:', err))
+        .finally(() => {
+          songBtn.disabled = false;
+        });
+    });
+  }
+
+  // Superlative ideas
+  if (supInput && supBtn) {
+    supBtn.addEventListener('click', () => {
+      const text = supInput.value.trim();
+      if (!text) return;
+
+      supBtn.disabled = true;
+
+      const params = new URLSearchParams({
+        mode: 'addSuperlative',
+        text
+      });
+
+      fetch(`${POLL_WEBAPP_URL}?${params.toString()}`)
+        .then(() => {
+          supInput.value = '';
+          loadLiveLists();
+        })
+        .catch(err => console.error('Error adding superlative:', err))
+        .finally(() => {
+          supBtn.disabled = false;
+        });
+    });
+  }
+
+  // Initial load when page opens
+  loadLiveLists();
+}
 
 /************ POLLS ************/
 
@@ -481,7 +579,6 @@ function initPolls() {
 }
 
 
-// ============ DOM READY ============
 document.addEventListener("DOMContentLoaded", () => {
   createSnowflakes();
   populateInviteeDatalist();
@@ -490,5 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderTeamGrid();
   setupTeamToggle();
-  initPolls();
+  setupLiveLists();   // NEW: wire up song + superlatives
+  // Poll click handlers are already attached by your poll code above
 });
+
