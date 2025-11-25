@@ -237,12 +237,14 @@ function setupRSVP() {
     const APPS_SCRIPT_URL =
       'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec'; // keep your current URL if different
 
+        const APPS_SCRIPT_URL =
+      'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
+
     const params = new URLSearchParams({
       data: JSON.stringify(payload)
     });
 
-    window.sendPollVoteToServer = function (pollId, option, previousOption) {
-
+    // Send RSVP to Google Apps Script (no-cors)
     fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
       method: 'GET',
       mode: 'no-cors'
@@ -338,8 +340,33 @@ function setupTeamToggle() {
 
 /************ POLLS ************/
 
-// ---- POLLS: one vote per poll, instant UI update ----
-(function initPollsOneVote() {
+// Apps Script endpoint for poll votes
+const POLL_WEBAPP_URL =
+  'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
+
+// Send a single poll vote to the backend (optional)
+function sendPollVoteToServer(pollId, option, previousOption) {
+  if (!POLL_WEBAPP_URL) return;
+
+  try {
+    const payload = { pollId, option, previousOption };
+    const params = new URLSearchParams({
+      data: JSON.stringify(payload)
+    });
+
+    fetch(`${POLL_WEBAPP_URL}?${params.toString()}`, {
+      method: 'GET',
+      mode: 'no-cors'
+    }).catch(err => {
+      console.error('[POLL] fetch error:', err);
+    });
+  } catch (err) {
+    console.error('[POLL] building request error:', err);
+  }
+}
+
+// One vote per poll per device, instant UI update
+function initPolls() {
   const STORAGE_KEY = 'frostyPollSelections';
 
   function loadSelections() {
@@ -354,7 +381,7 @@ function setupTeamToggle() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
   }
 
-  // Apply any saved selections on load
+  // Apply saved selections on load
   const selections = loadSelections();
   document.querySelectorAll('.poll').forEach(pollEl => {
     const pollId = pollEl.getAttribute('data-poll-id');
@@ -378,35 +405,27 @@ function setupTeamToggle() {
       if (!pollEl) return;
 
       const pollId = pollEl.getAttribute('data-poll-id');
-      if (!pollId) return;
-
       const option = btn.getAttribute('data-option');
-      if (!option) return;
+      if (!pollId || !option) return;
 
       const selectionsNow = loadSelections();
       const previousOption = selectionsNow[pollId] || null;
 
-      // If they click the same option again, do nothing (1 vote per poll)
+      // If they click the same option again, do nothing
       if (previousOption === option) {
         return;
       }
 
-      // Visually mark the selected option
-      pollEl.querySelectorAll('.poll-option').forEach(b => {
-        b.classList.remove('selected');
-      });
-      btn.classList.add('selected');
-
-      // Update counts in the DOM immediately
       const allButtons = Array.from(
         pollEl.querySelectorAll('.poll-option')
       );
 
       function findButtonFor(opt) {
-        return allButtons.find(b => b.getAttribute('data-option') === opt);
+        return allButtons.find(
+          b => b.getAttribute('data-option') === opt
+        );
       }
 
-      // Helper to read/update a count span
       function adjustCount(button, delta) {
         if (!button) return;
         const span = button.querySelector('[data-option-count]');
@@ -417,30 +436,28 @@ function setupTeamToggle() {
         span.textContent = String(next);
       }
 
-      // Decrement old choice (if any)
+      // Decrement the previous choice (if any)
       if (previousOption) {
         const prevBtn = findButtonFor(previousOption);
         adjustCount(prevBtn, -1);
       }
 
-      // Increment new choice
+      // Increment the new choice
       adjustCount(btn, 1);
 
-      // Save new selection locally (one vote per poll per device)
+      // Visually mark the selected option
+      allButtons.forEach(b => {
+        b.classList.toggle('selected', b === btn);
+      });
+
+      // Save and send to server
       selectionsNow[pollId] = option;
       saveSelections(selectionsNow);
-
-      // OPTIONAL: send to your server / Apps Script
-      if (typeof window.sendPollVoteToServer === 'function') {
-        try {
-          window.sendPollVoteToServer(pollId, option, previousOption);
-        } catch (err) {
-          console.error('Error sending poll vote to server:', err);
-        }
-      }
+      sendPollVoteToServer(pollId, option, previousOption);
     });
   });
-})();
+}
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -451,5 +468,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderTeamGrid();
   setupTeamToggle();
-  initPolls();
+  initPolls();   // now defined above
 });
+
