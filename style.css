@@ -112,70 +112,60 @@ body {
   padding-bottom:6px;
   letter-spacing:.4px;
 }
-/* Two-column layout for polls + ideas */
+/* --- Polls + Requests two-column layout --- */
 
-/* Slightly smaller text just for the right-column cards */
+/* slightly smaller headings/body for these cards */
 #song-requests h2,
-#superlative-ideas h2 {
-  font-size: 22px;      /* was 26px on .card h2 */
+#superlative-ideas h2,
+#drink-polls h2 {
+  font-size: 20px;
 }
 
 #song-requests p,
 #superlative-ideas p {
-  font-size: 14px;      /* a bit smaller body text */
+  font-size: 14px;
 }
 
-/* --- Polls + Requests two-column layout --- */
+/* Grid wrapper: LEFT = drink polls, RIGHT = song + superlatives */
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* equal columns */
+  grid-template-columns: repeat(2, minmax(0, 1fr));  /* equal columns */
   gap: 20px;
   align-items: flex-start;
-  margin: 14px 0;                                  /* matches .card spacing */
+  margin: 14px 0;                                    /* similar to .card spacing */
 }
 
-/* right column stacks the two cards */
+/* make sure grid items can shrink nicely */
+.tools-grid > * {
+  min-width: 0;
+}
+
+/* Right column stacks Song Requests + Superlatives vertically */
 .tools-right-col {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-/* stack on mobile */
-@media (max-width: 768px) {
-  .tools-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Slightly smaller headings + text in these utility cards */
-.live-box h3,
-#drink-polls h2 {
-  font-size: 20px;
+/* Live list card heading + helper text */
+.live-box h3 {
+  font-size: 18px;
+  margin: 0 0 0.4rem;
 }
 
 .poll-note,
-.live-note,
-.poll-list li,
-.live-list li {
+.live-note {
   font-size: 14px;
 }
 
-/* Lists scroll inside their card instead of making the page huge */
-.live-list {
-  list-style: disc;
-  padding-left: 1.2rem;
-  margin: 0.25rem 0 0;
-  max-height: 220px;      /* show about ~10 items */
-  overflow-y: auto;       /* scroll inside the box if more than that */
-}
-
-/* List style inside the card */
+/* Live lists: scroll inside the card so they don't grow forever */
 .live-list {
   list-style: none;
-  margin: 0;
+  margin: 0.25rem 0 0;
   padding: 0;
   font-size: 14px;
+  max-height: 220px;        /* show ~10 items */
+  overflow-y: auto;         /* scroll inside the box if longer */
 }
 
 .live-list li {
@@ -185,6 +175,13 @@ body {
 
 .live-list li:last-child {
   border-bottom: none;
+}
+
+/* Stack into one column on smaller screens */
+@media (max-width: 768px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Meet the Team toggle/button (you already have this, keep your gold styling if you like) */
