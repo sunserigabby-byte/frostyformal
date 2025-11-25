@@ -241,6 +241,8 @@ function setupRSVP() {
       data: JSON.stringify(payload)
     });
 
+    window.sendPollVoteToServer = function (pollId, option, previousOption) {
+
     fetch(`${APPS_SCRIPT_URL}?${params.toString()}`, {
       method: 'GET',
       mode: 'no-cors'
