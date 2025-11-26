@@ -248,7 +248,7 @@
   </p>
 </section>
 
-  <!-- TWO-COLUMN SECTION: polls on the left, ideas + media on the right -->
+ <!-- TWO-COLUMN SECTION: polls on the left, ideas + media on the right -->
 <div class="tools-grid">
   <!-- LEFT COLUMN: drink polls -->
   <section id="drink-polls" class="card">
@@ -325,27 +325,53 @@
 
   <!-- RIGHT COLUMN: Song requests + superlatives + media upload -->
   <div class="tools-right-col">
+    <!-- SONG REQUESTS -->
     <section id="song-requests" class="card live-box">
       <h3>Song Requests</h3>
       <p class="live-note">
         Drop your bangers and slow jams so our DJ can build the perfect playlist.
       </p>
+
+      <form id="song-form" class="live-form">
+        <input
+          id="song-input"
+          type="text"
+          class="live-input"
+          placeholder="Song + artist (e.g. 'Yeah! – Usher')"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn-live">Add Song</button>
+      </form>
+
       <ul id="song-list" class="live-list"></ul>
     </section>
 
+    <!-- SUPERLATIVES -->
     <section id="superlative-ideas" class="card live-box">
       <h3>Volleyball Superlative Ideas</h3>
       <p class="live-note">
         Have a funny or wholesome award idea? Add it here!
       </p>
+
+      <form id="superlative-form" class="live-form">
+        <input
+          id="superlative-input"
+          type="text"
+          class="live-input"
+          placeholder="e.g. 'Best Hype Duo' or 'Most Likely to Dive into the Bleachers'"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn-live">Add Idea</button>
+      </form>
+
       <ul id="superlative-list" class="live-list"></ul>
     </section>
 
-    <!-- NEW: media upload card -->
+    <!-- MEDIA UPLOAD -->
     <section id="media-upload" class="card live-box media-box">
       <h3>Share Photos &amp; Videos</h3>
       <p class="live-note">
-        Share your favorite pics and videos from over the year and we'll display them at the formal!
+        Share your favorite pics and videos from over the year and we’ll display some at the Formal!
       </p>
 
       <a
@@ -359,6 +385,7 @@
     </section>
   </div>
 </div>
+
 
 
 
