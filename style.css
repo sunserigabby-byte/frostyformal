@@ -55,6 +55,30 @@ html {
   font-size: 13px;
 }
 
+/* --- Media upload card button --- */
+.btn-media {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.55rem 1.4rem;
+  border-radius: 999px;
+  border: 2px solid #f5d27a;
+  background: linear-gradient(135deg, #fff8e2, #f7e1aa);
+  color: #1a2235;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.btn-media:hover {
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+}
+
 
 body {
   margin:0;
