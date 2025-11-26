@@ -33,7 +33,7 @@ const INVITEES = [
   { first: "Jessica", last: "Long", email: "", group: "" },
   { first: "Melissa", last: "Devlin", email: "", group: "" },
   { first: "Natorri", last: "Thomas", email: "", group: "" },
-  { first: "Alex", last: "Scopel", email: "", group: "" },
+  { first: "Alex", last: "Scopel", email: "", group: "10" },
   { first: "May", last: "Maung", email: "", group: "10" },
   { first: "Zin", last: "Maung", email: "", group: "11" },
   { first: "Hannah", last: "Wander", email: "", group: "11" },
@@ -41,6 +41,7 @@ const INVITEES = [
   { first: "Hannah", last: "Buds", email: "", group: "" },
   { first: "Alex", last: "Casado", email: "", group: "" },
   { first: "Amanda", last: "Dybal", email: "", group: "12" },
+  { first: "Eathan", last: "Long", email: "", group: "12" },
   { first: "Amanda", last: "Hobbs", email: "", group: "" },
   { first: "Rosie", last: "McMahan", email: "", group: "" },
   { first: "Anita", last: "Cuzcano", email: "", group: "" },
@@ -220,4 +221,5 @@ const INVITEES = [
   { first: "Ben", last: "Vasquez", email: "", group: "" },
   { first: "Nick", last: "Shirley", email: "", group: "20" },
   { first: "Rachel", last: "Polak", email: "", group: "20" },
+  { first: "Delilah", last: "Renken", email: "", group: "" },
 ];
