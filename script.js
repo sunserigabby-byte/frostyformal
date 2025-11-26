@@ -48,7 +48,7 @@ const RSVP_APPS_SCRIPT_URL =
 const POLL_WEBAPP_URL =
   'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
 
-const SUGGESTIONS_WEBAPP_URL ='https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
+const SUGGESTIONS_WEBAPP_URL = POLL_WEBAPP_URL;
 
 // ============ Build datalist for invitee suggestions ============
 function populateInviteeDatalist() {
@@ -139,23 +139,19 @@ function setupPlusOneSuggestion() {
   const plusOneInput = document.getElementById('plusOneName');
   if (!nameInput || !plusOneInput) return;
 
-  // When they finish choosing their name (blur)
   nameInput.addEventListener('blur', () => {
     autoFillPlusOne();
   });
 
-  // Also when they select from datalist / change value
   nameInput.addEventListener('change', () => {
     autoFillPlusOne();
   });
 
-  // As they type, if it matches exactly one invitee
   nameInput.addEventListener('input', () => {
     const me = findInviteeByName(nameInput.value);
     if (me) autoFillPlusOne(me);
   });
 
-  // If they manually edit plus one, sync guest count
   plusOneInput.addEventListener('input', () => {
     syncGuestCountWithPlusOne();
   });
@@ -173,12 +169,11 @@ function setupPlusOneSuggestion() {
   }
 }
 
-// ============ RSVP form behavior (invite-only + Sheet logging) ============
+// ============ RSVP form behavior ============
 function setupRSVP() {
   const form = document.getElementById('rsvp-form');
   const msg  = document.getElementById('rsvp-message');
 
-  // Inputs
   const nameEl      = document.getElementById('inviteeName');
   const plusOneEl   = document.getElementById('plusOneName');
   const emailEl     =
@@ -192,7 +187,6 @@ function setupRSVP() {
 
   if (!form || !msg) return;
 
-  // Keep Venmo amount in sync
   if (attendingEl) attendingEl.addEventListener('change', updateVenmoAmount);
   if (guestCountEl) guestCountEl.addEventListener('change', updateVenmoAmount);
   updateVenmoAmount();
@@ -207,14 +201,12 @@ function setupRSVP() {
     const guestCount = guestCountEl ? Number(guestCountEl.value || 1) : 1;
     const notes      = notesEl     ? notesEl.value.trim()     : '';
 
-    // Basic required fields
     if (!name || !email) {
       msg.classList.add('error');
       msg.textContent = 'Please enter your name and email before submitting.';
       return;
     }
 
-    // Invite-only guard: must be on INVITEES list
     const inviteeRecord = findInviteeByName(name);
     if (!inviteeRecord) {
       msg.classList.add('error');
@@ -224,7 +216,6 @@ function setupRSVP() {
     }
     msg.classList.remove('error');
 
-    // Calculate amount (0 if not attending)
     const amount = (attending === 'no') ? 0 : 45 * guestCount;
 
     const payload = {
@@ -243,7 +234,6 @@ function setupRSVP() {
       data: JSON.stringify(payload)
     });
 
-    // Send RSVP to Google Apps Script (no-cors)
     fetch(`${RSVP_APPS_SCRIPT_URL}?${params.toString()}`, {
       method: 'GET',
       mode: 'no-cors'
@@ -251,7 +241,6 @@ function setupRSVP() {
       console.error('[RSVP] fetch error:', err);
     });
 
-    // --- Front-end confirmation message ---
     const namesLabel = plusOne ? `${name} + ${plusOne}` : name;
 
     if (attending === 'no') {
@@ -267,7 +256,6 @@ function setupRSVP() {
       `;
     }
 
-    // Reset form & amount back to default
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
@@ -275,7 +263,7 @@ function setupRSVP() {
   });
 }
 
-// ============ Meet the Team (randomized grid + toggle) ============
+// ============ Meet the Team ============
 const TEAM_MEMBERS = [
   { name: 'Gabby Sunseri', photo: 'gabby.jpeg', alt: 'Gabby Sunseri' },
   { name: 'Jon Lamb', photo: 'jon.jpeg', alt: 'Jon Lamb' },
@@ -328,7 +316,17 @@ function setupTeamToggle() {
     section.classList.toggle("open");
   });
 }
+
 /************ SONG & SUPERLATIVE SUGGESTIONS ************/
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 function renderSuggestionList(listId, items) {
   const ul = document.getElementById(listId);
@@ -342,16 +340,6 @@ function renderSuggestionList(listId, items) {
   ul.innerHTML = items
     .map(text => `<li>${escapeHtml(text)}</li>`)
     .join('');
-}
-
-// tiny HTML-escape helper
-function escapeHtml(str) {
-  return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
 }
 
 // GET existing suggestions from Apps Script
@@ -405,7 +393,7 @@ function wireSuggestionForms() {
             return;
           }
           input.value = "";      // clear only on success
-          refreshSuggestions();  // reload lists
+          refreshSuggestions();  // reload lists from sheet
         })
         .catch(err => {
           console.error("Error adding suggestion:", err);
@@ -421,10 +409,6 @@ function wireSuggestionForms() {
   attach(superForm, superInput, "superlative");
 }
 
-  // Initial load when page opens
-  loadLiveLists();
-}
-
 /************ POLLS ************/
 
 function sendPollVoteToServer(pollId, option, previousOption) {
@@ -438,7 +422,6 @@ function sendPollVoteToServer(pollId, option, previousOption) {
       previousOption: previousOption || ''
     });
 
-    // Simple GET, we don't need to read the response for this call
     fetch(`${POLL_WEBAPP_URL}?${params.toString()}`)
       .catch(err => console.error('[POLL] vote fetch error:', err));
   } catch (err) {
@@ -454,14 +437,15 @@ function refreshPollResultsFromServer() {
   fetch(`${POLL_WEBAPP_URL}?${params.toString()}`)
     .then(res => res.json())
     .then(data => {
-      if (!data || !data.success || !data.polls) return;
+      if (!data || !data.ok || !data.counts) return;
 
-      // data.polls looks like: { beer: { "Blue Moon": 3, ... }, mule: {...}, ... }
-      Object.keys(data.polls).forEach(pollId => {
+      const counts = data.counts; // { beer: { 'Blue Moon': 3, ... }, mule: {...}, ... }
+
+      Object.keys(counts).forEach(pollId => {
         const pollEl = document.querySelector(`.poll[data-poll-id="${pollId}"]`);
         if (!pollEl) return;
 
-        const pollMap = data.polls[pollId];
+        const pollMap = counts[pollId];
 
         pollEl.querySelectorAll('.poll-option').forEach(btn => {
           const opt = btn.getAttribute('data-option');
@@ -494,7 +478,6 @@ function initPolls() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
   }
 
-  // Apply saved selections on load
   const selections = loadSelections();
   document.querySelectorAll('.poll').forEach(pollEl => {
     const pollId = pollEl.getAttribute('data-poll-id');
@@ -507,7 +490,6 @@ function initPolls() {
     });
   });
 
-  // Click handler: one vote per poll, local UI update + server update
   document.querySelectorAll('.poll-option').forEach(btn => {
     btn.addEventListener('click', () => {
       const pollEl = btn.closest('.poll');
@@ -520,7 +502,6 @@ function initPolls() {
       const selectionsNow = loadSelections();
       const previousOption = selectionsNow[pollId] || null;
 
-      // Same option? do nothing (already voted)
       if (previousOption === option) {
         return;
       }
@@ -545,40 +526,32 @@ function initPolls() {
         span.textContent = String(next);
       }
 
-      // Decrement previous selection in the UI
       if (previousOption) {
         const prevBtn = findButtonFor(previousOption);
         adjustCount(prevBtn, -1);
       }
 
-      // Increment new selection in the UI
       adjustCount(btn, 1);
 
-      // Visually mark selected
       allButtons.forEach(b => {
         b.classList.toggle('selected', b === btn);
       });
 
-      // Save locally + send to server
       selectionsNow[pollId] = option;
       saveSelections(selectionsNow);
       sendPollVoteToServer(pollId, option, previousOption);
 
-      // Optionally refresh from server after a short delay to stay in sync
       setTimeout(() => {
         refreshPollResultsFromServer();
       }, 800);
     });
   });
 
-  // Initial load from server so counts match the sheet
   refreshPollResultsFromServer();
-
-  // Periodic refresh so multiple people watching see it move
-  setInterval(refreshPollResultsFromServer, 15000); // every 15s
+  setInterval(refreshPollResultsFromServer, 15000);
 }
 
-
+// ============ DOM READY ============
 document.addEventListener("DOMContentLoaded", () => {
   createSnowflakes();
   populateInviteeDatalist();
@@ -587,9 +560,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTeamGrid();
   setupTeamToggle();
 
-  // polls are already initialized by the IIFE we wrote earlier
+  initPolls();
 
-  // suggestions
   refreshSuggestions();
   wireSuggestionForms();
 });
