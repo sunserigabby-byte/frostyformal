@@ -48,6 +48,8 @@ const RSVP_APPS_SCRIPT_URL =
 const POLL_WEBAPP_URL =
   'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
 
+const SUGGESTIONS_WEBAPP_URL ='https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
+
 // ============ Build datalist for invitee suggestions ============
 function populateInviteeDatalist() {
   const dataList = document.getElementById('inviteeNames');
@@ -332,14 +334,27 @@ function renderSuggestionList(listId, items) {
   const ul = document.getElementById(listId);
   if (!ul) return;
 
-  ul.innerHTML = "";
-  items.forEach(text => {
-    const li = document.createElement("li");
-    li.textContent = text;
-    ul.appendChild(li);
-  });
+  if (!items || !items.length) {
+    ul.innerHTML = '<li style="opacity:0.7;">No submissions yet — be the first!</li>';
+    return;
+  }
+
+  ul.innerHTML = items
+    .map(text => `<li>${escapeHtml(text)}</li>`)
+    .join('');
 }
 
+// tiny HTML-escape helper
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// GET existing suggestions from Apps Script
 function refreshSuggestions() {
   const params = new URLSearchParams({ type: "getSuggestions" });
 
@@ -357,6 +372,7 @@ function refreshSuggestions() {
     });
 }
 
+// Wire up the two forms (Song / Superlative)
 function wireSuggestionForms() {
   const songForm = document.getElementById("song-form");
   const songInput = document.getElementById("song-input");
@@ -377,7 +393,7 @@ function wireSuggestionForms() {
 
       const params = new URLSearchParams({
         type: "addSuggestion",
-        category,
+        category,  // "song" or "superlative"
         text
       });
 
@@ -388,9 +404,8 @@ function wireSuggestionForms() {
             console.error("Suggestion not saved:", data);
             return;
           }
-          // Only clear on success
-          input.value = "";
-          refreshSuggestions();
+          input.value = "";      // clear only on success
+          refreshSuggestions();  // reload lists
         })
         .catch(err => {
           console.error("Error adding suggestion:", err);
@@ -405,7 +420,6 @@ function wireSuggestionForms() {
   attach(songForm, songInput, "song");
   attach(superForm, superInput, "superlative");
 }
-
 
   // Initial load when page opens
   loadLiveLists();
@@ -562,107 +576,6 @@ function initPolls() {
 
   // Periodic refresh so multiple people watching see it move
   setInterval(refreshPollResultsFromServer, 15000); // every 15s
-}
-/************ SONG REQUESTS + SUPERLATIVES ************/
-
-// Reuse the same web app URL you're using for polls:
-const SUGGESTIONS_WEBAPP_URL = POLL_WEBAPP_URL;
-
-// Render a simple <ul> from an array of strings
-function renderSuggestionList(listId, items) {
-  const ul = document.getElementById(listId);
-  if (!ul) return;
-
-  if (!items || !items.length) {
-    ul.innerHTML = '<li style="opacity:0.7;">No submissions yet — be the first!</li>';
-    return;
-  }
-
-  ul.innerHTML = items
-    .map(text => `<li>${escapeHtml(text)}</li>`)
-    .join('');
-}
-
-// Very small HTML-escape helper so people can't break the page with <tags>
-function escapeHtml(str) {
-  return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-// Fetch current suggestions from Apps Script and render them
-async function refreshSuggestions() {
-  try {
-    const url = `${SUGGESTIONS_WEBAPP_URL}?mode=listSuggestions`;
-    const res = await fetch(url);
-    if (!res.ok) {
-      console.warn('Suggestions fetch not OK:', res.status);
-      return;
-    }
-    const data = await res.json();
-    // Expecting something like: { songs: [...], superlatives: [...] }
-    renderSuggestionList('song-list', data.songs || []);
-    renderSuggestionList('superlative-list', data.superlatives || []);
-  } catch (err) {
-    console.error('Error fetching suggestions:', err);
-  }
-}
-
-// Send a new suggestion to Apps Script (no-cors; we don't need the response)
-function sendSuggestion(kind, text) {
-  const params = new URLSearchParams({
-    mode: 'addSuggestion',  // this must match your doGet logic
-    kind,                   // 'song' or 'superlative'
-    text
-  });
-
-  return fetch(`${SUGGESTIONS_WEBAPP_URL}?${params.toString()}`, {
-    method: 'GET',
-    mode: 'no-cors'
-  });
-}
-
-// Attach submit handlers to the two forms
-function setupSuggestionForms() {
-  const songForm = document.getElementById('song-form');
-  const songInput = document.getElementById('song-input');
-  const superForm = document.getElementById('super-form');
-  const superInput = document.getElementById('super-input');
-
-  if (songForm && songInput) {
-    songForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const value = songInput.value.trim();
-      if (!value) return;
-
-      songInput.value = '';
-      try {
-        await sendSuggestion('song', value);
-        refreshSuggestions();
-      } catch (err) {
-        console.error('Error sending song suggestion:', err);
-      }
-    });
-  }
-
-  if (superForm && superInput) {
-    superForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const value = superInput.value.trim();
-      if (!value) return;
-
-      superInput.value = '';
-      try {
-        await sendSuggestion('superlative', value);
-        refreshSuggestions();
-      } catch (err) {
-        console.error('Error sending superlative suggestion:', err);
-      }
-    });
-  }
 }
 
 
