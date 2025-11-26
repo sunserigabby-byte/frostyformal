@@ -362,10 +362,16 @@ function refreshSuggestions() {
 
 // Wire up the two forms (Song / Superlative)
 function wireSuggestionForms() {
-  const songForm = document.getElementById("song-form");
+  const songForm  = document.getElementById("song-form");
   const songInput = document.getElementById("song-input");
-  const superForm = document.getElementById("superlative-form");
-  const superInput = document.getElementById("superlative-input");
+
+  // Try multiple possible IDs for the superlative form/input
+  const superForm =
+    document.getElementById("superlative-form") ||
+    document.getElementById("super-form");
+  const superInput =
+    document.getElementById("superlative-input") ||
+    document.getElementById("super-input");
 
   function attach(form, input, category) {
     if (!form || !input) return;
@@ -381,7 +387,7 @@ function wireSuggestionForms() {
 
       const params = new URLSearchParams({
         type: "addSuggestion",
-        category,  // "song" or "superlative"
+        category, // "song" or "superlative"
         text
       });
 
@@ -392,8 +398,8 @@ function wireSuggestionForms() {
             console.error("Suggestion not saved:", data);
             return;
           }
-          input.value = "";      // clear only on success
-          refreshSuggestions();  // reload lists from sheet
+          input.value = "";     // clear only on success
+          refreshSuggestions(); // reload lists from sheet
         })
         .catch(err => {
           console.error("Error adding suggestion:", err);
@@ -405,9 +411,10 @@ function wireSuggestionForms() {
     });
   }
 
-  attach(songForm, songInput, "song");
+  attach(songForm,  songInput,  "song");
   attach(superForm, superInput, "superlative");
 }
+
 
 /************ POLLS ************/
 
