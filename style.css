@@ -294,36 +294,40 @@ body {
 
 /* Inline form for song/superlative inputs */
 .live-form {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   display: flex;
   gap: 0.5rem;
+  align-items: stretch;
 }
 
 .live-input {
   flex: 1;
-  padding: 0.45rem 0.7rem;
+  padding: 0.55rem 0.9rem;
   border-radius: 999px;
-  border: 1px solid rgba(180, 200, 255, 0.9);
+  border: 1px solid rgba(208, 224, 245, 0.9);
   font-size: 0.9rem;
   font-family: inherit;
 }
 
-.live-submit {
-  padding: 0.45rem 0.9rem;
+.btn-live {
+  padding: 0.5rem 1.1rem;
   border-radius: 999px;
-  border: none;
-  background: linear-gradient(135deg, #f7d47a, #f5b85c);
-  color: #1a2235;
+  border: 2px solid var(--gold);
+  background: linear-gradient(135deg, #143a7a, #1f4fa5);
+  color: #fff;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   cursor: pointer;
-  white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
-.live-submit:hover {
+.btn-live:hover {
   filter: brightness(1.05);
   transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
 
 /* Stack into one column on smaller screens */
