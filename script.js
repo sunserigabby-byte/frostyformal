@@ -326,100 +326,86 @@ function setupTeamToggle() {
     section.classList.toggle("open");
   });
 }
-// ============ Song Requests + Superlative Ideas (live lists) ============
+/************ SONG & SUPERLATIVE SUGGESTIONS ************/
 
-// Small helper to avoid weird HTML injection
-function escapeHtml(str) {
-  return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+function renderSuggestionList(listId, items) {
+  const ul = document.getElementById(listId);
+  if (!ul) return;
+
+  ul.innerHTML = "";
+  items.forEach(text => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    ul.appendChild(li);
+  });
 }
 
-function renderLiveList(listEl, items) {
-  if (!listEl) return;
+function refreshSuggestions() {
+  const params = new URLSearchParams({ type: "getSuggestions" });
 
-  if (!items || !items.length) {
-    listEl.innerHTML = '<li style="font-style:italic; opacity:0.8;">No submissions yet — be the first!</li>';
-    return;
-  }
-
-  listEl.innerHTML = items
-    .map(item => `<li>${escapeHtml(item.text)}</li>`)
-    .join('');
-}
-
-// Load both lists (songs + superlatives) from Apps Script
-function loadLiveLists() {
-  fetch(`${POLL_WEBAPP_URL}?mode=listLive`)
+  fetch(`${SUGGESTIONS_WEBAPP_URL}?${params.toString()}`)
     .then(res => res.json())
     .then(data => {
-      const songs = (data && data.songs) || [];
-      const supers = (data && data.superlatives) || [];
-      renderLiveList(document.getElementById('song-list'), songs);
-      renderLiveList(document.getElementById('superlative-list'), supers);
+      if (!data || !data.ok || !data.suggestions) return;
+      const { songs = [], superlatives = [] } = data.suggestions;
+
+      renderSuggestionList("song-list", songs);
+      renderSuggestionList("superlative-list", superlatives);
     })
     .catch(err => {
-      console.error('Error loading live lists:', err);
+      console.error("Error fetching suggestions:", err);
     });
 }
 
-// Wire up inputs + buttons
-function setupLiveLists() {
-  const songInput = document.getElementById('song-input');
-  const songBtn   = document.getElementById('song-add-btn');
-  const supInput  = document.getElementById('superlative-input');
-  const supBtn    = document.getElementById('superlative-add-btn');
+function wireSuggestionForms() {
+  const songForm = document.getElementById("song-form");
+  const songInput = document.getElementById("song-input");
+  const superForm = document.getElementById("superlative-form");
+  const superInput = document.getElementById("superlative-input");
 
-  // Song requests
-  if (songInput && songBtn) {
-    songBtn.addEventListener('click', () => {
-      const text = songInput.value.trim();
+  function attach(form, input, category) {
+    if (!form || !input) return;
+    const button = form.querySelector('button[type="submit"]');
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = (input.value || "").trim();
       if (!text) return;
 
-      songBtn.disabled = true;
+      input.disabled = true;
+      if (button) button.disabled = true;
 
       const params = new URLSearchParams({
-        mode: 'addSong',
+        type: "addSuggestion",
+        category,
         text
       });
 
-      fetch(`${POLL_WEBAPP_URL}?${params.toString()}`)
-        .then(() => {
-          songInput.value = '';
-          loadLiveLists();
+      fetch(`${SUGGESTIONS_WEBAPP_URL}?${params.toString()}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data || !data.ok) {
+            console.error("Suggestion not saved:", data);
+            return;
+          }
+          // Only clear on success
+          input.value = "";
+          refreshSuggestions();
         })
-        .catch(err => console.error('Error adding song:', err))
+        .catch(err => {
+          console.error("Error adding suggestion:", err);
+        })
         .finally(() => {
-          songBtn.disabled = false;
+          input.disabled = false;
+          if (button) button.disabled = false;
         });
     });
   }
 
-  // Superlative ideas
-  if (supInput && supBtn) {
-    supBtn.addEventListener('click', () => {
-      const text = supInput.value.trim();
-      if (!text) return;
+  attach(songForm, songInput, "song");
+  attach(superForm, superInput, "superlative");
+}
 
-      supBtn.disabled = true;
-
-      const params = new URLSearchParams({
-        mode: 'addSuperlative',
-        text
-      });
-
-      fetch(`${POLL_WEBAPP_URL}?${params.toString()}`)
-        .then(() => {
-          supInput.value = '';
-          loadLiveLists();
-        })
-        .catch(err => console.error('Error adding superlative:', err))
-        .finally(() => {
-          supBtn.disabled = false;
-        });
-    });
-  }
 
   // Initial load when page opens
   loadLiveLists();
@@ -685,15 +671,12 @@ document.addEventListener("DOMContentLoaded", () => {
   populateInviteeDatalist();
   setupPlusOneSuggestion();
   setupRSVP();
-
   renderTeamGrid();
   setupTeamToggle();
 
-  // Polls IIFE (initPollsOneVote) already ran when the script loaded,
-  // so we don't need to call another init here.
+  // polls are already initialized by the IIFE we wrote earlier
 
-  // New: song requests + superlatives
-  setupSuggestionForms();
+  // suggestions
   refreshSuggestions();
+  wireSuggestionForms();
 });
-
