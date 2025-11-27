@@ -174,6 +174,8 @@ function setupRSVP() {
   const form = document.getElementById('rsvp-form');
   const msg  = document.getElementById('rsvp-message');
 
+  if (!form || !msg) return;
+
   // Inputs
   const nameEl      = document.getElementById('inviteeName');
   const plusOneEl   = document.getElementById('plusOneName');
@@ -186,31 +188,28 @@ function setupRSVP() {
   const guestCountEl = document.getElementById('guestCount');
   const notesEl      = document.getElementById('notes');
 
-  if (!form || !msg) return;
-
   // Keep Venmo amount in sync
   if (attendingEl) attendingEl.addEventListener('change', updateVenmoAmount);
   if (guestCountEl) guestCountEl.addEventListener('change', updateVenmoAmount);
   updateVenmoAmount();
 
-  let rsvpHideTimeout = null;
-
-  function showRsvpMessage(html, isError = false) {
+  // --- helper: show floating banner for ~20 seconds ---
+  function showRsvpBanner(messageHtml, isError) {
     if (!msg) return;
 
-    msg.innerHTML = html;
+    msg.innerHTML = messageHtml || '';
     msg.classList.toggle('error', !!isError);
-    msg.classList.add('show');
+    msg.classList.add('rsvp-visible');
 
-    // Make sure the card is in view (especially on phones)
-    const rsvpCard = document.getElementById('rsvp');
-    if (rsvpCard && rsvpCard.scrollIntoView) {
-      rsvpCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // clear any previous timer
+    if (msg._hideTimer) {
+      clearTimeout(msg._hideTimer);
     }
 
-    if (rsvpHideTimeout) clearTimeout(rsvpHideTimeout);
-    rsvpHideTimeout = setTimeout(() => {
-      msg.classList.remove('show');
+    msg._hideTimer = setTimeout(() => {
+      msg.classList.remove('rsvp-visible');
+      msg.classList.remove('error');
+      msg.innerHTML = '';
     }, 20000); // 20 seconds
   }
 
@@ -226,7 +225,7 @@ function setupRSVP() {
 
     // Basic required fields
     if (!name || !email) {
-      showRsvpMessage(
+      showRsvpBanner(
         'Please enter your name and email before submitting.',
         true
       );
@@ -236,8 +235,10 @@ function setupRSVP() {
     // Invite-only guard: must be on INVITEES list
     const inviteeRecord = findInviteeByName(name);
     if (!inviteeRecord) {
-      showRsvpMessage(
-        'We sadly do not have you on our list. If you believe there has been a mistake, email us at kickoff2christmas@gmail.com',
+      showRsvpBanner(
+        'We sadly do not have you on our list. ' +
+        'If you believe there has been a mistake, email us at ' +
+        '<strong>kickoff2christmas@gmail.com</strong>.',
         true
       );
       return;
@@ -270,19 +271,25 @@ function setupRSVP() {
       console.error('[RSVP] fetch error:', err);
     });
 
+    // --- Front-end confirmation message ---
+
     const namesLabel = plusOne ? `${name} + ${plusOne}` : name;
 
     if (attending === 'no') {
-      showRsvpMessage(`
-        <strong>RSVP received!</strong><br>
-        Thanks for letting us know – we will miss you. Hopefully see you next time!<br>
-        Check your email for a survey to help us for next time.
-      `);
+      showRsvpBanner(
+        '<strong>RSVP received!</strong><br>' +
+        'Thanks for letting us know – we will miss you. ' +
+        'Hopefully see you next time!<br>' +
+        'Check your email for a survey to help us for next time.',
+        false
+      );
     } else {
-      showRsvpMessage(`
-        <strong>YAY! RSVP received for ${namesLabel}.</strong><br>
-        We're so excited you're coming! Check your email for a message from us :)
-      `);
+      showRsvpBanner(
+        `<strong>YAY! RSVP received for ${namesLabel}.</strong><br>` +
+        `We&apos;re so excited you&apos;re coming! ` +
+        'Check your email for a message from us 🙂',
+        false
+      );
     }
 
     // Reset form & amount back to default
@@ -292,6 +299,7 @@ function setupRSVP() {
     updateVenmoAmount();
   });
 }
+
 
 
 // ============ Meet the Team ============
