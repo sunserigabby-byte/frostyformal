@@ -237,7 +237,7 @@ body {
   margin: 0.25rem 0 0;
   padding: 0;
   font-size: 14px;
-  max-height: 220px;        /* show ~10 items */
+  max-height: 120px;        /* show ~10 items */
   overflow-y: auto;         /* scroll inside the box if longer */
 }
 
