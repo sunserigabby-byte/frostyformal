@@ -799,8 +799,17 @@ body {
     linear-gradient(135deg, #fff7da, #f5d27a, #f1c155, #f8e4b2) border-box;
   box-shadow: 0 10px 26px rgba(9, 16, 35, 0.55);
 }
+/* Visible state */
+.rsvp-message.rsvp-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
 
-.rsvp-message.error { color:#c0392b; }
+/* Error styling */
+.rsvp-message.error {
+  background: #b81f2f;
+  color: #ffffff;        /* 👈 makes the text show clearly on red */
+}
 
 /* Links */
 
