@@ -237,7 +237,7 @@ function setupRSVP() {
     if (!inviteeRecord) {
       showRsvpBanner(
         'We sadly do not have you on our list. ' +
-        'If you believe there has been a mistake (or maybe we forgot or spelled your name wrong 🙁), email us at ' +
+        'If you believe there has been a mistake (or maybe we spelled your name wrong 🙁), email us at ' +
         '<strong>kickoff2christmas@gmail.com</strong>.',
         true
       );
