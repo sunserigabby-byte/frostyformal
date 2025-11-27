@@ -368,6 +368,22 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* Fix “Add Song / Add Idea” layout on small screens */
+@media (max-width: 600px) {
+  .live-form {
+    flex-direction: column;   /* stack input + button */
+    align-items: stretch;
+  }
+
+  .live-input {
+    width: 100%;
+  }
+
+  .btn-live {
+    width: 100%;              /* full-width button */
+    text-align: center;
+  }
+}
 
 /* Meet the Team toggle/button (you already have this, keep your gold styling if you like) */
 /* --- Meet the Team --- */
