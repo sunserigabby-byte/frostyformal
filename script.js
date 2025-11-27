@@ -333,13 +333,29 @@ function renderSuggestionList(listId, items) {
   if (!ul) return;
 
   if (!items || !items.length) {
-    ul.innerHTML = '<li style="opacity:0.7;">No submissions yet — be the first!</li>';
+    ul.innerHTML = '<li data-placeholder="1" style="opacity:0.7;">No submissions yet — be the first!</li>';
     return;
   }
 
   ul.innerHTML = items
     .map(text => `<li>${escapeHtml(text)}</li>`)
     .join('');
+}
+// Add a new suggestion immediately to the list in the UI
+function addSuggestionLocally(kind, text) {
+  const listId = kind === 'song' ? 'song-list' : 'superlative-list';
+  const ul = document.getElementById(listId);
+  if (!ul) return;
+
+  // Remove "no submissions yet" placeholder if present
+  const first = ul.firstElementChild;
+  if (first && first.dataset && first.dataset.placeholder === '1') {
+    ul.removeChild(first);
+  }
+
+  const li = document.createElement('li');
+  li.textContent = text;          // safe; no HTML injection
+  ul.insertBefore(li, ul.firstChild);             // or insertBefore(li, ul.firstChild) to show newest on top
 }
 
 // GET existing suggestions from Apps Script
@@ -360,58 +376,51 @@ function refreshSuggestions() {
     });
 }
 
-// Wire up the two forms (Song / Superlative)
 function wireSuggestionForms() {
-  const songForm  = document.getElementById("song-form");
+  const songForm = document.getElementById("song-form");
   const songInput = document.getElementById("song-input");
-
-  // Try multiple possible IDs for the superlative form/input
-  const superForm =
-    document.getElementById("superlative-form") ||
-    document.getElementById("super-form");
-  const superInput =
-    document.getElementById("superlative-input") ||
-    document.getElementById("super-input");
+  const superForm = document.getElementById("superlative-form");
+  const superInput = document.getElementById("superlative-input");
 
   function attach(form, input, category) {
     if (!form || !input) return;
-    const button = form.querySelector('button[type="submit"]');
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const text = (input.value || "").trim();
       if (!text) return;
 
-      input.disabled = true;
-      if (button) button.disabled = true;
+      // 1) Instant UI update (no waiting on Apps Script)
+      addSuggestionLocally(category, text);
+      input.value = "";
 
+      // 2) Fire-and-forget request to Apps Script in the background
       const params = new URLSearchParams({
         type: "addSuggestion",
-        category, // "song" or "superlative"
+        category,  // "song" or "superlative"
         text
       });
 
       fetch(`${SUGGESTIONS_WEBAPP_URL}?${params.toString()}`)
-        .then(res => res.json())
+        .then(res => {
+          // If we get a valid JSON response, we can sync with the sheet
+          if (!res.ok) return null;
+          return res.json();
+        })
         .then(data => {
-          if (!data || !data.ok) {
-            console.error("Suggestion not saved:", data);
-            return;
+          if (data && data.ok) {
+            // Optional: sync from sheet (not required for the "fast" feel)
+            refreshSuggestions();
           }
-          input.value = "";     // clear only on success
-          refreshSuggestions(); // reload lists from sheet
         })
         .catch(err => {
           console.error("Error adding suggestion:", err);
-        })
-        .finally(() => {
-          input.disabled = false;
-          if (button) button.disabled = false;
+          // UI already shows their entry, so we don’t block them
         });
     });
   }
 
-  attach(songForm,  songInput,  "song");
+  attach(songForm, songInput, "song");
   attach(superForm, superInput, "superlative");
 }
 
