@@ -231,16 +231,18 @@ body {
   font-size: 14px;
 }
 
-/* Live lists: scroll inside the card so they don't grow forever */
+/* Scrollable list for songs + superlatives */
 .live-list {
-  list-style: none;
+  max-height: 140px;              /* ~5 items before scroll */
+  overflow-y: auto;               /* allow scrolling */
   margin: 0.25rem 0 0;
   padding: 0;
+  list-style: none;
   font-size: 14px;
-  max-height: 120px;        /* show ~10 items */
-  overflow-y: auto;         /* scroll inside the box if longer */
+  padding-right: 6px;             /* room for scrollbar */
 }
 
+/* Each item */
 .live-list li {
   padding: 4px 0;
   border-bottom: 1px dashed rgba(180, 200, 255, 0.6);
@@ -249,6 +251,28 @@ body {
 .live-list li:last-child {
   border-bottom: none;
 }
+
+/* --- Scrollbar styling (WebKit: Chrome, Edge, Safari) --- */
+.live-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.live-list::-webkit-scrollbar-track {
+  background: rgba(180, 200, 255, 0.18);
+  border-radius: 999px;
+}
+
+.live-list::-webkit-scrollbar-thumb {
+  background: rgba(80, 100, 160, 0.5);
+  border-radius: 999px;
+}
+
+/* Firefox */
+.live-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(80, 100, 160, 0.5) rgba(180, 200, 255, 0.18);
+}
+
 
 /* Input row for Song Requests + Superlatives */
 .live-input-row {
