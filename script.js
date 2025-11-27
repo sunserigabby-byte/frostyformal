@@ -366,15 +366,21 @@ function refreshSuggestions() {
     .then(res => res.json())
     .then(data => {
       if (!data || !data.ok || !data.suggestions) return;
+
       const { songs = [], superlatives = [] } = data.suggestions;
 
-      renderSuggestionList("song-list", songs);
-      renderSuggestionList("superlative-list", superlatives);
+      // Newest items (bottom of the sheet) should show at the TOP of the list
+      const songsNewestFirst        = songs.slice().reverse();
+      const superlativesNewestFirst = superlatives.slice().reverse();
+
+      renderSuggestionList("song-list", songsNewestFirst);
+      renderSuggestionList("superlative-list", superlativesNewestFirst);
     })
     .catch(err => {
       console.error("Error fetching suggestions:", err);
     });
 }
+
 
 function wireSuggestionForms() {
   const songForm = document.getElementById("song-form");
