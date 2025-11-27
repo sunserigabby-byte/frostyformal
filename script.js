@@ -169,11 +169,12 @@ function setupPlusOneSuggestion() {
   }
 }
 
-// ============ RSVP form behavior ============
+// ============ RSVP form behavior (invite-only + Sheet logging) ============
 function setupRSVP() {
   const form = document.getElementById('rsvp-form');
   const msg  = document.getElementById('rsvp-message');
 
+  // Inputs
   const nameEl      = document.getElementById('inviteeName');
   const plusOneEl   = document.getElementById('plusOneName');
   const emailEl     =
@@ -187,9 +188,31 @@ function setupRSVP() {
 
   if (!form || !msg) return;
 
+  // Keep Venmo amount in sync
   if (attendingEl) attendingEl.addEventListener('change', updateVenmoAmount);
   if (guestCountEl) guestCountEl.addEventListener('change', updateVenmoAmount);
   updateVenmoAmount();
+
+  let rsvpHideTimeout = null;
+
+  function showRsvpMessage(html, isError = false) {
+    if (!msg) return;
+
+    msg.innerHTML = html;
+    msg.classList.toggle('error', !!isError);
+    msg.classList.add('show');
+
+    // Make sure the card is in view (especially on phones)
+    const rsvpCard = document.getElementById('rsvp');
+    if (rsvpCard && rsvpCard.scrollIntoView) {
+      rsvpCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    if (rsvpHideTimeout) clearTimeout(rsvpHideTimeout);
+    rsvpHideTimeout = setTimeout(() => {
+      msg.classList.remove('show');
+    }, 20000); // 20 seconds
+  }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -201,21 +224,26 @@ function setupRSVP() {
     const guestCount = guestCountEl ? Number(guestCountEl.value || 1) : 1;
     const notes      = notesEl     ? notesEl.value.trim()     : '';
 
+    // Basic required fields
     if (!name || !email) {
-      msg.classList.add('error');
-      msg.textContent = 'Please enter your name and email before submitting.';
+      showRsvpMessage(
+        'Please enter your name and email before submitting.',
+        true
+      );
       return;
     }
 
+    // Invite-only guard: must be on INVITEES list
     const inviteeRecord = findInviteeByName(name);
     if (!inviteeRecord) {
-      msg.classList.add('error');
-      msg.textContent =
-        'We sadly do not have you on our list. If you believe there has been a mistake, email us at kickoff2christmas@gmail.com';
+      showRsvpMessage(
+        'We sadly do not have you on our list. If you believe there has been a mistake, email us at kickoff2christmas@gmail.com',
+        true
+      );
       return;
     }
-    msg.classList.remove('error');
 
+    // Calculate amount (0 if not attending)
     const amount = (attending === 'no') ? 0 : 45 * guestCount;
 
     const payload = {
@@ -234,6 +262,7 @@ function setupRSVP() {
       data: JSON.stringify(payload)
     });
 
+    // Send RSVP to Google Apps Script (no-cors)
     fetch(`${RSVP_APPS_SCRIPT_URL}?${params.toString()}`, {
       method: 'GET',
       mode: 'no-cors'
@@ -244,24 +273,26 @@ function setupRSVP() {
     const namesLabel = plusOne ? `${name} + ${plusOne}` : name;
 
     if (attending === 'no') {
-      msg.innerHTML = `
+      showRsvpMessage(`
         <strong>RSVP received!</strong><br>
         Thanks for letting us know – we will miss you. Hopefully see you next time!<br>
         Check your email for a survey to help us for next time.
-      `;
+      `);
     } else {
-      msg.innerHTML = `
+      showRsvpMessage(`
         <strong>YAY! RSVP received for ${namesLabel}.</strong><br>
         We're so excited you're coming! Check your email for a message from us :)
-      `;
+      `);
     }
 
+    // Reset form & amount back to default
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
     updateVenmoAmount();
   });
 }
+
 
 // ============ Meet the Team ============
 const TEAM_MEMBERS = [
