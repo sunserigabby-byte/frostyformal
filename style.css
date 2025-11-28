@@ -738,6 +738,19 @@ body {
   cursor:pointer;
 }
 
+#sale-banner {
+  display: block;
+  margin: 0.75rem 0 0.5rem;
+  padding: 0.75rem 1.25rem;   /* 👈 increase these for a taller banner */
+  border-radius: 999px;       /* pill shape */
+  background: #ffe6e6;        /* light red/pink background */
+  color: #b81f2f;             /* text color */
+  font-weight: 700;
+  font-size: 0.95rem;         /* 👈 bump this up to 1rem or 1.05rem if you want */
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+}
+
 .rsvp-submit:hover {
   background:var(--blue2);
   transform:translateY(-2px);
