@@ -94,7 +94,7 @@
         </p>
         
         <p>
-          <strong>By Invitation Only.</strong> Invitees may bring a plus one. $45 per person.
+          <strong>By Invitation Only.</strong> Invitees may bring a plus one. $45 per person (Black Friday Sale - $35 per person - Sale ends 11:59 pm Nov 28th!).
           Please RSVP below and Venmo
           <a class="inline" href="https://account.venmo.com/u/Kyle-Warzecha" target="_blank" rel="noopener">
             <strong>@kyle-Warzecha</strong>
@@ -392,9 +392,13 @@
     <!-- RSVP FORM -->
 <section id="rsvp" class="card rsvp-card">
   <h2>RSVP</h2>
+  <p id="sale-banner" class="hint" style="font-weight:600; color:#b81f2f; margin-top:4px;">
+  <!-- will be filled by JS -->
+</p>
+
   <p>
     Find your name, add your plus one if applicable, and submit your RSVP.
-    After submitting, please send <strong>$45 per person</strong> to Venmo
+    After submitting, please send <strong>$45 per person ($35 if purchased on Black Friday) </strong> to Venmo
     <strong>@kyle-Warzecha</strong> to confirm.
   </p>
 
@@ -457,7 +461,10 @@
           <option value="1" selected>1</option>
           <option value="2">2</option>
         </select>
-        <small class="hint">$45 per person — suggested total shows below.</small>
+       <small id="per-person-hint" class="hint">
+      $45 per person — suggested total shows below.
+      </small>
+
       </div>
     </div>
 
