@@ -113,6 +113,20 @@ function getCurrentTicketPrice() {
   return 45;     // normal price
 }
 
+function updateSaleBanner() {
+  const banner = document.getElementById('sale-banner');
+  if (!banner) return;
+
+  const price = getCurrentTicketPrice();
+  if (price === 35) {
+    banner.textContent = 'Black Friday Special: Tickets are $35 today only (normally $45)!';
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+
 function updateVenmoAmount() {
   const attendingEl   = document.getElementById('attending');
   const guestCountEl  = document.getElementById('guestCount');
@@ -649,6 +663,8 @@ document.addEventListener("DOMContentLoaded", () => {
   populateInviteeDatalist();
   setupPlusOneSuggestion();
   setupRSVP();
+  updateSaleBanner();
+  updateVenmoAmount(); 
   renderTeamGrid();
   setupTeamToggle();
 
