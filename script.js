@@ -98,22 +98,53 @@ function getGroupMembers(invitee) {
   );
 }
 
-// ============ Venmo amount logic ============
+// ---- Ticket price: Black Friday sale vs normal ----
+function getCurrentTicketPrice() {
+  // Black Friday sale window in Eastern Time
+  // Start: 12:00am Nov 28, 2025   End: 11:59pm (midnight to the 29th)
+  const saleStart = new Date('2025-11-28T00:00:00-05:00');
+  const saleEnd   = new Date('2025-11-29T00:00:00-05:00');
+
+  const now = new Date();
+
+  if (now >= saleStart && now < saleEnd) {
+    return 35;   // 🎉 Black Friday price
+  }
+  return 45;     // normal price
+}
+
 function updateVenmoAmount() {
-  const attendingEl = document.getElementById('attending');
-  const guestCountEl = document.getElementById('guestCount');
-  const amountEl = document.getElementById('venmo-amount');
+  const attendingEl   = document.getElementById('attending');
+  const guestCountEl  = document.getElementById('guestCount');
+  const amountEl      = document.getElementById('venmo-amount');
+
+  // These two are optional dynamic labels in the HTML (step 3)
+  const perPersonHint = document.getElementById('per-person-hint');
+  const priceLabel    = document.getElementById('ticket-price-label');
+
   if (!attendingEl || !guestCountEl || !amountEl) return;
 
   const attending = attendingEl.value;
-  const count = parseInt(guestCountEl.value || '1', 10) || 1;
+  const count     = parseInt(guestCountEl.value || '1', 10) || 1;
 
+  const price = getCurrentTicketPrice();  // 👈 35 today, 45 otherwise
+
+  // Update any visible text labels to show the current price
+  if (priceLabel) {
+    priceLabel.textContent = `$${price}`;
+  }
+  if (perPersonHint) {
+    perPersonHint.textContent = `$${price} per person — suggested total shows below.`;
+  }
+
+  // Update the Venmo total
   if (attending === 'no') {
     amountEl.textContent = '$0';
   } else {
-    amountEl.textContent = `$${45 * count}`;
+    amountEl.textContent = `$${price * count}`;
   }
 }
+
 
 // ============ Sync guest count with plus one ============
 function syncGuestCountWithPlusOne() {
