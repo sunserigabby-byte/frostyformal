@@ -283,7 +283,7 @@ function setupRSVP() {
       showRsvpBanner(
         'We sadly do not have you on our list. ' +
         'If you believe there has been a mistake (or maybe we spelled your name wrong 🙁), email us at ' +
-        '<strong>kickoff2christmas@gmail.com</strong>.',
+        '<strong>kickoff2christmas25@gmail.com</strong>.',
         true
       );
       return;
