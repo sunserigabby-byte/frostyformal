@@ -235,5 +235,10 @@ const INVITEES = [
   { first: "Axel", last: "Kusber", email: "", group: "" },
   { first: "TJ", last: "Rogers", email: "", group: "" },
   { first: "Nikki", last: "Stephens", email: "", group: "" },
-  { first: "Tristy", last: "Philpot", email: "", group: "" },
+  { first: "Tristy", last: "Bittikofer", email: "", group: "" },
+  { first: "Vince", last: "Luciano", email: "", group: "" },
+  { first: "Megan", last: "Mehaney", email: "", group: "" },
+  { first: "Mike", last: "Eddy", email: "", group: "" },
+  { first: "Tori", last: "Daniel, email: "", group: "" },
+  { first: "Matt", last: "Meyers", email: "", group: "" },
 ];
