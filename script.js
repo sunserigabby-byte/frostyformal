@@ -18,9 +18,6 @@ const POLL_WEBAPP_URL =
 
 // Polls + Suggestions share the same Apps Script
 const SUGGESTIONS_WEBAPP_URL   = POLL_WEBAPP_URL;
-// 👉 Add this line for superlative voting (same script as polls)
-const SUPERLATIVE_WEBAPP_URL   = POLL_WEBAPP_URL;
-
 
 // Ticket price (normal, after sale)
 const TICKET_PRICE = 45;
@@ -557,19 +554,10 @@ function setupSuperlativeVoting() {
   form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
 
+    // reset status
     if (statusEl) {
       statusEl.textContent = '';
       statusEl.style.color = '#6b7aa8';
-
-      const res = await fetch(SUPERLATIVE_WEBAPP_URL, {
-  method: 'POST',
-  mode: 'cors',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  },
-  body: body.toString()
-});
-
     }
 
     // Read values from the form (these rely on the "name" attributes)
@@ -580,6 +568,7 @@ function setupSuperlativeVoting() {
     const bestHypeMachine  = (form.bestHypeMachine?.value || '').trim();
     const alwaysPrepared   = (form.alwaysPrepared?.value || '').trim();
 
+    // Require a name
     if (!voterName) {
       if (statusEl) {
         statusEl.textContent =
@@ -589,6 +578,7 @@ function setupSuperlativeVoting() {
       return;
     }
 
+    // Require at least one vote
     const anyChoice =
       mostHonest ||
       aceKingQueen ||
@@ -640,7 +630,6 @@ function setupSuperlativeVoting() {
     }
   });
 }
-
 
 
 /* ========= POLLS (DRINKS) ========= */
@@ -804,29 +793,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // superlative voting
   setupSuperlativeVoting(); 
   
-  // "who's coming"
-  refreshAttendeeList();
-  setInterval(refreshAttendeeList, 30000); // refresh every 30s
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  createSnowflakes();
-  populateInviteeDatalist();
-  setupPlusOneSuggestion();
-  setupRSVP();
-  renderTeamGrid();
-  setupTeamToggle();
-
-  // polls
-  initPolls();
-
-  // suggestions
-  refreshSuggestions();
-  setupSuggestionForms();
-
-  // superlative voting  👈 ADD THIS
-  setupSuperlativeVoting();
-
   // "who's coming"
   refreshAttendeeList();
   setInterval(refreshAttendeeList, 30000); // refresh every 30s
