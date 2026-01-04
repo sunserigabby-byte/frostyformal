@@ -335,26 +335,87 @@
       <ul id="song-list" class="live-list"></ul>
     </section>
 
-    <!-- SUPERLATIVES -->
-    <section id="superlative-ideas" class="card live-box">
-      <h3>Volleyball Superlative Ideas</h3>
-      <p class="live-note">
-        Have a funny or wholesome award idea? Add it here! We will pick 4 of them and vote later.
-      </p>
+    <!-- SUPERLATIVE VOTING -->
+<section id="superlative-voting" class="card">
+  <h2>Vote for the Superlatives</h2>
+  <p>
+    Cast your votes for this year’s Frosty Formal awards! You can skip any
+    category you’re not sure about – just type one name per box.
+  </p>
 
-      <form id="superlative-form" class="live-form">
-        <input
-          id="superlative-input"
-          type="text"
-          class="live-input"
-          placeholder="e.g. 'Best Hype Duo' or 'Most Likely to Dive into the Bleachers'"
-          autocomplete="off"
-        />
-        <button type="submit" class="btn-live">Add Idea</button>
-      </form>
+  <form id="supervote-form">
+    <div class="field">
+      <label for="super-voter-name">Your Name</label>
+      <input
+        id="super-voter-name"
+        name="voterName"
+        type="text"
+        placeholder="Your full name"
+        required
+      />
+      <small class="hint">
+        We won’t show ballots publicly – this just helps us clean up spelling and
+        duplicates.
+      </small>
+    </div>
 
-      <ul id="superlative-list" class="live-list"></ul>
-    </section>
+    <div class="field">
+      <label for="super-net-honest">Most Honest When Touching the Net</label>
+      <input
+        id="super-net-honest"
+        name="netHonest"
+        type="text"
+        placeholder="Type one name (or leave blank)"
+      />
+    </div>
+
+    <div class="field">
+      <label for="super-ace">Ace King/Queen</label>
+      <input
+        id="super-ace"
+        name="aceKingQueen"
+        type="text"
+        placeholder="Type one name (or leave blank)"
+      />
+    </div>
+
+    <div class="field">
+      <label for="super-sneaky">Sneakiest Cut Shot</label>
+      <input
+        id="super-sneaky"
+        name="sneakyCut"
+        type="text"
+        placeholder="Type one name (or leave blank)"
+      />
+    </div>
+
+    <div class="field">
+      <label for="super-hype">Best Hype Machine</label>
+      <input
+        id="super-hype"
+        name="bestHype"
+        type="text"
+        placeholder="Type one name (or leave blank)"
+      />
+    </div>
+
+    <div class="field">
+      <label for="super-prepared">Always Prepared</label>
+      <input
+        id="super-prepared"
+        name="alwaysPrepared"
+        type="text"
+        placeholder="Type one name (or leave blank)"
+      />
+    </div>
+
+    <button type="submit" class="rsvp-submit">
+      Submit Votes
+    </button>
+    <p id="supervote-status" class="hint" style="margin-top:8px;"></p>
+  </form>
+</section>
+
 
     <!-- MEDIA UPLOAD -->
     <section id="media-upload" class="card live-box media-box">
