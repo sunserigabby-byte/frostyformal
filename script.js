@@ -545,6 +545,87 @@ function attachSuggestionForm(formId, inputId, category, listId) {
       });
   });
 }
+function setupSuperlativeVoting() {
+  const form = document.getElementById('supervote-form');
+  if (!form) return;
+
+  const statusEl = document.getElementById('supervote-status');
+
+  form.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    if (statusEl) {
+      statusEl.textContent = '';
+      statusEl.style.color = '#6b7aa8';
+    }
+
+    const voterName = form.voterName.value.trim();
+    const payload = {
+      voterName,
+      netHonest: form.netHonest.value.trim(),
+      aceKingQueen: form.aceKingQueen.value.trim(),
+      sneakyCut: form.sneakyCut.value.trim(),
+      bestHype: form.bestHype.value.trim(),
+      alwaysPrepared: form.alwaysPrepared.value.trim()
+    };
+
+    if (!voterName) {
+      if (statusEl) {
+        statusEl.textContent = 'Please enter your name so we can count your ballot.';
+        statusEl.style.color = '#b81f2f';
+      }
+      return;
+    }
+
+    const anyChoice =
+      payload.netHonest ||
+      payload.aceKingQueen ||
+      payload.sneakyCut ||
+      payload.bestHype ||
+      payload.alwaysPrepared;
+
+    if (!anyChoice) {
+      if (statusEl) {
+        statusEl.textContent = 'Please vote for at least one category (you can leave others blank).';
+        statusEl.style.color = '#b81f2f';
+      }
+      return;
+    }
+
+    try {
+      const body = new URLSearchParams();
+      body.append('mode', 'superVote');
+      body.append('data', JSON.stringify(payload));
+
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body.toString()
+      });
+
+      const json = await res.json();
+
+      if (json && json.ok) {
+        form.reset();
+        if (statusEl) {
+          statusEl.textContent = 'Thank you! Your votes have been recorded. ❤️';
+          statusEl.style.color = '#143047';
+        }
+      } else {
+        throw new Error(json && json.error ? json.error : 'Unknown error');
+      }
+    } catch (err) {
+      console.error('Superlative voting error:', err);
+      if (statusEl) {
+        statusEl.textContent =
+          'Sorry — something went wrong saving your votes. Please try again later.';
+        statusEl.style.color = '#b81f2f';
+      }
+    }
+  });
+}
 
 
 /* ========= POLLS (DRINKS) ========= */
