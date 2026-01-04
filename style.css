@@ -164,7 +164,6 @@ body {
 
 .card {
   background:rgba(255,255,255,0.97);
-  border:1px solid rgba(180,200,255,0.4);
   border-radius:16px;
   box-shadow:0 8px 24px rgba(9,16,35,0.45);
   padding:28px;
@@ -729,8 +728,15 @@ body {
 
 
 /* RSVP Card */
-
-.rsvp-card { text-align:left; }
+/* Metallic gold border just for the RSVP card */
+.card.rsvp-card {
+  border-radius: 16px;
+  border: 12px solid transparent;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #fff7da, #f5d27a, #f1c155, #f8e4b2) border-box;
+  box-shadow: 0 10px 26px rgba(9, 16, 35, 0.55);
+}
 
 .field { margin-bottom:14px; }
 
