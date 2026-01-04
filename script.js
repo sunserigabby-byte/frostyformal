@@ -284,17 +284,12 @@ function setupRSVP() {
       return;
     }
 
+        // OPTIONAL: still try to look them up if they're on the list
+    // (so your plus-one auto-fill + any future logic can use it),
+    // but DO NOT block people who aren't on the INVITEES list anymore.
     const inviteeRecord = findInviteeByName(name);
-    if (!inviteeRecord) {
-      const text =
-        'We sadly do not have you on our list. If you believe there has been a mistake, email us at kickoff2christmas@gmail.com';
-      msg.classList.add('error');
-      msg.textContent = text;
-      showRsvpBanner(text, true);
-      return;
-    }
-
     msg.classList.remove('error');
+
 
     const amount = attending === 'no' ? 0 : TICKET_PRICE * guestCount;
 
