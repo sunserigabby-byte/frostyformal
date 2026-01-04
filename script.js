@@ -553,64 +553,65 @@ function setupSuperlativeVoting() {
 
   form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
+
     if (statusEl) {
       statusEl.textContent = '';
       statusEl.style.color = '#6b7aa8';
     }
 
-    const voterName = form.voterName.value.trim();
-    const payload = {
-      voterName,
-      netHonest: form.netHonest.value.trim(),
-      aceKingQueen: form.aceKingQueen.value.trim(),
-      sneakyCut: form.sneakyCut.value.trim(),
-      bestHype: form.bestHype.value.trim(),
-      alwaysPrepared: form.alwaysPrepared.value.trim()
-    };
+    // Read values from the form (these rely on the "name" attributes)
+    const voterName        = (form.voterName?.value || '').trim();
+    const mostHonest       = (form.mostHonest?.value || '').trim();
+    const aceKingQueen     = (form.aceKingQueen?.value || '').trim();
+    const sneakiestCutShot = (form.sneakiestCutShot?.value || '').trim();
+    const bestHypeMachine  = (form.bestHypeMachine?.value || '').trim();
+    const alwaysPrepared   = (form.alwaysPrepared?.value || '').trim();
 
     if (!voterName) {
       if (statusEl) {
-        statusEl.textContent = 'Please enter your name so we can count your ballot.';
+        statusEl.textContent =
+          'Please enter your name so we can count your ballot.';
         statusEl.style.color = '#b81f2f';
       }
       return;
     }
 
     const anyChoice =
-      payload.netHonest ||
-      payload.aceKingQueen ||
-      payload.sneakyCut ||
-      payload.bestHype ||
-      payload.alwaysPrepared;
+      mostHonest ||
+      aceKingQueen ||
+      sneakiestCutShot ||
+      bestHypeMachine ||
+      alwaysPrepared;
 
     if (!anyChoice) {
       if (statusEl) {
-        statusEl.textContent = 'Please vote for at least one category (you can leave others blank).';
+        statusEl.textContent =
+          'Please vote for at least one category (you can leave others blank).';
         statusEl.style.color = '#b81f2f';
       }
       return;
     }
 
     try {
-      const body = new URLSearchParams();
-      body.append('mode', 'superVote');
-      body.append('data', JSON.stringify(payload));
-
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: body.toString()
+      // Send as GET query params to the same web app as the polls
+      const params = new URLSearchParams({
+        mode: 'superVote',
+        voterName,
+        mostHonest,
+        aceKingQueen,
+        sneakiestCutShot,
+        bestHypeMachine,
+        alwaysPrepared
       });
 
+      const res = await fetch(`${POLL_WEBAPP_URL}?${params.toString()}`);
       const json = await res.json();
 
       if (json && json.ok) {
         form.reset();
         if (statusEl) {
-          statusEl.textContent = 'Thank you! Your votes have been recorded. ❤️';
+          statusEl.textContent =
+            'Thank you! Your votes have been recorded. ❤️';
           statusEl.style.color = '#143047';
         }
       } else {
@@ -626,6 +627,7 @@ function setupSuperlativeVoting() {
     }
   });
 }
+
 
 
 /* ========= POLLS (DRINKS) ========= */
@@ -785,6 +787,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // suggestions
   refreshSuggestions();
   setupSuggestionForms();
+
+  // "who's coming"
+  refreshAttendeeList();
+  setInterval(refreshAttendeeList, 30000); // refresh every 30s
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  createSnowflakes();
+  populateInviteeDatalist();
+  setupPlusOneSuggestion();
+  setupRSVP();
+  renderTeamGrid();
+  setupTeamToggle();
+
+  // polls
+  initPolls();
+
+  // suggestions
+  refreshSuggestions();
+  setupSuggestionForms();
+
+  // superlative voting  👈 ADD THIS
+  setupSuperlativeVoting();
 
   // "who's coming"
   refreshAttendeeList();
