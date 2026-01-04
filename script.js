@@ -788,6 +788,9 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshSuggestions();
   setupSuggestionForms();
 
+    // superlative voting
+  setupSuperlativeVoting(); 
+  
   // "who's coming"
   refreshAttendeeList();
   setInterval(refreshAttendeeList, 30000); // refresh every 30s
