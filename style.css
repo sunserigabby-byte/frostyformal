@@ -790,18 +790,6 @@ body {
   cursor:pointer;
 }
 
-#sale-banner {
-  display: block;
-  margin: 0.75rem 0 0.5rem;
-  padding: 0.75rem 1.25rem;   /* 👈 increase these for a taller banner */
-  border-radius: 999px;       /* pill shape */
-  background: #ffe6e6;        /* light red/pink background */
-  color: #b81f2f;             /* text color */
-  font-weight: 700;
-  font-size: 0.95rem;         /* 👈 bump this up to 1rem or 1.05rem if you want */
-  text-align: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
-}
 
 .rsvp-submit:hover {
   background:var(--blue2);
@@ -856,14 +844,12 @@ body {
 
 /* Metallic gold border just for the RSVP card */
 .card.rsvp-card {
-  /* keep your existing card styles, but override the border */
-  border-radius: 16px;
-  border: 12px solid transparent;
-  background:
-    linear-gradient(#ffffff, #ffffff) padding-box,
-    linear-gradient(135deg, #fff7da, #f5d27a, #f1c155, #f8e4b2) border-box;
-  box-shadow: 0 10px 26px rgba(9, 16, 35, 0.55);
+  border-radius: 16px;                      /* keep rounded corners */
+  border: none;                             /* no inner border */
+  background: rgba(255,255,255,0.97);       /* same as .card */
+  box-shadow: 0 8px 24px rgba(9,16,35,0.45);/* same as .card */
 }
+
 /* Visible state */
 .rsvp-message.rsvp-visible {
   opacity: 1;
