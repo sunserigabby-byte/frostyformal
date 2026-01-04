@@ -1,4 +1,43 @@
-// ============ Snowflakes (small background snow) ============
+/****************************************************
+ * Frosty Formal — Front-End Script
+ * - Snowflakes
+ * - Invitee helpers + RSVP
+ * - Polls (drinks)
+ * - Song & Superlative suggestions
+ * - "Who’s Coming" list
+ * - Meet the Team shuffle
+ ****************************************************/
+
+/* ========= CONFIG: URLs & PRICE ========= */
+
+const RSVP_APPS_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
+
+const POLL_WEBAPP_URL =
+  'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
+
+// Polls + Suggestions share the same Apps Script
+const SUGGESTIONS_WEBAPP_URL = POLL_WEBAPP_URL;
+
+// Ticket price (normal, after sale)
+const TICKET_PRICE = 45;
+
+
+/* ========= SMALL HELPER(S) ========= */
+
+// tiny HTML-escape helper (used by suggestion + attendee lists)
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+
+/* ========= SNOWFLAKES ========= */
+
 function createSnowflakes() {
   const snowLayer = document.getElementById('snow-layer');
   if (!snowLayer) return;
@@ -41,25 +80,48 @@ function createSnowflakes() {
   document.head.appendChild(styleEl);
 })();
 
-// === Global URLs ===
-const RSVP_APPS_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbwILdtiAkM0VQsWEQp58Lb-gnt4EnKbvXlXHg2hDUEPc9nkPQSdrzHUL1xWb1-2s-kc/exec';
 
-const POLL_WEBAPP_URL =
-  'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
+/* ========= INVITEE / PLUS-ONE HELPERS ========= */
 
-const SUGGESTIONS_WEBAPP_URL = POLL_WEBAPP_URL;
+function normalizeName(str) {
+  return (str || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
 
-// ============ Build datalist for invitee suggestions ============
+function findInviteeByName(fullName) {
+  const norm = normalizeName(fullName);
+  if (!norm) return null;
+
+  const list = (typeof INVITEES !== 'undefined' && Array.isArray(INVITEES))
+    ? INVITEES
+    : [];
+
+  return (
+    list.find(p => normalizeName(p.first + ' ' + p.last) === norm) || null
+  );
+}
+
+function getGroupMembers(invitee) {
+  if (!invitee || !invitee.group) return [];
+
+  const list = (typeof INVITEES !== 'undefined' && Array.isArray(INVITEES))
+    ? INVITEES
+    : [];
+
+  return list.filter(p =>
+    p.group === invitee.group &&
+    normalizeName(p.first + ' ' + p.last) !== normalizeName(invitee.first + ' ' + invitee.last)
+  );
+}
+
 function populateInviteeDatalist() {
   const dataList = document.getElementById('inviteeNames');
   if (!dataList) return;
 
-  const list = (typeof INVITEES !== "undefined" && Array.isArray(INVITEES))
+  const list = (typeof INVITEES !== 'undefined' && Array.isArray(INVITEES))
     ? INVITEES
     : [];
 
-  dataList.innerHTML = "";
+  dataList.innerHTML = '';
   list.forEach(p => {
     const option = document.createElement('option');
     option.value = `${p.first} ${p.last}`;
@@ -67,100 +129,6 @@ function populateInviteeDatalist() {
   });
 }
 
-// ============ Helper functions for invitees ============
-function normalizeName(str) {
-  return (str || "").trim().toLowerCase().replace(/\s+/g, " ");
-}
-
-function findInviteeByName(fullName) {
-  const norm = normalizeName(fullName);
-  if (!norm) return null;
-
-  const list = (typeof INVITEES !== "undefined" && Array.isArray(INVITEES))
-    ? INVITEES
-    : [];
-
-  return list.find(p =>
-    normalizeName(p.first + " " + p.last) === norm
-  ) || null;
-}
-
-function getGroupMembers(invitee) {
-  if (!invitee || !invitee.group) return [];
-
-  const list = (typeof INVITEES !== "undefined" && Array.isArray(INVITEES))
-    ? INVITEES
-    : [];
-
-  return list.filter(p =>
-    p.group === invitee.group &&
-    normalizeName(p.first + " " + p.last) !== normalizeName(invitee.first + " " + invitee.last)
-  );
-}
-
-// ---- Ticket price: Black Friday sale vs normal ----
-function getCurrentTicketPrice() {
-  // Black Friday sale window in Eastern Time
-  // Start: 12:00am Nov 28, 2025   End: 11:59pm (midnight to the 29th)
-  const saleStart = new Date('2025-11-28T00:00:00-05:00');
-  const saleEnd   = new Date('2025-11-29T00:00:00-05:00');
-
-  const now = new Date();
-
-  if (now >= saleStart && now < saleEnd) {
-    return 35;   // 🎉 Black Friday price
-  }
-  return 45;     // normal price
-}
-
-function updateSaleBanner() {
-  const banner = document.getElementById('sale-banner');
-  if (!banner) return;
-
-  const price = getCurrentTicketPrice();
-  if (price === 35) {
-    banner.textContent = 'Black Friday Special: Tickets are $35 today only (normally $45)!';
-    banner.style.display = 'block';
-  } else {
-    banner.style.display = 'none';
-  }
-}
-
-
-function updateVenmoAmount() {
-  const attendingEl   = document.getElementById('attending');
-  const guestCountEl  = document.getElementById('guestCount');
-  const amountEl      = document.getElementById('venmo-amount');
-
-  // These two are optional dynamic labels in the HTML (step 3)
-  const perPersonHint = document.getElementById('per-person-hint');
-  const priceLabel    = document.getElementById('ticket-price-label');
-
-  if (!attendingEl || !guestCountEl || !amountEl) return;
-
-  const attending = attendingEl.value;
-  const count     = parseInt(guestCountEl.value || '1', 10) || 1;
-
-  const price = getCurrentTicketPrice();  // 👈 35 today, 45 otherwise
-
-  // Update any visible text labels to show the current price
-  if (priceLabel) {
-    priceLabel.textContent = `$${price}`;
-  }
-  if (perPersonHint) {
-    perPersonHint.textContent = `$${price} per person — suggested total shows below.`;
-  }
-
-  // Update the Venmo total
-  if (attending === 'no') {
-    amountEl.textContent = '$0';
-  } else {
-    amountEl.textContent = `$${price * count}`;
-  }
-}
-
-
-// ============ Sync guest count with plus one ============
 function syncGuestCountWithPlusOne() {
   const plusOneInput = document.getElementById('plusOneName');
   const guestCountEl = document.getElementById('guestCount');
@@ -178,11 +146,22 @@ function syncGuestCountWithPlusOne() {
   updateVenmoAmount();
 }
 
-// ============ Plus-one auto-suggestion using group IDs ============
 function setupPlusOneSuggestion() {
   const nameInput = document.getElementById('inviteeName');
   const plusOneInput = document.getElementById('plusOneName');
   if (!nameInput || !plusOneInput) return;
+
+  function autoFillPlusOne(existingInvitee) {
+    const me = existingInvitee || findInviteeByName(nameInput.value);
+    if (!me) return;
+
+    const others = getGroupMembers(me);
+    if (others.length === 1 && !plusOneInput.value.trim()) {
+      const partner = others[0];
+      plusOneInput.value = `${partner.first} ${partner.last}`;
+      syncGuestCountWithPlusOne();
+    }
+  }
 
   nameInput.addEventListener('blur', () => {
     autoFillPlusOne();
@@ -200,76 +179,104 @@ function setupPlusOneSuggestion() {
   plusOneInput.addEventListener('input', () => {
     syncGuestCountWithPlusOne();
   });
+}
 
-  function autoFillPlusOne(existingInvitee) {
-    const me = existingInvitee || findInviteeByName(nameInput.value);
-    if (!me) return;
 
-    const others = getGroupMembers(me);
-    if (others.length === 1 && !plusOneInput.value.trim()) {
-      const partner = others[0];
-      plusOneInput.value = `${partner.first} ${partner.last}`;
-      syncGuestCountWithPlusOne();
-    }
+/* ========= VENMO AMOUNT ========= */
+
+function updateVenmoAmount() {
+  const attendingEl = document.getElementById('attending');
+  const guestCountEl = document.getElementById('guestCount');
+  const amountEl = document.getElementById('venmo-amount');
+  if (!attendingEl || !guestCountEl || !amountEl) return;
+
+  const attending = attendingEl.value;
+  const count = parseInt(guestCountEl.value || '1', 10) || 1;
+
+  if (attending === 'no') {
+    amountEl.textContent = '$0';
+  } else {
+    amountEl.textContent = `$${TICKET_PRICE * count}`;
   }
 }
 
-// ============ RSVP form behavior (invite-only + Sheet logging) ============
+
+/* ========= RSVP + BANNER ========= */
+
+let rsvpBannerTimer = null;
+
+function getOrCreateRsvpBanner() {
+  let banner = document.getElementById('rsvp-banner');
+  if (banner) return banner;
+
+  const card = document.querySelector('.rsvp-card');
+  if (!card) return null;
+
+  banner = document.createElement('div');
+  banner.id = 'rsvp-banner';
+  banner.className = 'rsvp-banner';
+  banner.textContent = '';
+  card.appendChild(banner);
+  return banner;
+}
+
+function showRsvpBanner(message, isError) {
+  const banner = getOrCreateRsvpBanner();
+  if (!banner) return;
+
+  banner.textContent = message || (isError
+    ? 'Something went wrong. Please try again.'
+    : 'RSVP received!');
+
+  banner.classList.remove('rsvp-banner--error', 'rsvp-banner--success');
+  banner.classList.add(isError ? 'rsvp-banner--error' : 'rsvp-banner--success');
+  banner.classList.add('rsvp-banner--show');
+
+  if (rsvpBannerTimer) {
+    clearTimeout(rsvpBannerTimer);
+  }
+  rsvpBannerTimer = setTimeout(() => {
+    banner.classList.remove('rsvp-banner--show');
+  }, 20000); // ~20 seconds
+}
+
 function setupRSVP() {
   const form = document.getElementById('rsvp-form');
-  const msg  = document.getElementById('rsvp-message');
+  const msg = document.getElementById('rsvp-message');
 
-  if (!form || !msg) return;
-
-  // Inputs
-  const nameEl      = document.getElementById('inviteeName');
-  const plusOneEl   = document.getElementById('plusOneName');
-  const emailEl     =
+  const nameEl = document.getElementById('inviteeName');
+  const plusOneEl = document.getElementById('plusOneName');
+  const emailEl =
     document.getElementById('email') ||
     document.getElementById('inviteeEmail') ||
     document.getElementById('rsvp-email') ||
     document.querySelector('input[type="email"]');
-  const attendingEl  = document.getElementById('attending');
+  const attendingEl = document.getElementById('attending');
   const guestCountEl = document.getElementById('guestCount');
-  const notesEl      = document.getElementById('notes');
+  const notesEl = document.getElementById('notes');
 
-  // Keep Venmo amount in sync
+  if (!form || !msg) return;
+
   if (attendingEl) attendingEl.addEventListener('change', updateVenmoAmount);
   if (guestCountEl) guestCountEl.addEventListener('change', updateVenmoAmount);
   updateVenmoAmount();
 
-  // --- helper: show floating banner for ~20 seconds ---
-  function showRsvpBanner(messageHtml, isError) {
-    if (!msg) return;
-
-    msg.innerHTML = messageHtml || '';
-    msg.classList.toggle('error', !!isError);
-    msg.classList.add('rsvp-visible');
-
-    // clear any previous timer
-    if (msg._hideTimer) {
-      clearTimeout(msg._hideTimer);
-    }
-
-    msg._hideTimer = setTimeout(() => {
-      msg.classList.remove('rsvp-visible');
-      msg.classList.remove('error');
-      msg.innerHTML = '';
-    }, 20000); // 20 seconds
-  }
-
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const name       = nameEl      ? nameEl.value.trim()      : '';
-    const plusOne    = plusOneEl   ? plusOneEl.value.trim()   : '';
-    const email      = emailEl     ? emailEl.value.trim()     : '';
-    const attending  = attendingEl ? attendingEl.value        : 'yes';
+    const name = nameEl ? nameEl.value.trim() : '';
+    const plusOne = plusOneEl ? plusOneEl.value.trim() : '';
+    const email = emailEl ? emailEl.value.trim() : '';
+    const attending = attendingEl ? attendingEl.value : 'yes';
     const guestCount = guestCountEl ? Number(guestCountEl.value || 1) : 1;
-    const notes      = notesEl     ? notesEl.value.trim()     : '';
+    const notes = notesEl ? notesEl.value.trim() : '';
 
-    // Basic required fields
+    msg.textContent = '';
+    msg.classList.remove('error');
+
     if (!name || !email) {
+      msg.classList.add('error');
+      msg.textContent = 'Please enter your name and email before submitting.';
       showRsvpBanner(
         'Please enter your name and email before submitting.',
         true
@@ -277,20 +284,19 @@ function setupRSVP() {
       return;
     }
 
-    // Invite-only guard: must be on INVITEES list
     const inviteeRecord = findInviteeByName(name);
     if (!inviteeRecord) {
-      showRsvpBanner(
-        'We sadly do not have you on our list. ' +
-        'If you believe there has been a mistake (or maybe we spelled your name wrong 🙁), email us at ' +
-        '<strong>kickoff2christmas25@gmail.com</strong>.',
-        true
-      );
+      const text =
+        'We sadly do not have you on our list. If you believe there has been a mistake, email us at kickoff2christmas@gmail.com';
+      msg.classList.add('error');
+      msg.textContent = text;
+      showRsvpBanner(text, true);
       return;
     }
 
-    // Calculate amount (0 if not attending)
-    const amount = (attending === 'no') ? 0 : 45 * guestCount;
+    msg.classList.remove('error');
+
+    const amount = attending === 'no' ? 0 : TICKET_PRICE * guestCount;
 
     const payload = {
       name,
@@ -308,7 +314,7 @@ function setupRSVP() {
       data: JSON.stringify(payload)
     });
 
-    // Send RSVP to Google Apps Script (no-cors)
+    // Fire-and-forget; response is not readable in no-cors
     fetch(`${RSVP_APPS_SCRIPT_URL}?${params.toString()}`, {
       method: 'GET',
       mode: 'no-cors'
@@ -316,50 +322,87 @@ function setupRSVP() {
       console.error('[RSVP] fetch error:', err);
     });
 
-    // --- Front-end confirmation message ---
-
     const namesLabel = plusOne ? `${name} + ${plusOne}` : name;
 
     if (attending === 'no') {
       showRsvpBanner(
-        '<strong>RSVP received!</strong><br>' +
-        'Thanks for letting us know – we will miss you. ' +
-        'Hopefully see you next time!<br>' +
-        'Check your email for a survey to help us for next time.',
+        'RSVP received! We will miss you this time, but hope to see you next time 💙',
         false
       );
+      msg.innerHTML =
+        '<strong>RSVP received!</strong> We will miss you this time.';
     } else {
       showRsvpBanner(
-        `<strong>YAY! RSVP received for ${namesLabel}.</strong><br>` +
-        `We&apos;re so excited you&apos;re coming! ` +
-        'Check your email for a message from us 🙂',
+        `YAY! RSVP received for ${namesLabel}. We’re so excited you’re coming!`,
         false
       );
+      msg.innerHTML =
+        `<strong>YAY! RSVP received for ${namesLabel}.</strong> We’re so excited you’re coming!`;
     }
 
-    // Reset form & amount back to default
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
     if (attendingEl) attendingEl.value = 'yes';
     updateVenmoAmount();
+
+    // Refresh the "Who’s Coming" list shortly after
+    setTimeout(refreshAttendeeList, 2000);
   });
 }
 
 
+/* ========= WHO'S COMING LIST (from RSVP SHEET) ========= */
 
-// ============ Meet the Team ============
+async function refreshAttendeeList() {
+  const ul = document.getElementById('attending-list');
+  if (!ul) return;
+
+  ul.innerHTML = '<li style="opacity:0.7;">Loading RSVPs…</li>';
+
+  try {
+    const params = new URLSearchParams({ mode: 'listAttendees' });
+    const res = await fetch(`${RSVP_APPS_SCRIPT_URL}?${params.toString()}`);
+    if (!res.ok) {
+      throw new Error('Network error: ' + res.status);
+    }
+
+    const data = await res.json();
+    if (!data || !data.ok || !Array.isArray(data.attendees)) {
+      throw new Error('Bad data format');
+    }
+
+    const attendees = data.attendees;
+    if (!attendees.length) {
+      ul.innerHTML =
+        '<li style="opacity:0.7;">No RSVPs yet — you could be the first!</li>';
+      return;
+    }
+
+    ul.innerHTML = attendees
+      .map(name => `<li>${escapeHtml(name)}</li>`)
+      .join('');
+  } catch (err) {
+    console.error('[ATTENDEES] Error loading list:', err);
+    ul.innerHTML =
+      '<li style="opacity:0.7;">Unable to load RSVPs right now.</li>';
+  }
+}
+
+
+/* ========= MEET THE TEAM ========= */
+
 const TEAM_MEMBERS = [
   { name: 'Gabby Sunseri', photo: 'gabby.jpeg', alt: 'Gabby Sunseri' },
   { name: 'Jon Lamb', photo: 'jon.jpeg', alt: 'Jon Lamb' },
   { name: 'Gio Ramirez', photo: 'gio.jpeg', alt: 'Gio Ramirez' },
   {
-    name: "Caity and Cole",
-    photo: "caitycole.jpeg",
-    alt: "Caity and Cole",
-    linkLabel: "Shake It Up NC",
-    linkHref: "https://shakeitupnc.com/"
+    name: 'Caity and Cole',
+    photo: 'caitycole.jpeg',
+    alt: 'Caity and Cole',
+    linkLabel: 'Shake It Up NC',
+    linkHref: 'https://shakeitupnc.com/'
   },
-  { name: 'Kyle Warzecha', photo: 'kyle.jpeg', alt: 'Kyle Warzecha' },
+  { name: 'Kyle Warzecha', photo: 'kyle.jpeg', alt: 'Kyle Warzecha' }
 ];
 
 function shuffleArray(arr) {
@@ -372,7 +415,7 @@ function shuffleArray(arr) {
 }
 
 function renderTeamGrid() {
-  const grid = document.getElementById("team-grid");
+  const grid = document.getElementById('team-grid');
   if (!grid) return;
 
   const shuffled = shuffleArray(TEAM_MEMBERS);
@@ -383,41 +426,34 @@ function renderTeamGrid() {
       ${
         m.linkHref
           ? `<a class="team-link" href="${m.linkHref}" target="_blank" rel="noopener">
-               ${m.linkLabel || "Visit website"}
+               ${m.linkLabel || 'Visit website'}
              </a>`
-          : ""
+          : ''
       }
     </div>
-  `).join("");
+  `).join('');
 }
 
 function setupTeamToggle() {
-  const btn = document.getElementById("team-toggle");
-  const section = document.getElementById("team-collapsible");
+  const btn = document.getElementById('team-toggle');
+  const section = document.getElementById('team-collapsible');
   if (!btn || !section) return;
 
-  btn.addEventListener("click", () => {
-    section.classList.toggle("open");
+  btn.addEventListener('click', () => {
+    section.classList.toggle('open');
   });
 }
 
-/************ SONG & SUPERLATIVE SUGGESTIONS ************/
 
-function escapeHtml(str) {
-  return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
+/* ========= SONG & SUPERLATIVE SUGGESTIONS ========= */
 
 function renderSuggestionList(listId, items) {
   const ul = document.getElementById(listId);
   if (!ul) return;
 
   if (!items || !items.length) {
-    ul.innerHTML = '<li data-placeholder="1" style="opacity:0.7;">No submissions yet — be the first!</li>';
+    ul.innerHTML =
+      '<li style="opacity:0.7;">No submissions yet — be the first!</li>';
     return;
   }
 
@@ -425,97 +461,98 @@ function renderSuggestionList(listId, items) {
     .map(text => `<li>${escapeHtml(text)}</li>`)
     .join('');
 }
-// Add a new suggestion immediately to the list in the UI
-function addSuggestionLocally(kind, text) {
-  const listId = kind === 'song' ? 'song-list' : 'superlative-list';
-  const ul = document.getElementById(listId);
-  if (!ul) return;
 
-  // Remove "no submissions yet" placeholder if present
-  const first = ul.firstElementChild;
-  if (first && first.dataset && first.dataset.placeholder === '1') {
-    ul.removeChild(first);
-  }
-
-  const li = document.createElement('li');
-  li.textContent = text;          // safe; no HTML injection
-  ul.insertBefore(li, ul.firstChild);             // or insertBefore(li, ul.firstChild) to show newest on top
-}
-
-// GET existing suggestions from Apps Script
 function refreshSuggestions() {
-  const params = new URLSearchParams({ type: "getSuggestions" });
+  const params = new URLSearchParams({ type: 'getSuggestions' });
 
   fetch(`${SUGGESTIONS_WEBAPP_URL}?${params.toString()}`)
     .then(res => res.json())
     .then(data => {
       if (!data || !data.ok || !data.suggestions) return;
-
       const { songs = [], superlatives = [] } = data.suggestions;
 
-      // Newest items (bottom of the sheet) should show at the TOP of the list
-      const songsNewestFirst        = songs.slice().reverse();
-      const superlativesNewestFirst = superlatives.slice().reverse();
-
-      renderSuggestionList("song-list", songsNewestFirst);
-      renderSuggestionList("superlative-list", superlativesNewestFirst);
+      // newest first (assuming sheet appends at bottom)
+      renderSuggestionList(
+        'song-list',
+        songs.slice().reverse()
+      );
+      renderSuggestionList(
+        'superlative-list',
+        superlatives.slice().reverse()
+      );
     })
     .catch(err => {
-      console.error("Error fetching suggestions:", err);
+      console.error('Error fetching suggestions:', err);
     });
 }
 
+function setupSuggestionForms() {
+  attachSuggestionForm(
+    'song-form',
+    'song-input',
+    'song',
+    'song-list'
+  );
+  attachSuggestionForm(
+    'superlative-form',
+    'superlative-input',
+    'superlative',
+    'superlative-list'
+  );
+}
 
-function wireSuggestionForms() {
-  const songForm = document.getElementById("song-form");
-  const songInput = document.getElementById("song-input");
-  const superForm = document.getElementById("superlative-form");
-  const superInput = document.getElementById("superlative-input");
+function attachSuggestionForm(formId, inputId, category, listId) {
+  const form = document.getElementById(formId);
+  const input = document.getElementById(inputId);
+  const list = document.getElementById(listId);
+  if (!form || !input) return;
 
-  function attach(form, input, category) {
-    if (!form || !input) return;
+  const button = form.querySelector('button[type="submit"]');
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const text = (input.value || "").trim();
-      if (!text) return;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = (input.value || '').trim();
+    if (!text) return;
 
-      // 1) Instant UI update (no waiting on Apps Script)
-      addSuggestionLocally(category, text);
-      input.value = "";
+    // optimistic: show immediately at the top of the list
+    if (list) {
+      const li = document.createElement('li');
+      li.textContent = text;
+      list.insertBefore(li, list.firstChild || null);
+    }
 
-      // 2) Fire-and-forget request to Apps Script in the background
-      const params = new URLSearchParams({
-        type: "addSuggestion",
-        category,  // "song" or "superlative"
-        text
+    input.value = '';
+    input.disabled = true;
+    if (button) button.disabled = true;
+
+    const params = new URLSearchParams({
+      type: 'addSuggestion',
+      category,
+      text
+    });
+
+    fetch(`${SUGGESTIONS_WEBAPP_URL}?${params.toString()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data || !data.ok) {
+          console.error('Suggestion not saved:', data);
+          return;
+        }
+        // sync with sheet after a short delay
+        setTimeout(refreshSuggestions, 2000);
+      })
+      .catch(err => {
+        console.error('Error adding suggestion:', err);
+      })
+      .finally(() => {
+        input.disabled = false;
+        if (button) button.disabled = false;
       });
-
-      fetch(`${SUGGESTIONS_WEBAPP_URL}?${params.toString()}`)
-        .then(res => {
-          // If we get a valid JSON response, we can sync with the sheet
-          if (!res.ok) return null;
-          return res.json();
-        })
-        .then(data => {
-          if (data && data.ok) {
-            // Optional: sync from sheet (not required for the "fast" feel)
-            refreshSuggestions();
-          }
-        })
-        .catch(err => {
-          console.error("Error adding suggestion:", err);
-          // UI already shows their entry, so we don’t block them
-        });
-    });
-  }
-
-  attach(songForm, songInput, "song");
-  attach(superForm, superInput, "superlative");
+  });
 }
 
 
-/************ POLLS ************/
+/* ========= POLLS (DRINKS) ========= */
 
 function sendPollVoteToServer(pollId, option, previousOption) {
   if (!POLL_WEBAPP_URL) return;
@@ -545,20 +582,18 @@ function refreshPollResultsFromServer() {
     .then(data => {
       if (!data || !data.ok || !data.counts) return;
 
-      const counts = data.counts; // { beer: { 'Blue Moon': 3, ... }, mule: {...}, ... }
+      const counts = data.counts; // { beer: { "Blue Moon": 3, ... }, ... }
 
       Object.keys(counts).forEach(pollId => {
         const pollEl = document.querySelector(`.poll[data-poll-id="${pollId}"]`);
         if (!pollEl) return;
 
-        const pollMap = counts[pollId];
-
+        const pollMap = counts[pollId] || {};
         pollEl.querySelectorAll('.poll-option').forEach(btn => {
           const opt = btn.getAttribute('data-option');
           if (!opt) return;
           const span = btn.querySelector('[data-option-count]');
           if (!span) return;
-
           const value = pollMap[opt] || 0;
           span.textContent = String(value);
         });
@@ -609,7 +644,7 @@ function initPolls() {
       const previousOption = selectionsNow[pollId] || null;
 
       if (previousOption === option) {
-        return;
+        return; // already voted for this
       }
 
       const allButtons = Array.from(
@@ -657,19 +692,25 @@ function initPolls() {
   setInterval(refreshPollResultsFromServer, 15000);
 }
 
-// ============ DOM READY ============
-document.addEventListener("DOMContentLoaded", () => {
+
+/* ========= DOM READY ========= */
+
+document.addEventListener('DOMContentLoaded', () => {
   createSnowflakes();
   populateInviteeDatalist();
   setupPlusOneSuggestion();
   setupRSVP();
-  updateSaleBanner();
-  updateVenmoAmount(); 
   renderTeamGrid();
   setupTeamToggle();
 
+  // polls
   initPolls();
 
+  // suggestions
   refreshSuggestions();
-  wireSuggestionForms();
+  setupSuggestionForms();
+
+  // "who's coming"
+  refreshAttendeeList();
+  setInterval(refreshAttendeeList, 30000); // refresh every 30s
 });
