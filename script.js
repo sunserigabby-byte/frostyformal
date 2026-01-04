@@ -17,7 +17,10 @@ const POLL_WEBAPP_URL =
   'https://script.google.com/macros/s/AKfycbzSD5BFroBXQONN0cZ6CspmIOQ-Md6DvISSbEvo0QryX3FcNkZsbzN3SiEdsCRSKh2J/exec';
 
 // Polls + Suggestions share the same Apps Script
-const SUGGESTIONS_WEBAPP_URL = POLL_WEBAPP_URL;
+const SUGGESTIONS_WEBAPP_URL   = POLL_WEBAPP_URL;
+// 👉 Add this line for superlative voting (same script as polls)
+const SUPERLATIVE_WEBAPP_URL   = POLL_WEBAPP_URL;
+
 
 // Ticket price (normal, after sale)
 const TICKET_PRICE = 45;
@@ -557,6 +560,16 @@ function setupSuperlativeVoting() {
     if (statusEl) {
       statusEl.textContent = '';
       statusEl.style.color = '#6b7aa8';
+
+      const res = await fetch(SUPERLATIVE_WEBAPP_URL, {
+  method: 'POST',
+  mode: 'cors',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: body.toString()
+});
+
     }
 
     // Read values from the form (these rely on the "name" attributes)
