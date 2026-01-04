@@ -295,12 +295,16 @@
   </p>
 </section>
 
- <!-- TWO-COLUMN SECTION: left = drinks + photos, right = songs + superlatives -->
+<!-- TWO-COLUMN SECTION: left = drinks + photos, right = songs + superlatives -->
 <div class="tools-grid">
-  <!-- LEFT COLUMN: drink menu + photo sharing -->
+  <!-- LEFT COLUMN: Drink Menu + Photo sharing -->
   <div class="tools-left-col">
+    <!-- Drink Menu -->
     <section id="drink-menu" class="card">
       <h2>Tonight’s Drink Menu</h2>
+      <p>
+        Here’s what Shake It Up NC will be pouring at the Frosty Formal. 🧊🍹
+      </p>
       <img
         src="Drinks.jpg"
         alt="Frosty Formal drink menu"
@@ -308,7 +312,7 @@
       />
     </section>
 
-    <!-- MEDIA UPLOAD MOVED HERE -->
+    <!-- Share Photos & Videos -->
     <section id="media-upload" class="card live-box media-box">
       <h3>Share Photos &amp; Videos</h3>
       <p class="live-note">
@@ -326,20 +330,131 @@
     </section>
   </div>
 
-  <!-- RIGHT COLUMN: song requests + superlative voting -->
+  <!-- RIGHT COLUMN: Song Requests + Superlative Voting -->
   <div class="tools-right-col">
     <!-- SONG REQUESTS -->
     <section id="song-requests" class="card live-box">
-      <!-- your existing song requests content -->
+      <h3>Song Requests</h3>
+      <p class="live-note">
+        Drop your bangers and slow jams so our DJ can build the perfect playlist.
+      </p>
+
+      <form id="song-form" class="live-form">
+        <input
+          id="song-input"
+          type="text"
+          class="live-input"
+          placeholder="Song + artist (e.g. 'Yeah! – Usher')"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn-live">Add Song</button>
+      </form>
+
+      <ul id="song-list" class="live-list"></ul>
     </section>
 
     <!-- SUPERLATIVE VOTING -->
     <section id="supervote" class="card supervote-card">
-      <!-- your superlative voting form with descriptions -->
+      <h3>Vote for the Volleyball Superlatives</h3>
+      <p class="live-note">
+        One ballot per person, please. You can leave categories blank if you’re not sure.
+      </p>
+
+      <form id="supervote-form" class="supervote-form">
+        <!-- Voter name -->
+        <div class="field">
+          <label for="supervote-name">Your Name</label>
+          <input
+            id="supervote-name"
+            name="voterName"
+            type="text"
+            placeholder="Your full name"
+          />
+          <small class="hint">
+            We’re only using this to help keep ballots honest. One vote per person.
+          </small>
+        </div>
+
+        <!-- 1. Most Honest When Touching the Net -->
+        <div class="field">
+          <label for="netHonest">Most Honest When Touching the Net</label>
+          <small class="hint">
+            The player who always calls their own net touches, even when no one saw it.
+          </small>
+          <input
+            id="netHonest"
+            name="netHonest"
+            type="text"
+            placeholder="Nominee name (optional)"
+          />
+        </div>
+
+        <!-- 2. Ace King/Queen -->
+        <div class="field">
+          <label for="aceKingQueen">Ace King/Queen</label>
+          <small class="hint">
+            The serving menace — racks up aces and keeps the other side sweating.
+          </small>
+          <input
+            id="aceKingQueen"
+            name="aceKingQueen"
+            type="text"
+            placeholder="Nominee name (optional)"
+          />
+        </div>
+
+        <!-- 3. Sneakiest Cut Shot -->
+        <div class="field">
+          <label for="sneakyCut">Sneakiest Cut Shot</label>
+          <small class="hint">
+            That evil short-angle shot that drops just over the block and ruins back-row’s day.
+          </small>
+          <input
+            id="sneakyCut"
+            name="sneakyCut"
+            type="text"
+            placeholder="Nominee name (optional)"
+          />
+        </div>
+
+        <!-- 4. Best Hype Machine -->
+        <div class="field">
+          <label for="bestHype">Best Hype Machine</label>
+          <small class="hint">
+            The teammate who’s always yelling, cheering, and keeping vibes sky-high.
+          </small>
+          <input
+            id="bestHype"
+            name="bestHype"
+            type="text"
+            placeholder="Nominee name (optional)"
+          />
+        </div>
+
+        <!-- 5. Always Prepared -->
+        <div class="field">
+          <label for="alwaysPrepared">Always Prepared</label>
+          <small class="hint">
+            Tape, snacks, extra clothes, ibuprofen, portable fan — they’ve got it all.
+          </small>
+          <input
+            id="alwaysPrepared"
+            name="alwaysPrepared"
+            type="text"
+            placeholder="Nominee name (optional)"
+          />
+        </div>
+
+        <!-- Status + submit -->
+        <p id="supervote-status" class="hint" style="margin-top:0.75rem;"></p>
+
+        <button type="submit" class="btn-live">
+          Submit Votes
+        </button>
+      </form>
     </section>
   </div>
 </div>
-
 
 <!-- WHO'S COMING LIST -->
 <section id="attending" class="card attending-card">
