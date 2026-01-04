@@ -295,143 +295,20 @@
   </p>
 </section>
 
- <!-- TWO-COLUMN SECTION: polls on the left, ideas + media on the right -->
-<!-- TWO-COLUMN SECTION: drink menu on the left, ideas + media on the right -->
+ <!-- TWO-COLUMN SECTION: left = drinks + photos, right = songs + superlatives -->
 <div class="tools-grid">
-  <!-- LEFT COLUMN: Drink Menu -->
-  <section id="drink-polls" class="card">
-    <h2>Drink Menu</h2>
-    <p>
-      Here’s what Shake It Up NC will be pouring at the Frosty Formal. 🍸🍺
-    </p>
-
-    <img
-      src="Drinks.jpg"
-      alt="Frosty Formal drink menu"
-      id="drink-menu-img"
-    />
-  </section>
-
-  <!-- RIGHT COLUMN: Song requests + superlatives + media upload -->
-  <div class="tools-right-col">
-    <!-- SONG REQUESTS -->
-    <section id="song-requests" class="card live-box">
-      <h3>Song Requests</h3>
-      <p class="live-note">
-        Drop your bangers and slow jams so our DJ can build the perfect playlist.
-      </p>
-
-      <form id="song-form" class="live-form">
-        <input
-          id="song-input"
-          type="text"
-          class="live-input"
-          placeholder="Song + artist (e.g. 'Yeah! – Usher')"
-          autocomplete="off"
-        />
-        <button type="submit" class="btn-live">Add Song</button>
-      </form>
-
-      <ul id="song-list" class="live-list"></ul>
+  <!-- LEFT COLUMN: drink menu + photo sharing -->
+  <div class="tools-left-col">
+    <section id="drink-menu" class="card">
+      <h2>Tonight’s Drink Menu</h2>
+      <img
+        src="Drinks.jpg"
+        alt="Frosty Formal drink menu"
+        style="display:block; width:100%; height:auto; border-radius:12px;"
+      />
     </section>
 
-    <!-- SUPERLATIVE VOTING -->
-<section id="superlative-voting" class="card">
-  <h2>Vote for the Superlatives</h2>
-  <p>
-    Cast your votes for this year’s Frosty Formal awards! You can skip any
-    category you’re not sure about – just type one name per box.
-  </p>
-
-  <form id="supervote-form">
-    <div class="field">
-      <label for="super-voter-name">Your Name</label>
-      <input
-        id="super-voter-name"
-        name="voterName"
-        type="text"
-        placeholder="Your full name"
-        required
-      />
-      <small class="hint">
-        We won’t show ballots publicly – Just so we don’t count duplicate ballots. Your votes are still just for fun.
-      </small>
-    </div>
-
-    <div class="field">
-      <label for="super-net-honest">Most Honest When Touching the Net</label>
-     <small class="hint">
-        The player who *always* calls their own net, even when no one else saw it.
-      </small>
-      <input
-        id="super-net-honest"
-        name="netHonest"
-        type="text"
-        placeholder="Type one full name"
-      />
-    </div>
-
-    <div class="field">
-      <label for="super-ace">Ace King/Queen</label>
-     <small class="hint">
-        The server you silently pray not to receive from. Aces for days.
-      </small>
-      <input
-        id="super-ace"
-        name="aceKingQueen"
-        type="text"
-        placeholder="Type one full name"
-      />
-    </div>
-
-    <div class="field">
-      <label for="super-sneaky">Sneakiest Cut Shot</label>
-     <small class="hint">
-        The person who always sneakily hits that disrespectful cut shot on the court.
-      </small>
-      <input
-        id="super-sneaky"
-        name="sneakyCut"
-        type="text"
-        placeholder="Type one name (or leave blank)"
-      />
-    </div>
-
-    <div class="field">
-      <label for="super-hype">Best Hype Machine</label>
-     <small class="hint">
-        The loudest cheerleader, celebration specialist, and good-vibes captain.
-      </small>
-      <input
-        id="super-hype"
-        name="bestHype"
-        type="text"
-        placeholder="Type one name (or leave blank)"
-      />
-    </div>
-
-    <div class="field">
-      <label for="super-prepared">Always Prepared</label>
-     <small class="hint">
-        Snacks, tape, ibuprofen, extra socks… they’ve got a mini pro shop in their bag.
-      </small>
-      <input
-        id="super-prepared"
-        name="alwaysPrepared"
-        type="text"
-        placeholder="Type one name (or leave blank)"
-      />
-    </div>
-
-    <button type="submit" class="rsvp-submit">
-      Submit Votes
-    </button>
-    <p id="supervote-status" class="hint" style="margin-top:8px;"></p>
-  </form>
-</section>
-
-
-    <!-- MEDIA UPLOAD -->
+    <!-- MEDIA UPLOAD MOVED HERE -->
     <section id="media-upload" class="card live-box media-box">
       <h3>Share Photos &amp; Videos</h3>
       <p class="live-note">
@@ -448,7 +325,21 @@
       </a>
     </section>
   </div>
+
+  <!-- RIGHT COLUMN: song requests + superlative voting -->
+  <div class="tools-right-col">
+    <!-- SONG REQUESTS -->
+    <section id="song-requests" class="card live-box">
+      <!-- your existing song requests content -->
+    </section>
+
+    <!-- SUPERLATIVE VOTING -->
+    <section id="supervote" class="card supervote-card">
+      <!-- your superlative voting form with descriptions -->
+    </section>
+  </div>
 </div>
+
 
 <!-- WHO'S COMING LIST -->
 <section id="attending" class="card attending-card">
