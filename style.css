@@ -280,6 +280,58 @@ body {
   scrollbar-color: rgba(80, 100, 160, 0.7) transparent;
 }
 
+/* --- Who's Coming (RSVP YES list) --- */
+
+.attending-card h2 {
+  font-size: 22px;
+}
+
+.attending-note {
+  font-size: 14px;
+  color: #4a5a82;
+  margin-bottom: 0.5rem;
+}
+
+/* list container */
+.attending-list {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  max-height: 220px;           /* scroll if lots of people */
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* show a light scrollbar (similar to live-list) */
+.attending-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.attending-list::-webkit-scrollbar-track {
+  background: rgba(180, 200, 255, 0.18);
+  border-radius: 999px;
+}
+
+.attending-list::-webkit-scrollbar-thumb {
+  background: rgba(80, 100, 160, 0.5);
+  border-radius: 999px;
+}
+
+.attending-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(80, 100, 160, 0.5) rgba(180, 200, 255, 0.18);
+}
+
+/* each attendee line */
+.attending-list li {
+  padding: 4px 0;
+  border-bottom: 1px dashed rgba(180, 200, 255, 0.6);
+}
+
+.attending-list li:last-child {
+  border-bottom: none;
+}
 
 
 /* Input row for Song Requests + Superlatives */
