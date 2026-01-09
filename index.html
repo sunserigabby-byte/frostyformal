@@ -541,27 +541,36 @@
       >
     </div>
 
-    <div class="inline-fields">
-      <div class="field">
-        <label for="attending">Are you attending?</label>
-        <select id="attending" name="attending" required>
-          <option value="yes" selected>Yes, I'll be there</option>
-          <option value="no">No, can't make it</option>
-        </select>
-      </div>
+<div class="inline-fields">
+  <div class="field">
+    <label for="attending">Are you attending?</label>
+    <select
+      id="attending"
+      name="attending"
+      required
+      onchange="updateVenmoAmount()"
+    >
+      <option value="yes" selected>Yes, I'll be there</option>
+      <option value="no">No, can't make it</option>
+    </select>
+  </div>
 
-      <div class="field">
-        <label for="guestCount">Total Guests (including you)</label>
-        <select id="guestCount" name="guestCount">
-          <option value="1" selected>1</option>
-          <option value="2">2</option>
-        </select>
-       <small id="per-person-hint" class="hint">
+  <div class="field">
+    <label for="guestCount">Total Guests (including you)</label>
+    <select
+      id="guestCount"
+      name="guestCount"
+      onchange="updateVenmoAmount()"
+    >
+      <option value="1" selected>1</option>
+      <option value="2">2</option>
+    </select>
+    <small id="per-person-hint" class="hint">
       $45 per person — suggested total shows below.
-      </small>
+    </small>
+  </div>
+</div>
 
-      </div>
-    </div>
 
     <!-- Amount area -->
     <div class="field amount-field">
