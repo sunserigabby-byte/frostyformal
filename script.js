@@ -185,19 +185,23 @@ function setupPlusOneSuggestion() {
 /* ========= VENMO AMOUNT ========= */
 
 function updateVenmoAmount() {
-  const attendingEl = document.getElementById('attending');
+  const attendingEl  = document.getElementById('attending');
   const guestCountEl = document.getElementById('guestCount');
-  const amountEl = document.getElementById('venmo-amount');
+  const amountEl     = document.getElementById('venmo-amount');
   if (!attendingEl || !guestCountEl || !amountEl) return;
 
   const attending = attendingEl.value;
   const count = parseInt(guestCountEl.value || '1', 10) || 1;
 
-  if (attending === 'no') {
-    amountEl.textContent = '$0';
-  } else {
-    amountEl.textContent = `$${TICKET_PRICE * count}`;
+  // Default is $0
+  let amount = 0;
+
+  // Only charge if they are attending
+  if (attending === 'yes') {
+    amount = TICKET_PRICE * count;
   }
+
+  amountEl.textContent = `$${amount}`;
 }
 
 
