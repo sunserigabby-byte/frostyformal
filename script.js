@@ -190,19 +190,18 @@ function updateVenmoAmount() {
   const amountEl     = document.getElementById('venmo-amount');
   if (!attendingEl || !guestCountEl || !amountEl) return;
 
-  const attending = attendingEl.value;
+  const attending = (attendingEl.value || '').toLowerCase();
   const count = parseInt(guestCountEl.value || '1', 10) || 1;
 
-  // Default is $0
-  let amount = 0;
-
-  // Only charge if they are attending
-  if (attending === 'yes') {
-    amount = TICKET_PRICE * count;
-  }
+  // If they explicitly say "no", charge $0.
+  // Any other value counts as "yes".
+  const amount = attending === 'no'
+    ? 0
+    : TICKET_PRICE * count;
 
   amountEl.textContent = `$${amount}`;
 }
+
 
 
 /* ========= RSVP + BANNER ========= */
@@ -271,8 +270,9 @@ function setupRSVP() {
     const name = nameEl ? nameEl.value.trim() : '';
     const plusOne = plusOneEl ? plusOneEl.value.trim() : '';
     const email = emailEl ? emailEl.value.trim() : '';
-    const attending = attendingEl ? attendingEl.value : 'yes';
-    const guestCount = guestCountEl ? Number(guestCountEl.value || 1) : 1;
+    const attendingRaw = attendingEl ? attendingEl.value : 'yes';
+const attending    = (attendingRaw || '').toLowerCase();
+const guestCount   = guestCountEl ? Number(guestCountEl.value || 1) : 1;
     const notes = notesEl ? notesEl.value.trim() : '';
 
     msg.textContent = '';
