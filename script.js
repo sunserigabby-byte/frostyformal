@@ -565,12 +565,31 @@ function setupSuperlativeVoting() {
     }
 
     // Read values from the form (these rely on the "name" attributes)
-    const voterName        = (form.voterName?.value || '').trim();
-    const mostHonest       = (form.mostHonest?.value || '').trim();
-    const aceKingQueen     = (form.aceKingQueen?.value || '').trim();
-    const sneakiestCutShot = (form.sneakiestCutShot?.value || '').trim();
-    const bestHypeMachine  = (form.bestHypeMachine?.value || '').trim();
-    const alwaysPrepared   = (form.alwaysPrepared?.value || '').trim();
+const voterName = (form.voterName?.value || '').trim();
+
+// Look for BOTH possible names, old + new
+const mostHonest = (
+  form.mostHonest?.value ||
+  form.netHonest?.value ||
+  ''
+).trim();
+
+const aceKingQueen = (form.aceKingQueen?.value || '').trim();
+
+const sneakiestCutShot = (
+  form.sneakiestCutShot?.value ||
+  form.sneakyCut?.value ||
+  ''
+).trim();
+
+const bestHypeMachine = (
+  form.bestHypeMachine?.value ||
+  form.bestHype?.value ||
+  ''
+).trim();
+
+const alwaysPrepared = (form.alwaysPrepared?.value || '').trim();
+
 
     // Require a name
     if (!voterName) {
