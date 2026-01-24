@@ -100,6 +100,62 @@ body {
 }
 
 /* HERO */
+/* === Hero dates block === */
+
+.hero-dates {
+  margin-top: 1.5rem;
+}
+
+/* rows are centered and inline */
+.hero-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+/* OLD DATE – faint + strikethrough */
+.hero-date-old {
+  font-size: 18px;
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+/* NEW DATE – more prominent */
+.hero-date-new {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+/* Badge styling */
+.hero-reschedule-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: #f7d47a;
+  color: #5b3110;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  white-space: nowrap;
+}
+
+/* Mobile tweak so it wraps nicely */
+@media (max-width: 600px) {
+  .hero-date-row {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .hero-date-new {
+    font-size: 20px;
+  }
+}
 
 .hero {
   position:relative;
