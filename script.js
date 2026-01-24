@@ -275,15 +275,16 @@ const guestCount   = guestCountEl ? Number(guestCountEl.value || 1) : 1;
     msg.textContent = '';
     msg.classList.remove('error');
 
-    if (!name || !email) {
-      msg.classList.add('error');
-      msg.textContent = 'Please enter your name and email before submitting.';
-      showRsvpBanner(
-        'Please enter your name and email before submitting.',
-        true
-      );
-      return;
-    }
+   if (!name || !email) {
+  msg.classList.add('error');
+  msg.textContent = 'Please enter your name and email before submitting.';
+  showRsvpPopup(
+    'Please enter your name and email before submitting.',
+    true
+  );
+  return;
+}
+
 
         // OPTIONAL: still try to look them up if they're on the list
     // (so your plus-one auto-fill + any future logic can use it),
@@ -320,21 +321,22 @@ const guestCount   = guestCountEl ? Number(guestCountEl.value || 1) : 1;
 
     const namesLabel = plusOne ? `${name} + ${plusOne}` : name;
 
-    if (attending === 'no') {
-      showRsvpBanner(
-        'RSVP received! We will miss you this time, but hope to see you next time 💙',
-        false
-      );
-      msg.innerHTML =
-        '<strong>RSVP received!</strong> We will miss you this time.';
-    } else {
-      showRsvpBanner(
-        `YAY! RSVP received for ${namesLabel}. We’re so excited you’re coming!`,
-        false
-      );
-      msg.innerHTML =
-        `<strong>YAY! RSVP received for ${namesLabel}.</strong> We’re so excited you’re coming!`;
-    }
+if (attending === 'no') {
+  showRsvpPopup(
+    'RSVP received! We will miss you this time, but hope to see you next time 💙',
+    false
+  );
+  msg.innerHTML =
+    '<strong>RSVP received!</strong> We will miss you this time.';
+} else {
+  showRsvpPopup(
+    `YAY! RSVP received for ${namesLabel}. We’re so excited you’re coming!`,
+    false
+  );
+  msg.innerHTML =
+    `<strong>YAY! RSVP received for ${namesLabel}.</strong> We’re so excited you’re coming!`;
+}
+
 
     form.reset();
     if (guestCountEl) guestCountEl.value = '1';
@@ -815,19 +817,21 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // "who's coming"
   refreshAttendeeList();
-  setInterval(refreshAttendeeList, 30000); // refresh every 30s
+  setInterval(refreshAttendeeList, 90000); // refresh every 90s
+  
+  // RSVP popup close handlers
+const modal = document.getElementById('rsvp-modal');
+const closeBtn = document.getElementById('rsvp-modal-close');
+if (closeBtn) {
+  closeBtn.addEventListener('click', hideRsvpPopup);
+}
+if (modal) {
+  modal.addEventListener('click', (e) => {
+    // click outside the white box closes it
+    if (e.target === modal) hideRsvpPopup();
+  });
+}
+
 });
 
-  // RSVP popup close handlers
-  const modal = document.getElementById('rsvp-modal');
-  const closeBtn = document.getElementById('rsvp-modal-close');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', hideRsvpPopup);
-  }
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      // click outside the white box closes it
-      if (e.target === modal) hideRsvpPopup();
-    });
-  }
 
