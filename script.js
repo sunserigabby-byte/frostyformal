@@ -205,43 +205,40 @@ function updateVenmoAmount() {
 
 
 /* ========= RSVP + BANNER ========= */
+/* ========= RSVP POPUP ========= */
 
-let rsvpBannerTimer = null;
+let rsvpModalTimer = null;
 
-function getOrCreateRsvpBanner() {
-  let banner = document.getElementById('rsvp-banner');
-  if (banner) return banner;
+function showRsvpPopup(message, isError) {
+  const modal   = document.getElementById('rsvp-modal');
+  const titleEl = document.getElementById('rsvp-modal-title');
+  const textEl  = document.getElementById('rsvp-modal-text');
 
-  const card = document.querySelector('.rsvp-card');
-  if (!card) return null;
+  if (!modal || !titleEl || !textEl) return;
 
-  banner = document.createElement('div');
-  banner.id = 'rsvp-banner';
-  banner.className = 'rsvp-banner';
-  banner.textContent = '';
-  card.appendChild(banner);
-  return banner;
-}
-
-function showRsvpBanner(message, isError) {
-  const banner = getOrCreateRsvpBanner();
-  if (!banner) return;
-
-  banner.textContent = message || (isError
+  const defaultText = isError
     ? 'Something went wrong. Please try again.'
-    : 'RSVP received!');
+    : 'RSVP received!';
 
-  banner.classList.remove('rsvp-banner--error', 'rsvp-banner--success');
-  banner.classList.add(isError ? 'rsvp-banner--error' : 'rsvp-banner--success');
-  banner.classList.add('rsvp-banner--show');
+  textEl.textContent = message || defaultText;
+  titleEl.textContent = isError ? 'Oops!' : 'RSVP Received';
 
-  if (rsvpBannerTimer) {
-    clearTimeout(rsvpBannerTimer);
-  }
-  rsvpBannerTimer = setTimeout(() => {
-    banner.classList.remove('rsvp-banner--show');
-  }, 20000); // ~20 seconds
+  modal.classList.remove('success', 'error');
+  modal.classList.add(isError ? 'error' : 'success', 'show');
+
+  // optional auto-close after ~15s
+  if (rsvpModalTimer) clearTimeout(rsvpModalTimer);
+  rsvpModalTimer = setTimeout(() => {
+    hideRsvpPopup();
+  }, 15000);
 }
+
+function hideRsvpPopup() {
+  const modal = document.getElementById('rsvp-modal');
+  if (!modal) return;
+  modal.classList.remove('show', 'success', 'error');
+}
+
 
 function setupRSVP() {
   const form = document.getElementById('rsvp-form');
@@ -820,3 +817,17 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshAttendeeList();
   setInterval(refreshAttendeeList, 30000); // refresh every 30s
 });
+
+  // RSVP popup close handlers
+  const modal = document.getElementById('rsvp-modal');
+  const closeBtn = document.getElementById('rsvp-modal-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', hideRsvpPopup);
+  }
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      // click outside the white box closes it
+      if (e.target === modal) hideRsvpPopup();
+    });
+  }
+
